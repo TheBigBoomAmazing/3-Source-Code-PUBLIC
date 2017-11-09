@@ -1,0 +1,14 @@
+﻿@model List<eContract.Common.Entity.SysNoticeEntity>
+<div class="layout-main-panel-item">
+    <div class="item-title">@ViewBag.Title</div>
+    <ul>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var entity in Model)
+            {
+                @*<li><a>@entity.NoticeTitle</a><span>@entity.PublishedTime.Value.ToString("yyyy/MM/dd")</span></li>*@  
+                <li><a href="/Home/Notice?id=@(entity.NoticeID)">@entity.NoticeTitle</a><span>@entity.PublishedTime.Value.ToString("yyyy/MM/dd")</span></li>  
+            }
+        }
+    </ul>
+</div>

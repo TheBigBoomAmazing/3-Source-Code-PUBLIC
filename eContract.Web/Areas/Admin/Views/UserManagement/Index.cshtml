@@ -1,0 +1,150 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    //Layout = "~/Views/Shared/_ListLayout.cshtml";
+}
+@using eContract.Common.Schema
+@using eContract.Common.WebUtils
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_USER_ACCOUNT">Account：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_USER_ACCOUNT" name="USER_ACCOUNT" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CHINESE_NAME">Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CHINESE_NAME" name="CHINESE_NAME" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_EMAIL">Email：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_EMAIL" name="EMAIL" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            <a data-toggle="modal" data-target="#modalContent" href="@Url.Action("Edit")" class="btn btn-primary">New</a>
+                            <button type="button" id="del_btn" class="btn btn-primary">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_List.cshtml")
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+    <script type="text/javascript">
+
+        $(document)
+            .ready(function () {
+                jqGrid.initGrid($("#userGrid"),
+                {
+                    url: "@Url.Action("Index")",
+                    sortname: "USER_ACCOUNT",
+                    multiselect: true,
+                    colNames: ['ID', 'Account', 'Chinese Name','English Name', 'Email', 'Action'],
+                    colModel: [
+                        { name: 'USER_ID', index: 'USER_ID', search: true, hidden: true },
+                        { name: 'USER_ACCOUNT', index: 'USER_ACCOUNT', search: true },
+                        { name: 'CHINESE_NAME', index: 'CHINESE_NAME', search: true },
+                        { name: 'ENGLISH_NAME', index: 'ENGLISH_NAME', search: true },
+                        { name: 'EMAIL', index: 'EMAIL', search: true },
+                        {
+                            name: '',
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                var result = "<div class=\"c-table-cz\">" + '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("edit")?id=' + row.USER_ID + '">Edit</a>&nbsp;';
+                                if ('@WebCaching.IsAdmin' == 'True') {
+                                    result += '<a href="javascript://" onclick="ChangePwd(\'' + row.USER_ID + '\')">Reset Password</a>&nbsp;';
+                                    result += '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("UserPermissionEdit")?id=' +
+                                    row.USER_ID +
+                                    '">Permission Setting</a>&nbsp;' + " </div>";
+                                }
+                                result += '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("UserRoleEdit")?id=' +
+                                    row.USER_ID +
+                                    '">Role Setting</a>&nbsp;' + " </div>";
+                                return result;
+                            }
+                        }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    });
+
+                $("#del_btn")
+                    .click(function () {
+                        jqGrid.gridDelete({
+                            url: "@Url.Action("Delete")",
+                            KeyName: 'USER_ID'
+                        });
+
+                    });
+            });
+
+
+        @*function Delete() {
+            jForm.GridDelete(g, {
+                url: "@Url.Action("Delete")",
+                KeyName: 'USER_ID'
+            });
+        }*@
+        function ChangePwd(userid) {
+            jNotify.Confirm("",
+                "确认要将密码重置为默认密码吗？",
+                function () {
+                    //jNotify.hideLoading();
+                    jqGrid.gAjax("@Url.Action("ChangePwd")",
+                        { UserId: userid },
+                        function (res) {
+                            if (res.msgHeader.IsError)
+                                jNotify.showError(res.msgHeader.Message);
+                            else {
+                                setTimeout(jNotify.showSuccess("密码重置成功"), 2000);
+                            }
+                        });
+                });
+        }
+
+        @*function qExport() {
+            var data = {};
+            $("#gridSearch").find("input,select").each(function () {
+                data[$(this).attr("name")] = $(this).val();
+            });
+            jForm.Ajax({
+                url: "@Url.Action("Export")",
+                data: data,
+                success: function (data) {
+                    $("#Export")[0].click();
+                }
+            });
+
+        }*@
+    </script>
+@*}*@

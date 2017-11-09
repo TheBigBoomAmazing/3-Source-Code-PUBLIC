@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "UploadStampContract";
+    Layout = null;
+}
+@model eContract.Common.Entity.CasContractEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content c-edit-wrap">
+                    <form method="post" class="form-horizontal" id="stampContractForm" @*action="@Url.Action("UploadStampContract")" onsubmit="return onSubmit();"*@>
+                        <div class="row">
+                            <div class="col-sm-6 control-label">
+                                <input type='hidden' name='ContractId' id='ContractId' value=@Model.ContractId>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 control-label">
+                                <div id='div_ContractName' class='form-group layout-edit-from-checkbox'>
+                                    <label class='col-sm-6'>
+                                        Contract Name：
+                                    </label>
+                                    <div class='col-sm-6'>
+                                        @if (Model.ContractName != "")
+                                        {
+                                            <input class="textinput form-control " value="@Model.ContractName" validate="{required:true}" type='text' id='ContractName' name='ContractName' style="float:left" />
+                                            <p class="text-danger help-block"></p>
+                                        }
+                                        else
+                                        {
+                                            <input class="textinput form-control " value="@Model.TemplateName" validate="{required:true}" type='text' id='TemplateName' name='TemplateName' style="float:left" />
+                                            <p class="text-danger help-block"></p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 control-label">
+                                <div id='div_ContractName' class='form-group layout-edit-from-checkbox'>
+                                    <label class='col-sm-6'>
+                                        Executed Contract：
+                                    </label>
+                                    <div class='col-sm-6'>
+                                        <button id="browse" style="float:left">Upload</button>@*选择文件*@
+                                        @*<button id="showResult" onclick="show();">查看已保存的文件ID</button>*@
+                                        <input type="hidden" id="fileIds" name="fileIds" />
+                                        <p class="text-danger help-block">Only support PDF file.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.Hidden("Status")
+                        <div class="form-buttons">
+                            @Html.XButtonList(
+                        new[]{new XButton{Id="btnSave",DisplayName="Save",onClick="onSave();return false;", Icon="icon-save", LoadingText="Saving....",xButtonType=XButtonType.Button},
+                         new XButton{Id="btnUpdate",DisplayName="Submit",onClick="onSave2();return false;", Icon="icon-save", LoadingText="Submiting....",xButtonType=XButtonType.Button},
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back", LoadingText="Returning....",xButtonType=XButtonType.Button,onClick="hideModal();"},
+                               })
+                            <input id="mySubmit" type="submit" style="display:none;" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="~/Scripts/plupload.full.min.js"></script>
+    <script src="~/Areas/CAS/Scripts/UploadHelper.js"></script>
+    <script type="text/javascript">
+
+        $.ajax({
+            url: '/CAS/ApplayContract/GetUploadFiles',
+            async: false,
+            data: {
+                contractId: "@Model.ContractId"
+            },
+            timeout: 5000,    //超时时间
+            dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success: function (data, textStatus, jqXHR) {
+                $("#fileIds").val(data);
+                if ("@Model.Status" == "5") {
+                    $.UploadHelper.init("browse", "fileIds", data, true);
+                }
+                else {
+                    $.UploadHelper.init("browse", "fileIds", data, false, true);
+                }
+            }
+        });
+
+        $(function () {
+            $("#ContractName").attr("readonly", true);//合同名称不可编辑
+            $("#TemplateName").attr("readonly", true);//合同名称不可编辑
+            jForm.xValidate($("#stampContractForm"), {});
+
+            if ("@Model.Status" == "5") {//状态是Completed
+                $("button[name=btnSave]").attr("disabled", true);
+                $("button[name=btnUpdate]").attr("disabled", true);
+                $("button[id=browse]").attr("disabled", true);
+            }
+            if ("@ViewBag.strError" != "") {
+                jNotify.showError("@ViewBag.strError");
+            }
+            //GetUploadFiles();
+        })
+
+        //function onSubmit() {
+        //    var returnVal = false;
+        //    try {
+        //        returnVal = $("#stampContractForm").valid();
+        //    } catch (e) {
+        //        returnVal = false;
+        //    }
+        //    if (returnVal)
+        //    {
+        //        var inputValue = $("#fileIds").val();
+        //        if (inputValue != null || inputValue!="") {
+        //            returnVal = true;//你的校验
+        //        }
+        //        else {
+        //            jNotify.showError("请添加附件");
+        //        }
+        //    }
+        //    return returnVal;
+        //};
+        function onSave() {
+            var returnVal = false;
+            try {
+                $("#Status").val("1");//保存的时候状态是原状态
+                if ($("#stampContractForm").valid()) {
+                    returnVal = true
+                }
+            } catch (e) {
+                returnVal = false;
+            }
+            if (returnVal) {
+                var inputValue = $("#fileIds").val();
+                if (inputValue == null || inputValue == "") {
+                    returnVal = false;//你的校验
+                    jNotify.showError("Please insert the attachment.");
+                }
+            }
+            if (returnVal) {
+                jForm.Ajax({
+                    url: "ApplayContract/UploadStampContract",//Action
+                    data: jForm.getfrmData($("#stampContractForm")),//表单参数
+                    success: function (result) {
+                        jNotify.showSuccess("Successfully submitted");//显示信息
+                        hideModal();//关闭模态框
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("StampContract")");//列表页刷新
+                    }
+                });
+            }
+            return returnVal;
+        }
+        function onSave2() {
+            var returnVal = false;
+            try {
+                $("#Status").val("2");//提交的时候状态是2
+                if ($("#stampContractForm").valid()) {
+                    returnVal = true
+                }
+            } catch (e) {
+                returnVal = false;
+            }
+            if (returnVal) {
+                var inputValue = $("#fileIds").val();
+                if (inputValue == null || inputValue == "") {
+                    returnVal = false;//你的校验
+                    jNotify.showError("Please insert the attachment.");
+                }
+            }
+            if (returnVal) {
+                jForm.Ajax({
+                    url: "ApplayContract/UploadStampContract",//Action
+                    data: jForm.getfrmData($("#stampContractForm")),//表单参数
+                    success: function (result) {
+                        jNotify.showSuccess("Successfully submitted");//显示信息
+                        hideModal();//关闭模态框
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("StampContract")");//列表页刷新
+                    }
+                });
+            }
+            return returnVal;
+        }
+        //var myFiles = "";
+        function GetUploadFiles() {
+
+        };
+        //$.UploadHelper.init("browse", "fileIds", myFiles);
+        function show() {
+            alert($("#fileIds").val())
+        }
+    </script>
+

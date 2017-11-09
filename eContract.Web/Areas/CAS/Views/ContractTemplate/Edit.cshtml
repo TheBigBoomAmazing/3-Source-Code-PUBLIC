@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+}
+@model eContract.Common.Entity.CasContractTemplateEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content c-edit-wrap">
+                    @*<form method="post" class="form-horizontal" action="@Url.Action("Edit")" onsubmit="return onSubmit();">*@
+                    <form method="post" class="form-horizontal" id="ContractTemplateForm">
+                        <input type='hidden' name='ContractTemplateId' id='ContractTemplateId' value=@Model.ContractTemplateId>
+                        <div class="form-group">
+                            <label class='col-sm-2 control-label'>
+                                Ferrero Party：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <select class="form-control m-b c-edit-select valid" id="Company" name="Company"
+                                        validate="{required:true}" display="" aria-required="true" aria-invalid="true">
+                                    <option value="">===Select===</option>
+                                    <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
+                                    <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
+                                </select><p class="text-danger help-block"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class='col-sm-2 control-label'>
+                                Contract Template Name：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input class="textinput form-control " value="@Model.ContractTemplateName" validate="{required:true}" type='text' id='ContractTemplateName' name='ContractTemplateName' style="float:left" />
+                                <p class="text-danger help-block"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class='col-sm-2 control-label'>
+                                Attachment：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                @*<input type='button' value="Upload" id='ContractName' name='ContractName' style="float:left" />*@
+                                <button id="browse" style="float:left">Upload</button>
+                                @*<button id="showResult" onclick="show();">查看已保存的文件ID</button>*@
+                                <input type="hidden" id="fileIds" name="fileIds" />
+                            </div>
+                        </div>
+
+                        @*@Html.Hidden("submitType")*@
+                        @Html.Hidden("Status")
+                        @Html.XButtonList(
+                        new[]{new XButton{Id="btnSave",DisplayName="Save", onClick="onSave();return false;",Icon="icon-save", LoadingText="Saving....",xButtonType=XButtonType.Button},
+                              new XButton{Id="btnUpdate",DisplayName="Submit",onClick="onSave2();return false;", Icon="icon-save", LoadingText="Submiting....",xButtonType=XButtonType.Button},
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back",onClick="hideModal();", LoadingText="Returning....",xButtonType=XButtonType.Button},
+                               })
+                        <input id="mySubmit" type="submit" style="display:none;" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*@section footer{*@
+    <script src="~/Areas/CAS/Scripts/depUserCommon.js"></script>
+    <script src="~/Scripts/plupload.full.min.js"></script>
+    <script src="~/Areas/CAS/Scripts/UploadHelper.js"></script>
+    <script type="text/javascript">
+        var myFiles = "";
+        $(function () {
+            $(document).ready(function () {
+                var company = "@Model.Company";
+                if (company != "") {
+                    $("#Company").find("option[value='" + company + "']").attr("selected", true);
+                }
+
+                if ("@ViewBag.Type" == "3") {
+                    $("select").attr("disabled", true);
+                    $("button[name=btnSave]").attr("disabled", true);
+                    $("button[name=btnUpdate]").attr("disabled", true);
+                    $("button[id=browse]").attr("disabled", true);
+                    $("input.delUploaderFile").attr("readonly", true);
+                    //alert("1")
+                }
+                if ("@ViewBag.EditType" == "0") {
+                    $("select[name=Company]").attr("disabled", true);//公司名称不可编辑
+                    //alert("2")
+                }
+                GetUploadFiles();
+                jForm.xValidate($("#ContractTemplateForm"), {});
+            });
+            if ("@ViewBag.strError" != "") {
+                jNotify.showError("@ViewBag.strError");
+            }
+
+        })
+
+        function onSubmit() {
+            try {
+                return $("#ContractTemplateForm").valid();
+            } catch (e) {
+
+            }
+            return false;
+        };
+        function onSave() {
+            $("#Company").removeAttr("disabled");//保存的时候要将disabled的属性去掉，否则得不到值
+            try {
+                $("#Status").val("1");//保存的时候状态是1
+                if ($("#ContractTemplateForm").valid()) {
+
+                    jForm.Ajax({
+                        url: "/ContractTemplate/Edit",//Action
+                        data: jForm.getfrmData($("#ContractTemplateForm")),//表单参数
+                        success: function (result) {
+                            jNotify.showSuccess("Successfully submitted");//显示信息
+                            hideModal();//关闭模态框
+                            jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");//列表页刷新
+                        }
+                    });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+            return false;
+        }
+        function onSave2() {
+            $("#Company").removeAttr("disabled");//保存的时候要将disabled的属性去掉，否则得不到值
+            try {
+                $("#Status").val("2");//提交的时候状态是2
+                if ($("#ContractTemplateForm").valid()) {
+                    jForm.Ajax({
+                        url: "/ContractTemplate/Edit",//Action
+                        data: jForm.getfrmData($("#ContractTemplateForm")),//表单参数
+                        success: function (result) {
+                            jNotify.showSuccess("Successfully submitted");//显示信息
+                            hideModal();//关闭模态框
+                            jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");//列表页刷新
+                        }
+                    });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+            return false;
+        }
+
+        function GetUploadFiles() {
+            $.ajax({
+                url: '/CAS/ContractTemplate/GetUploadFiles',
+                async: true,
+                data: {
+                    contractId: "@Model.ContractTemplateId"
+                },
+                timeout: 5000,    //超时时间
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success: function (data, textStatus, jqXHR) {
+                    0.
+                    myFiles = data;
+                    if ("@ViewBag.Type" == "3") {
+                        $.UploadHelper.init("browse", "fileIds", myFiles, true);
+                    }
+                    else {
+                        $.UploadHelper.init("browse", "fileIds", myFiles, false,false);
+                    }
+
+                }
+            })
+        };
+        //$.UploadHelper.init("browse", "fileIds", myFiles);
+        function show() {
+            alert($("#fileIds").val())
+        }
+    </script>
+@*}*@
+

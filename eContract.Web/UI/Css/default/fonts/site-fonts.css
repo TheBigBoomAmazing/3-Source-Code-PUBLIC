@@ -1,0 +1,9 @@
+/* common */
+@font-face {
+	font-family:'common icon';
+	src:url('custom_icon.eot');
+	src:url('custom_icon.eot?#iefix') format('embedded-opentype'),
+		url('custom_icon.woff') format('woff'),
+		url('custom_icon.ttf') format('truetype'),
+		url('custom_icon.svg#arialregular') format('svg');
+}

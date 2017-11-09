@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "User Permission Edit";
+    Layout = null;
+    Dictionary<int, string> GenderDic = new Dictionary<int, string>();
+    GenderDic.Add(0, "男");
+    GenderDic.Add(1, "女");
+    GenderDic.Add(2, "保密");
+
+    Dictionary<string, string> Company = new Dictionary<string, string>();
+    Company.Add("FTS", "Ferrero Trading (Shanghai) Co., Ltd.");
+    Company.Add("FFH", "Ferrero Food (Hangzhou) Co., Ltd.");
+    
+}
+@model eContract.Common.Entity.CasUserEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-content c-edit-wrap">
+                    <form method="post" class="form-horizontal" id="userPermissionForm">
+                        @Html.XHiddenFor(m => m.UserId)
+                        @Html.XHiddenFor(m => m.EnglishName)
+                        @Html.XHiddenFor(m => m.Password)
+                        @Html.XHiddenFor(m => m.LastModifiedBy)
+                        @Html.XHiddenFor(m => m.LastModifiedTime)
+
+                        @Html.XTextBoxFor(m => m.UserAccount, new UIValidation { DisplayName = "登录名", required = true, disabled = true }, new { display = Model.UserAccount })
+                        @Html.XTextBoxFor(m => m.ChineseName, new UIValidation { DisplayName = "姓名", required = true, disabled = true }, new { display = Model.ChineseName })
+                        @Html.XTextBoxFor(m => m.EnglishName, new UIValidation { DisplayName = "英文名", required = true, disabled = true }, new { display = Model.EnglishName })
+                        @Html.XDropDownListFor(m => m.CompanyCode, false, Company, new UIValidation { DisplayName = "所属公司", required = true, disabled = true }, new { display = Model.CompanyCode })
+                        <div class="form-group">
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>设置部门权限：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type="hidden" id="selected_Dep" name="OwnDepValue">
+                                <select id="sel_menuDep" multiple="multiple" class="js-data-example-ajax form-control" name="ownDepartment"></select>
+                            </div>
+                        </div>
+                        @Html.XDropDownListFor(m => m.Gender, false, GenderDic, new UIValidation { DisplayName = "性别", required = true, disabled = true }, new { display = Model.Gender })
+                        @Html.XTextBoxFor(m => m.Email, new UIValidation { DisplayName = "Email", required = true, disabled = true }, new { display = Model.Email })
+
+                        @Html.XButtonList(
+                        new[]{new XButton{Id="btnSave",DisplayName="Save",Icon="icon-save",onClick="onSubmit();", LoadingText="Saving....",xButtonType=XButtonType.Button},
+
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back", LoadingText="Returning....",xButtonType=XButtonType.Button,onClick="hideModal();"}
+                               })
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/CAS/Scripts/depUserCommon.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $(document).ready(function () {
+            if ("@ViewBag.EditType" == "1") {
+                selectDept($("#sel_menuDep"), $("#selected_Dep"));
+            }
+            if ("@ViewBag.EditType" == "0") {
+                loadSelectDep();//查询用户设置部门权限
+            }
+            
+            jForm.xValidate($("#userPermissionForm"), {});
+        });
+        if ("@ViewBag.EditType" == "0") {
+            //$("#AccountValue").attr("disabled", "disabled");
+        }
+        if ("@ViewBag.strError" != "") {
+            jNotify.showError("@ViewBag.strError");
+        }
+    })
+
+    function onSubmit() {
+        var returnVal = $("#userPermissionForm").valid();
+        if (returnVal) {
+            var depValue = $("#selected_Dep").val();
+            if (depValue == null || depValue == "") {
+                returnVal = false;
+                jNotify.showError("请选择需要设置的部门");
+            }
+        }
+
+        if (returnVal) {
+            jForm.Ajax({
+                url: "/UserManagement/UserPermissionEdit",//Action
+                data: jForm.getfrmData($("#userPermissionForm")),//表单参数
+                success: function (result) {
+                    jNotify.showSuccess("Successfully submitted");//显示信息
+                    hideModal();//关闭模态框
+                    return;
+                    //列表页刷新
+                    jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                }
+            });
+        }
+    }
+
+    //查询用户设置部门权限
+    function loadSelectDep() {
+        $.ajax({
+            url: '/Admin/UserManagement/loadSelectUserDepPermission',
+            async: true,
+            data: {
+                userid: "@Model.UserId"
+            },
+            timeout: 5000,    //超时时间
+            dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success: function (data, textStatus, jqXHR) {
+                selectDept2($("#sel_menuDep"), $("#selected_Dep"), data);
+            }
+        });
+    };
+</script>
+

@@ -1,0 +1,833 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+    var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;
+    var contractTypeEntity = ViewBag.ContractType as eContract.Common.Entity.CasContractTypeEntity;
+    var mineCasAttacments = ViewBag.MineFiles as List<eContract.Common.Entity.CasAttachmentEntity>;
+    var originalCasAttacments = ViewBag.OriginalFiles as List<eContract.Common.Entity.CasAttachmentEntity>;
+    //var Model = ViewBag.entity as eContract.Common.Entity.CasModel;
+
+}
+@model eContract.Common.Entity.CasContractEntity
+<style>
+    .form-horizontal .form-group {
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+        .form-horizontal .form-group .form-group {
+            margin-left: 0;
+        }
+</style>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div id="printContainer">
+    <h1 style="text-align:center;display:none" id="title">@Model.ContractName</h1>
+    <h2 style="text-align:center">Basic Information(基本信息)</h2>
+    <div class="ibox-content c-edit-wrap" style="overflow-y:auto;padding-bottom: 60px;">
+        <form method="post" class="form-horizontal" id="fromHeight">
+            <input type="hidden" value="@Model.ContractId" name="ContractId" />
+            <div class="form-group">
+                <div id="div_FerreroEntity" class="form-group width-6">
+                    <label for="FerreroEntity" class="col-sm-6 control-label"><span class="asteriskField">*</span>Ferrero Entity<br /><span class="label-cn">(费列罗方)：</span></label>
+                    <div class="col-sm-6 controls ">
+                        <span>@Model.FerreroEntity</span>
+                    </div>
+                </div>
+                <div id="div_ContractTypeId" class="form-group width-6">
+                    <label for="ContractTypeId" class="col-sm-6 control-label"><span class="asteriskField">*</span>Contract Group<br /><span class="label-cn">(合同类型)：</span></label>
+                    <div class="col-sm-6 controls ">
+                        <span>@Model.ContractTypeName</span>
+                    </div>
+                </div>
+            </div>
+            @if (Model.ContractSerialNo != ""&& Model.ContractSerialNo!=null)
+            {
+                <div class="form-group">
+                    <div id="div_explanation" class="form-group" style="width:100%">
+                        <label for="Contractexplanation" class="col-sm-3 control-label">
+                            <span class="asteriskField">*</span>Contract Serial No<br /><span class="label-cn">(合同流水号)：</span>
+                        </label>
+                        <div class="col-sm-9 controls ">
+                            <span>@Model.ContractSerialNo</span>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (!(bool)contractTypeEntity.IsTemplateContract)
+            {
+                <div id="normalContract">
+                    @if ((bool)contractTypeEntity.CounterpartyEn || (bool)contractTypeEntity.CounterpartyCn)
+                    {
+                        <div class="form-group">
+                            @if ((bool)contractTypeEntity.CounterpartyEn)
+                            {
+                                <div id="div_CounterpartyEn" class="form-group width-6">
+                                    <label for="CounterpartyEn" class="col-sm-6 control-label">
+                                        <span class="asteriskField">*</span>Counterparty EN<br /><span class="label-cn">(相对方-英)：</span>
+                                    </label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.CounterpartyEn</span>
+                                    </div>
+                                </div>
+                            }
+                            @if ((bool)contractTypeEntity.CounterpartyCn)
+                            {
+                                <div id="div_CounterpartyCn" class="form-group width-6">
+                                    <label for="CounterpartyCn" class="col-sm-6 control-label">
+                                        <span class="asteriskField">&nbsp;</span>Counterparty CH<br /><span class="label-cn">(相对方-中)：</span>
+                                    </label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.CounterpartyCn</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    @if ((bool)contractTypeEntity.ContractName)
+                    {
+                        <div class="form-group">
+                            <div id="div_ContractName" class="form-group width-12">
+                                <label for="ContractName" class="col-sm-3 control-label">
+                                    <span class="asteriskField">*</span>Contract Name<br /><span class="label-cn">(合同名称)：</span>
+                                </label>
+                                <div class="col-sm-9 controls ">
+                                    <span>@Model.ContractName</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if ((bool)contractTypeEntity.ContractTerm)
+                    {
+                        <div class="form-group">
+                            <div id="div_ContractTerm" class="form-group width-12">
+                                <label for="ContractTerm" class="col-sm-3 control-label">
+                                    <span class="asteriskField">*</span>Contract Term<br /><span class="label-cn">(合同期限)：</span>
+                                </label>
+                                <div class="col-sm-9 controls">
+                                    <span id="ContractEffectiveDate">@Model.EffectiveDate</span>
+                                    &nbsp;To(至)&nbsp;
+                                    <span id="ContractExpirationDate">@Model.ExpirationDate</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group">
+                        @if ((bool)contractTypeEntity.ContractOwner)
+                        {
+                            <div id="div_ContractOwner" class="form-group width-6">
+                                <label for="ContractOwner" class="col-sm-6 control-label">
+                                    <span class="asteriskField">*</span>Contract Owner<br /><span class="label-cn">(合同经办部门)：</span>
+                                </label>
+                                <div class="col-sm-6 controls ">
+                                    <span>@Model.ContractOwner</span>
+                                </div>
+                            </div>
+                        }
+                        @if ((bool)contractTypeEntity.ContractInitiator)
+                        {
+                            <div id="div_ContractInitiator" class="form-group width-6">
+                                <label for="ContractInitiator" class="col-sm-6 control-label">
+                                    <span class="asteriskField">*</span>Contract Initiator<br /><span class="label-cn">(申请人)：</span>
+                                </label>
+                                <div class="col-sm-6 controls ">
+                                    <span>@Model.ContractInitiator</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group">
+                        @if ((bool)contractTypeEntity.ApplyDate)
+                        {
+                            <div id="div_ApplyDate" class="form-group width-6">
+                                <label for="ContractApplyDate" class="col-sm-6 control-label">
+                                    <span class="asteriskField">*</span>Date of Application<br /><span class="label-cn">(申请时间)：</span>
+                                </label>
+                                <div class="col-sm-6 controls ">
+                                    <span>@Model.CreateTime</span>@*LastModifiedTime*@
+                                </div>
+                            </div>
+                        }
+                        @if ((bool)contractTypeEntity.Capex)
+                        {
+                            <div id="div_Capex" class="form-group width-6">
+                                <label for="Capex" class="col-sm-6 control-label">
+                                    <span class="asteriskField">*</span>Capex or not<br /><span class="label-cn">(是否是固定资产)：</span>
+                                </label>
+                                <div class="col-sm-6 controls ">
+                                    @if ((bool)Model.Capex)
+                                    {
+                                        <span>Yes</span>
+                                    }
+                                    else
+                                    {
+                                        <span>No</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        @if ((bool)contractTypeEntity.IsMasterAgreement)
+                        {
+                            <div id="div_IsMasterAgreement" class="form-group width-6">
+                                <label for="IsMasterAgreement" class="col-sm-6 control-label"><span class="asteriskField">*</span>Master agreement or not<br /><span class="label-cn">(是否框架合同)：</span></label>
+                                <div class="col-sm-6 controls ">
+                                    @if ((bool)Model.IsMasterAgreement)
+                                    {
+                                        <span>Yes</span>
+                                    }
+                                    else
+                                    {
+                                        <span>No</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @if ((bool)contractTypeEntity.Supplementary)
+                        {
+                            <div id="div_Supplementary" class="form-group layout-edit-from-checkbox width-6">
+                                <label for="Supplementary" class="col-sm-6 control-label"><span class="asteriskField">*</span>Supplementary or not<br /><span class="label-cn">(是否补充合同)：</span></label>
+                                <div class="col-sm-6 controls ">
+                                    @if ((bool)Model.Supplementary)
+                                    {
+                                        <span>Yes</span>
+                                    }
+                                    else
+                                    {
+                                        <span>No</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                    @if ((bool)contractTypeEntity.Supplementary && (bool)Model.Supplementary)
+                    {
+                        <div class="form-group">
+                            <div id="div_SupplementaryContent_ori" class="form-group" style="width: 100%;background-color: #eee;">
+                                <label for="SupplementaryContent" class="col-sm-3 control-label">
+                                    Original Contract Attachments<br /><span class="label-cn">(原始合同文件)：</span>
+                                </label>
+                                <div class="col-sm-9 controls ">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 80%;">File</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var file in originalCasAttacments)
+                                            {
+                                                <tr>
+                                                    <td>@file.FileName</td>
+                                                    <td>
+                                                        <a href="../CAS/CommonPDF/index?path=@file.PdfFilePath" target="_blank">View</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @*@if ((bool)contractTypeEntity.BudgetType || (bool)contractTypeEntity.TemplateNo)*@
+                     @if ((bool)contractTypeEntity.TemplateNo)
+                    {
+                        <div class="form-group">
+                            @if ((bool)contractTypeEntity.BudgetType)
+                            {
+                                <div id="div_BudgetType" class="form-group width-6">
+                                    <label for="BudgetType" class="col-sm-6 control-label"><span class="asteriskField">*</span>Budget type<br /><span class="label-cn">(预算类型)：</span></label>
+                                    <div class="col-sm-6 controls ">
+                                        @if (Model.BudgetType == 0)
+                                        {
+                                            <span>Overheads</span>
+                                        }
+                                        else if (Model.BudgetType == 1)
+                                        {
+                                            <span>Non-overheads</span>
+                                        }
+                                        else if (Model.BudgetType == 2)
+                                        {
+                                            <span>Industrial</span>
+                                        }
+                                        else if (Model.BudgetType == 3)
+                                        {
+                                            <span>Other</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="color:red">Error</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            @if ((bool)contractTypeEntity.TemplateNo)
+                            {
+                                <div id="div_TemplateNo" class="form-group width-6">
+                                    <label for="TemplateNo" class="col-sm-6 control-label">
+                                        <span class="asteriskField">*</span>Template No.<br /><span class="label-cn">（模板编号)：</span>
+                                    </label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.TemplateNo</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    @if (contractTypeEntity.BudgetAmount!=null || contractTypeEntity.InternalORInvestmentOrder!=null)
+                    {
+                        <div class="form-group">
+                            @if (contractTypeEntity.BudgetAmount==true)
+                            {
+                                <div id="div_BudgetAmount" class="form-group width-6">
+                                    <label for="BudgetAmount" class="col-sm-6 control-label"><span class="asteriskField">*</span>Budget amount<br /><span class="label-cn">(预算金额)：</span></label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.BudgetAmount</span>
+                                    </div>
+                                </div>
+                            }
+                            @if (contractTypeEntity.InternalORInvestmentOrder==true)
+                            {
+                                <div id="div_InternalORInvestmentOrder" class="form-group width-6">
+                                    <label for="InternalORInvestmentOrder" class="col-sm-6 control-label">
+                                        <span class="asteriskField">*</span>Internal order/Investment order<br /><span class="label-cn">（内部订单/投资订单))：</span>
+                                    </label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.InternalORInvestmentOrder</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    @if ((bool)contractTypeEntity.ContractOREstimatedPrice || (bool)contractTypeEntity.Currency)
+                    {
+                        <div class="form-group">
+                            @if ((bool)Model.IsMasterAgreement)
+                            {
+                                <div id="div_ContractPrice" class="form-group width-6">
+                                    <label for="ContractPrice" class="col-sm-6 control-label"><span class="asteriskField">*</span>Estimated Price<br /><span class="label-cn">(合同估计金额)：</span></label>
+                                    <div class="col-sm-6 controls ">
+                                        @if (Model.Tax==1)
+                                        {
+                                            <span>with TAX</span>
+                                        }
+                                        else
+                                        {
+                                            <span>without TAX</span>
+                                        }
+                                        ---<span>@Model.EstimatedPrice</span>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="div_ContractPrice" class="form-group width-6">
+                                    <label for="ContractPrice" class="col-sm-6 control-label"><span class="asteriskField">*</span>Contract Price<br /><span class="label-cn">(合同金额)：</span></label>
+                                    <div class="col-sm-6 controls ">
+                                        @if (Model.Tax == 1)
+                                        {
+                                            <span>with TAX</span>
+                                        }
+                                        else
+                                        {
+                                            <span>without TAX</span>
+                                        }---
+                                        <span>@Model.ContractPrice</span>
+                                    </div>
+                                </div>
+                            }
+                            @if ((bool)contractTypeEntity.Currency)
+                            {
+                                <div id="div_Currency" class="form-group width-6">
+                                    <label for="Currency" class="col-sm-6 control-label">
+                                        <span class="asteriskField">*</span>Currency<br /><span class="label-cn">(币种)：</span>
+                                    </label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.Currency</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    @if ((bool)contractTypeEntity.PrepaymentAmount || (bool)contractTypeEntity.PrepaymentPercentage)
+                    {
+                        <div class="form-group">
+                            @if ((bool)contractTypeEntity.PrepaymentAmount)
+                            {
+                                <div id="div_PrepaymentAmount" class="form-group width-6">
+                                    <label for="PrepaymentAmount" class="col-sm-6 control-label">
+                                        <span class="asteriskField">&nbsp;</span>Prepayment Amount<br /><span class="label-cn">(预付款金额)：</span>
+                                    </label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.PrepaymentAmount</span>
+                                    </div>
+                                </div>
+
+                            }
+                            @if ((bool)contractTypeEntity.PrepaymentPercentage)
+                            {
+                                <div id="div_PrepaymentPercentage" class="form-group width-6">
+                                    <label for="PrepaymentPercentage" class="col-sm-6 control-label">
+                                        <span class="asteriskField">&nbsp;</span>Prepayment Percentage<br /><span class="label-cn">(预付款比例)：</span>
+                                    </label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.PrepaymentPercentage</span>%
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    @if ((bool)contractTypeEntity.ContractKeyPoints)
+                    {
+                        <div class="form-group">
+                            <div id="div_ContractKeyPoints" class="form-group width-12">
+                                <label for="ContractKeyPoints" class="col-sm-3 control-label">
+                                    <span class="asteriskField">*</span>Key points of contract<br /><span class="label-cn">(合同要点)：</span>
+                                </label>
+                                <div class="col-sm-9 controls ">
+                                    <span>@Model.ContractKeyPoints</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div id="templateContract">
+                    <div class="form-group">
+                        @if ((bool)contractTypeEntity.TemplateNo)
+                        {
+                            <div id="div_TemplateNo" class="form-group width-6">
+                                <label for="TemplateNo" class="col-sm-6 control-label">
+                                    <span class="asteriskField">*</span>Template No.<br /><span class="label-cn">(模板编号)：</span>
+                                </label>
+                                <div class="col-sm-6 controls ">
+                                    <span>@Model.TemplateNo</span>
+                                </div>
+                            </div>
+                        }
+                        @if ((bool)contractTypeEntity.TemplateName)
+                        {
+                            <div id="div_TemplateName" class="form-group width-6">
+                                <label for="TemplateName" class="col-sm-6 control-label">
+                                    <span class="asteriskField">*</span>Template Name<br /><span class="label-cn">(模板名称)：</span>
+                                </label>
+                                <div class="col-sm-6 controls ">
+                                    <span>@Model.TemplateName</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                    @if ((bool)contractTypeEntity.TemplateTerm)
+                    {
+                        <div class="form-group">
+                            <div id="div_TemplateTerm" class="form-group width-12">
+                                <label for="TemplateTerm" class="col-sm-3 control-label">
+                                    <span class="asteriskField">*</span>Template Term<br /><span class="label-cn">(合同期限)：</span>
+                                </label>
+                                <div class="col-sm-9 controls ">
+                                    <span id="TemplateEffectiveDate">@Model.EffectiveDate</span>
+                                    &nbsp;To(至)&nbsp;
+                                    <span id="TemplateExpirationDate">@Model.ExpirationDate</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if ((bool)contractTypeEntity.TemplateOwner || (bool)contractTypeEntity.ApplyDate)
+                    {
+                        <div class="form-group">
+                            @if ((bool)contractTypeEntity.TemplateOwner)
+                            {
+                                <div id="div_TemplateOwner" class="form-group width-6">
+                                    <label for="TemplateOwner" class="col-sm-6 control-label">
+                                        <span class="asteriskField">*</span>Template Owner<br /><span class="label-cn">(申请部门)：</span>
+                                    </label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.TemplateOwner</span>
+                                    </div>
+                                </div>
+                            }
+                            @if ((bool)contractTypeEntity.ApplyDate)
+                            {
+                                <div id="div_ApplyDate" class="form-group width-6">
+                                    <label for="TemplateApplyDate" class="col-sm-6 control-label">
+                                        <span class="asteriskField">*</span>Date of Application<br /><span class="label-cn">(申请时间)：</span>
+                                    </label>
+                                    <div class="col-sm-6 controls ">
+                                        <span>@Model.CreateTime</span>@*ApplyDate*@
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    @if ((bool)contractTypeEntity.TemplateInitiator)
+                    {
+                        <div class="form-group">
+                            <div id="div_TemplateInitiator" class="form-group width-6">
+                                <label for="TemplateInitiator" class="col-sm-6 control-label">
+                                    <span class="asteriskField">*</span>Template Initiator<br /><span class="label-cn">(经办人)：</span>
+                                </label>
+                                <div class="col-sm-6 controls ">
+                                    <span>@Model.TemplateInitiator</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if ((bool)contractTypeEntity.ScopeOfApplication)
+                    {
+                        <div class="form-group">
+                            <div id="div_ScopeOfApplication" class="form-group width-12">
+                                <label for="ScopeOfApplication" class="col-sm-3 control-label">
+                                    <span class="asteriskField">*</span>Scope of Application<br /><span class="label-cn">(适用范围)：</span>
+                                </label>
+                                <div class="col-sm-9 controls ">
+                                    <span>@Model.ScopeOfApplication</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="form-group">
+                @if ((bool)contractTypeEntity.HasAttachment)
+                {
+                <div id="div_SupplementaryContent_mine" class="form-group" style="width: 100%;background-color: #eee;">
+                    <label for="SupplementaryContent" class="col-sm-3 control-label">
+                        Contract to be reviewed<br /><span class="label-cn">(合同原件)：</span>
+                    </label>
+                    <div class="col-sm-9 controls ">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80%;">File</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var file in mineCasAttacments)
+                                    {
+                                    <tr>
+                                        <td>@file.FileName</td>
+                                        <td>
+                                            <a href="../CAS/CommonPDF/index?path=@file.PdfFilePath" target="_blank">View</a>
+                                        </td>
+                                    </tr>
+                                    }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                }
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.explanation))
+            {
+                <div class="form-group">
+                    <div id="div_ContractAttachment" class="form-group width-12">
+                        <label for="Explanation" class="col-sm-3 control-label">
+                            <span class="asteriskField">*</span>Summary of revision<br /><span class="label-cn">(修改要点)：</span>
+                        </label>
+                        <div class="col-sm-3 controls ">
+                            <span>@Model.explanation</span>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @*@if ((bool)contractTypeEntity.HasAttachment)
+                {
+                    <div class="form-group">
+                        <div id="div_ContractAttachment" class="form-group width-12" style="display:none">
+                            <label for="ContractAttachment" class="col-sm-6 control-label">
+                                <span class="asteriskField">*</span>Contract to be reviewed(上传合同原件)：
+                            </label>
+                            <div class="col-sm-6 controls ">
+                                <button type="button" class="btn btn-default"><i class="icon-back"></i>Upload</button>
+                                <p class="text-danger help-block"></p>
+                            </div>
+                        </div>
+                    </div>
+                }*@
+
+        </form>
+    </div>
+    <h2 style="text-align:center">Review & Approval Process(审批流程)</h2>
+    <div class="ibox-content c-edit-wrap" style="overflow-y:auto;padding-bottom:60px" id="ApprovalProcess">
+        <div class="ibox-content" id="ProcessContent">
+            <div class="jqGrid_wrapper c-table-list">
+                <table id="ContractApprovalItemsGrid" class="c-table-list-content"></table>
+            </div>
+        </div>
+        <div class="form-group form-buttons" id="singleButton">
+            <button type="button" onclick="hideModal();" class="btn btn-primary" data-loading-text="Returning...."><i class="icon-back"></i>Back to list</button>
+            @if ((int)Model.Status == (int)eContract.Common.ContractStatusEnum.HadApproval || (int)Model.Status == (int)eContract.Common.ContractStatusEnum.SignedCompleted)
+            {
+                <input id="btnPrint" type="button" value="Print" class="btn btn-primary">
+            }
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="hidEditType" value="View" />
+<script src="~/Scripts/plupload.full.min.js"></script>
+<script src="~/Areas/CAS/Scripts/UploadHelper.js"></script>
+<script src="~/Areas/CAS/Scripts/ApplayContract.js"></script>
+<script type="text/javascript">
+        @*$("#fileIds").val("@ViewBag.MineFiles");
+        $("#OriginalFileIds").val("@ViewBag.OriginalFiles");
+        $.UploadHelper.init("btnUpload", "fileIds", "@ViewBag.MineFiles");
+        $.UploadHelper.init("btnOriginalUpload", "OriginalFileIds", "@ViewBag.OriginalFiles");*@
+
+    $(function () {
+
+        //$(window).resize(function () {
+        //    $("#ContractApprovalItemsGrid").setGridWidth($("#ProcessContent").width());
+        //});
+
+        //样式调整
+        var normalItems = $("#normalContract").children(".form-group");
+        for (var itemIndex = 0; itemIndex < normalItems.length; itemIndex++) {
+            if ($(normalItems[itemIndex]).children().length == 1) {
+                $(normalItems[itemIndex]).children(".width-6").removeClass("width-6").addClass("width-12")
+                $(normalItems[itemIndex]).find(".control-label").removeClass("col-sm-6").addClass("col-sm-3");//标题
+                $(normalItems[itemIndex]).find(".controls").removeClass("col-sm-6").addClass("col-sm-9");//内容
+            }
+        }
+        var tempItems = $("#templateContract").children(".form-group");
+        for (var itemIndex = 0; itemIndex < tempItems.length; itemIndex++) {
+            if ($(tempItems[itemIndex]).children().length == 1) {
+                $(tempItems[itemIndex]).children(".width-6").removeClass("width-6").addClass("width-12")
+                $(tempItems[itemIndex]).find(".control-label").removeClass("col-sm-6").addClass("col-sm-3");//标题
+                $(tempItems[itemIndex]).find(".controls").removeClass("col-sm-6").addClass("col-sm-9");//内容
+            }
+        }
+
+
+        $("#btnPrint").click(function () {
+            var id = "@Model.ContractId";
+            if (id != "") {
+                if ("@contractTypeEntity.IsTemplateContract" == "True") {
+                    window.open("../CAS/Report/TemplateReviewProcessReport?id=" + id);
+                }
+                else {
+                    window.open("../CAS/Report/ContractReviewProcessReport?id=" + id);
+                }
+            }
+        });
+
+        jForm.xValidate($(".form-horizontal"), {});
+        if ("@ViewBag.strError" != "") {
+            jNotify.showError("@ViewBag.strError");
+        }
+        var jsonObj = eval("(" + escape2Html("@ViewBag.ApprovalResult") + ")");
+        $("#ContractApprovalItemsGrid").jqGrid({
+            datatype: "local",
+            data: jsonObj,
+            autowidth: true,
+            shrinkToFit: true,
+            gridComplete: function () {
+                var width = $('#modalContent').width() * 0.73;
+                $("#ContractApprovalItemsGrid").setGridWidth(width, true);
+            },
+            //autoScroll: true,
+            colNames: ['Approver(审批人)', 'Approval process(审批类型)', 'Date(审批时间)', 'Status(审批状态)', 'Comment(审批意见)'],
+            colModel: [
+                { name: 'ENGLISH_NAME', index: 'ENGLISH_NAME', search: true, sortable: false },
+                {
+                    name: 'APPROVER_TYPE', index: 'APPROVER_TYPE ', search: true, sortable: false, formatter: function (cellvalue, options, row) {
+                        switch (cellvalue) {
+                            case 1: return "Line manager"; break;
+                            case 2: return "RSM"; break;
+                            case 3: return "Department head"; break;
+                            case 4: return "Function Approval"; break;
+                            case 5: return "Initiator"; break;
+                            case 6: return "Initiator"; break;
+                            case 7: return "Initiator"; break;
+                            default: return "Function Approval"; break;
+                        }
+                    }
+                },
+                //{
+                //    name: 'STEP', index: 'STEP ', search: true, sortable: false, formatter: function (cellvalue, options, row) {
+                //        if (cellvalue == null) {
+                //            return "0";
+                //        }
+                //        return cellvalue;
+                //    }
+                //},
+                {
+                    name: 'APPROVAL_TIME', index: 'APPROVAL_TIME', search: true, sortable: false,
+                    formatter: function (cellvalue, options, row) {
+                        if (cellvalue == null) {
+                            return "";
+                        }
+                        return new Date(+new Date(cellvalue) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+                    }
+                },
+                {
+                    name: 'APPROVAL_RESULT', index: 'APPROVAL_RESULT ', search: true, sortable: false,
+                    formatter: function (cellvalue, options, row) {
+                        var statusHtml = "";
+                        switch (cellvalue) {
+                            case 0:
+                                statusHtml = "In review process";
+                                break;
+                            case 1:
+                                statusHtml = "Comment";
+                                break;
+                            case 2:
+                                statusHtml = "Approved";
+                                break;
+                            case 3:
+                                statusHtml = "Not applicable";
+                                break;
+                            case 4:
+                                statusHtml = "Rejected";
+                                break;
+                            case 5:
+                                statusHtml = "Closed";
+                                break;
+                            case 6:
+                                statusHtml = "ReSubmitted";
+                                break;
+                            case 7:
+                                statusHtml = "Submitted";
+                                break;
+                            default:
+                                statusHtml = "异常状态";
+                        }
+                        return statusHtml;
+                    }
+                },
+                {
+                    name: 'APPROVAL_OPINIONS', index: 'APPROVAL_OPINIONS', sortable: false,
+                }
+            ]
+        });
+
+        //控制显示原合同
+        $('#div_Supplementary').on("ifClicked", function (event) {
+            var checked = $("[name='Supplementary']").val();
+            if (checked == "true") {
+                $("#div_OriginalContract").css("display", "block");
+            } else {
+                $("#div_OriginalContract").css("display", "none");
+            }
+        })
+        if ("@Model.Supplementary" == "True") {
+            $("#div_OriginalContract").css("display", "block");
+        }
+
+        //加载模板编号数据
+        $.ajax({
+            type: "POST",
+            url: "/ApplayContract/GetTemplateNoList",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                $("#uploadLog").hide();
+                var response = eval("(" + JSON.parse(JSON.stringify(result)) + ")");
+                var selTempNoElement = $("select#TemplateNo");
+                selTempNoElement.empty();
+                var selHtml = "<option value=''>===Select===</option>";
+                for (var index = 0; index < response.length; index++) {
+                    selHtml += "<option value='" + response[index].ContractId + "'>"
+                    + response[index].TemplateNo + "</option>";
+                }
+                selTempNoElement.append(selHtml);
+            }
+        });
+
+        //加载原合同文件数据
+        $.ajax({
+            type: "POST",
+            url: "/ApplayContract/GetOrigialContractList",
+            data: {},
+            dataType: "json",
+            success: function (result) {
+                $("#uploadLog").hide();
+                var response = eval("(" + JSON.parse(JSON.stringify(result)) + ")");
+                var selOrigialContractElement = $("#selOriginalContract");
+                selOrigialContractElement.empty();
+                var selHtml = "<option value=''>===Select===</option>";
+                for (var index = 0; index < response.length; index++) {
+                    if (response[index].IsTemplateContract) {
+                        selHtml += "<option value='" + response[index].ContractId + "'>"
+                        + response[index].TemplateName + "</option>";
+                    } else {
+                        selHtml += "<option value='" + response[index].ContractId + "'>"
+                        + response[index].ContractName + "</option>";
+                    }
+                }
+                selOrigialContractElement.append(selHtml);
+                $("#selOriginalContract").val("@Model.OriginalContractId");
+            }
+        });
+
+        //初始化数据
+        if ("@Model.ContractId" != "") {
+            $("#FerreroEntity").val("@Model.FerreroEntity");
+            $("#FerreroEntity").trigger("change");//触发FerreroEntity的change事件
+
+            $("#ContractTypeId").val("@Model.ContractTypeId");
+            $("#ContractTypeId").trigger("change");//触发ContractTypeId的change事件
+
+            $("#CounterpartyEn").val("@Model.CounterpartyEn");
+            $("#CounterpartyCn").val("@Model.CounterpartyCn");
+            $("#ContractName").val("@Model.ContractName");
+            //申请部门自动带出
+            //申请人自动带出：当前登录用户
+            //申请时间自动带出：当前时间
+            $("#Capex").val("@Model.Capex".toLowerCase());
+            $("#IsMasterAgreement").val("@Model.IsMasterAgreement".toLowerCase());
+
+            $("#BudgetType").val("@Model.BudgetType");
+            $("#ContractPrice").val("@Model.ContractPrice");
+            $("#Currency").val("@Model.Currency");
+            $("#PrepaymentAmount").val("@Model.PrepaymentAmount");
+            $("#PrepaymentPercentage").val("@Model.PrepaymentPercentage");
+            $("#ContractKeyPoints").val("@Model.ContractKeyPoints");
+            @*$("#ContractEffectiveDate").val(new Date("@Model.EffectiveDate".replace(/-/, "/")).format("yyyy-MM-dd"));
+                $("#ContractExpirationDate").val(new Date("@Model.ExpirationDate".replace(/-/, "/")).format("yyyy-MM-dd"));
+                $("#TemplateEffectiveDate").val(new Date("@Model.EffectiveDate".replace(/-/, "/")).format("yyyy-MM-dd"));
+                $("#TemplateExpirationDate").val(new Date("@Model.ExpirationDate".replace(/-/, "/")).format("yyyy-MM-dd"));*@
+            $("#ContractEffectiveDate").text(new Date("@Model.EffectiveDate").format("yyyy-MM-dd"));
+            $("#ContractExpirationDate").text(new Date("@Model.ExpirationDate").format("yyyy-MM-dd"));
+            $("#TemplateEffectiveDate").text(new Date("@Model.EffectiveDate").format("yyyy-MM-dd"));
+            $("#TemplateExpirationDate").text(new Date("@Model.ExpirationDate").format("yyyy-MM-dd"));
+
+            //模板编号
+            if ("@Model.IsTemplateContract" == "False") {
+                $("#normalContract").find("#TemplateNo").val("@Model.TemplateNo");
+            } else {
+                $("#templateContract").find("#TemplateNo").val("@Model.TemplateNo");
+            }
+
+            $("#TemplateInitiator").val("@Model.TemplateInitiator");
+            $("#ScopeOfApplication").val("@Model.ScopeOfApplication");
+            $("#TemplateName").val("@Model.TemplateName");
+
+        }
+    });
+    function escape2Html(str) {
+        var arrEntities = { 'lt': '<', 'gt': '>', 'nbsp': ' ', 'amp': '&', 'quot': '"' };
+        return str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function (all, t) { return arrEntities[t]; });
+    }
+</script>

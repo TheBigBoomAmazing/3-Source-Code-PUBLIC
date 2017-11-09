@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form id="formtest" action="@Url.Action("SendMail")" method="get">
+    <p>title: <input type="text" name="title" /></p>
+    <p>emails: <input type="text" name="emails" /></p>
+    <p>content: <input type="text" name="content" /></p>
+    <p>cc: <input type="text" name="cc" /></p>
+    <input type="submit" value="Submit" id="send"/>
+</form>
+
+<script type="text/javascript">
+
+
+    //ajax提交表单
+    $("#send").click(function(){
+        getExamId()
+        setExamId()
+
+        $.ajax({
+            type: "post",
+            url: "SendMail",//"/CAS/Common/GetContractTypeList",
+            data: $("#formtest").serialize(),
+            success: function(data) {
+                alert("！");
+            },
+            error: function(data) {
+                alert(data);
+            }
+        })
+    });
+
+</script>

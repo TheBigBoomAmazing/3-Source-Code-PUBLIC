@@ -1,0 +1,126 @@
+﻿@{
+
+    Layout =null;
+}
+    <link href="@eContract.Common.ConfigHelper.UIPATH/ui/INSPINIA/css/plugins/jsTree/style.min.css" rel="stylesheet" />
+<div class="wrapper wrapper-content  layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+            
+                <div class="ibox-content c-edit-wrap" style="display: block;">
+                    <div class="form-horizontal">
+                        <div class="jsTree">
+                            @Html.Raw(ViewBag.PageList)
+                        </div>
+                        <div id="jsTreeView" style="display: none;">
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <input type="button" tabindex="8" id="btnSubmit" onclick="Save();" value="Save" class="default btn btn-primary" />
+                                <a onclick="hideModal();" href="javaScript://" class="btn btn-white">Back to list</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+        var roleId = "";
+
+        var tree;
+        $(function () {
+            $('.jsTree').jstree("deselect_all");
+            InitTree();
+            jForm.Ajax({
+                url: "/Admin/FunctionRoleManagement/GetRolePage?d=" + new Date(),
+                data: { roleid: "@ViewBag.RoleId" },
+                IsNoLoad: true,
+                success: function (result) {
+                    //$("#myModal").modal("show");
+                    var arr = [];
+                    if (result != null && result.msgBody.length > 0) {
+                        for (var i = 0; i < result.msgBody.length; i++) {
+                            var obj = $("#jsTreeView").find("li[id='jstree_" + result.msgBody[i] + "']");
+                            if (obj.attr("data-children") != "1") {
+                                arr.push(result.msgBody[i]);
+                            }
+                        }
+                       
+                        $('.jsTree').jstree("select_node", arr);
+
+                    }
+
+                }
+            });
+        });
+
+        function InitTree() {
+            $("#jsTreeView").append($('.jsTree').html());
+            $("#jsTreeView").find("li[id!='']").each(function () {
+                $(this).attr("id", "jstree_" + $(this).attr("id"));
+            });
+            $('.jsTree').jstree({
+                "checkbox": {
+                    "keep_selected_style": false
+                },
+                "plugins": ["checkbox"]
+            });
+        }
+
+
+
+        function Save(roleid) {
+            var data = $('.jsTree').jstree('get_selected');
+            var ids = "";
+            for (var i = 0; i < data.length; i++) {
+                if (ids == "") {
+                    ids = data[i];
+                }
+                else {
+                    ids += "," + data[i];
+                }
+            }
+            $('.jsTree').find("i.jstree-undetermined").each(function () {
+                if (ids == "") {
+                    ids = $(this).closest("li").attr("id");
+                }
+                else {
+                    ids += "," + $(this).closest("li").attr("id");
+                }
+            });
+            jNotify.Confirm("", "保存后会将原有关系进行删除，确定要保存吗？", function (data) {
+                $.ajax({
+                    url: "@Url.Action("Save")",
+                    method: "POST",
+                    dataType: "json",
+                    data: { RoleId: "@ViewBag.RoleId", strPageIds: ids },
+                    success: function (result) {
+                        @*jNotify.showSuccess("Successfully submitted！", function () {
+                            window.location.href = "@Url.Action("Index")";
+                        });*@
+                        jNotify.showSuccess("Successfully submitted");
+                        //alert("保存成功");
+                        setTimeout(function () {
+                            //jNotify.showSuccess("Successfully submitted");
+                            //window.location.href = "@Url.Action("Index")";
+                            hideModal();//关闭模态框
+                        }, 2000);
+                    }
+                    //, error: function (result) {
+                    //    jNotify.showSuccess("保存失败：" + result);
+                    //}
+                });
+                @*jForm.Ajax({
+                    url: "@Url.Action("Save")",
+                    data: { RoleId: "@ViewBag.RoleId", strPageIds: ids },
+                    success: function (result) {
+                        jNotify.showSuccess("Successfully submitted");
+                    }
+                });*@
+            });
+        }
+    </script>

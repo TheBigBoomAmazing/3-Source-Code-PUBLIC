@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html xml:lang="en">
+@{
+    string controller = ViewContext.RouteData.Route.GetRouteData(this.Context).Values["controller"].ToString();
+    string action = ViewContext.RouteData.Route.GetRouteData(this.Context).Values["action"].ToString();
+    string area = "home";
+    if (ViewContext.RouteData.Route.GetRouteData(this.Context).DataTokens["area"] != null)
+    {
+        area = ViewContext.RouteData.Route.GetRouteData(this.Context).DataTokens["area"].ToString().ToLower();
+    }
+    string controllerNew = (!string.IsNullOrEmpty(area) ? area + "/" : "") + controller.ToLower();
+    string controllerurl = controllerNew + "/" + action.ToLower();
+
+    eContract.Common.WebUtils.MenuDataItem currentItem = null;
+    eContract.Common.WebUtils.MenuDataItem currentCitem = null;//二级当前分类
+    eContract.Common.WebUtils.MenuDataItem currentcCitem = null;//三级当前分类
+    var IsFirst = false;
+    var IsHome = false;
+    if (ViewBag.IsHome != null && Convert.ToBoolean(ViewBag.IsHome))
+    {
+        IsHome = Convert.ToBoolean(ViewBag.IsHome);
+    }
+}
+<head>
+    <title>主数据管理系统</title>
+        <link href="@Url.Content("~/favicon.ico")" mce_href="favicon.ico" rel="bookmark" type="image/x-icon" />
+    <link href="@Url.Content("~/favicon.ico")" mce_href="favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="@Url.Content("~/favicon.ico")" mce_href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="@Url.Content("/UI/INSPINIA/css/bootstrap.min.css")" rel="stylesheet">
+    <link href="@Url.Content("/UI/INSPINIA/font-awesome/css/font-awesome.css")" rel="stylesheet">
+    <link href="@Url.Content("/UI/INSPINIA/css/plugins/dataTables/datatables.min.css")" rel="stylesheet">
+    <link href="@Url.Content("/UI/INSPINIA/css/plugins/iCheck/custom.css")" rel="stylesheet">
+    <link href="@Url.Content("/UI/INSPINIA/css/animate.css")" rel="stylesheet">
+    <link href="@Url.Content("/UI/INSPINIA/css/style.css")" rel="stylesheet">
+    <link href="@Url.Content("/UI/Css/default/site.css")?v=@eContract.Common.ConfigHelper.Version" rel="stylesheet">
+    @RenderSection("header", false)
+</head>
+
+<body class="layout">
+    <div id="layout-body-left wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <span>
+                                <img alt="image" class="img-circle" src="../../../UI/INSPINIA/img/profile_small.jpg" />
+                            </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs">
+                                        <strong class="font-bold">费列罗集团</strong>
+                                    </span> <span class="text-muted text-xs block">@(eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null ? eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.CasUserEntity.EnglishName : "") <b class="caret"></b></span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="@Url.Content("~/Admin/PersonalInfo")">修改密码</a></li>
+                                <li class="divider"></li>
+                                <li><a href="@Url.Content("~/account/LogOff")">退出</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            IN+
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa c-nav-ico fa-home"></i> <span class="nav-label">首页</span></a>
+                    </li>
+                    @{
+                List<eContract.Common.WebUtils.MenuDataItem> lstItem = null;
+                if (eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null && eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.MenuDataItems.Count > 0)
+                {
+                    var i = 0;
+                    lstItem = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.MenuDataItems.Where(x => x.Page.IsMenu == 1).ToList();
+                    foreach (var item in lstItem)
+                    {
+                        i++;
+                        bool flag = false;
+                        if (!string.IsNullOrEmpty(item.Page.PageUrl) && item.Page.PageUrl.ToLower().Equals(area))
+                        {
+                            currentItem = item;
+                            flag = true;
+                        }
+                        <li class="@(flag ? "active" : "")">
+                            <a href="@(!string.IsNullOrEmpty(item.Page.PageUrl) ? Url.Content("~/" + item.Page.PageUrl) : "javascript://")"><i class="fa c-nav-ico fa-check-square-o"></i> <span class="nav-label">@item.Page.PageName</span><span class="fa arrow"></span></a>
+                            @if (item.SubMenu != null && item.SubMenu.Count > 0)
+                            {
+                                flag = false;
+                                currentCitem = lstItem.Where(x => !string.IsNullOrEmpty(x.Page.PageUrl) && x.Page.PageUrl.ToLower().Equals(controllerurl)).FirstOrDefault();
+
+                                <ul class="nav nav-second-level collapse">
+                                    @foreach (var fitem in item.SubMenu)
+                                    {
+                                        if (currentCitem == fitem)
+                                        {
+                                            flag = true ;
+                                        }
+                                        <li class="@(flag ? "active" : "")">
+                                            <a href="@(!string.IsNullOrEmpty(fitem.Page.PageUrl) ? Url.Content("~/" + fitem.Page.PageUrl) : "javascript://")"> <span class="fa arrow">@fitem.Page.PageName</span></a>
+
+                                            @if (fitem.SubMenu != null && fitem.SubMenu.Count > 0)
+                                            {
+                                                flag = false;
+                                                currentcCitem = item.SubMenu.Where(x => !string.IsNullOrEmpty(x.Page.PageUrl) && x.Page.PageUrl.ToLower().Equals(controllerNew)).FirstOrDefault();
+                                                <ul class="nav nav-third-level">
+                                                    @foreach (var citem in fitem.SubMenu)
+                                                    {
+                                                        flag = citem == currentcCitem;
+                                                        <li class="@(flag ? "active" : "")"><a href="@(!string.IsNullOrEmpty(citem.Page.PageUrl) ? Url.Content("~/" + citem.Page.PageUrl) : "javascript://")">@citem.Page.PageName</a></li>
+                                                    }
+                                                </ul>
+
+                                                }
+                                        </li>
+                                    }
+
+
+                                </ul>
+                            }
+
+                        </li>
+                        <li class=""><a href="@(!string.IsNullOrEmpty(item.Page.PageUrl) ? Url.Content("~/" + item.Page.PageUrl) : "")">@item.Page.PageName</a></li>
+                    }
+                }
+                    }
+
+
+                </ul>
+            </div>
+        </nav>
+        <div id="layout-body-body page-wrapper" class="gray-bg">
+
+
+        </div>
+
+        <div class="layout-footer footer">
+            <div align="center">
+                Copyright © 2017 费列罗贸易(上海)有限公司 版权所有
+            </div>
+        </div>
+        </div>
+</body>
+<script src="@Url.Content("~/Scripts/jquery/jquery-1.3.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/ligerui/ligerui.all.js")?v=@eContract.Common.ConfigHelper.Version" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/validate/jquery.validate.min.js")" type="text/javascript"></script> 
+<script src="@Url.Content("~/Scripts/validate/jquery.validate.Expand.js?v=" + eContract.Common.ConfigHelper.Version)" type="text/javascript"></script> 
+<script src="@Url.Content("~/Scripts/validate/jquery.metadata.js?v=" + eContract.Common.ConfigHelper.Version)" type="text/javascript"></script>
+        
+<script src="@Url.Content("~/Scripts/validate/messages_cn.js?v=" + eContract.Common.ConfigHelper.Version)" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Jquery.Form.3.0.js")?v=@eContract.Common.ConfigHelper.Version" type="text/javascript"></script>
+<script type="text/javascript">
+    var BaseUrl="@Url.Content("~/")";
+</script>
+@if (!IsHome && IsFirst)
+{
+<script type="text/javascript">
+
+    window.location.href = "@Url.Content("~/" + currentCitem.Page.PageUrl)";
+</script>
+}
+    @RenderSection("footer", false)
+    <script type="text/javascript">
+        $(function () {
+            $(".subtree li a").click(function (e) {
+                var $this = $(this).parent();
+                var $sub = $(this).parent().children(".tree");
+                var $icon = $(this).find('.parMeunIcon');
+                if ($(this).hasClass("subitem")) {
+                    if (!$sub.hasClass("curr")) {
+                        $sub.addClass("curr");
+                        $this.children(".tree").slideDown("fast");
+                        $icon.attr('style', '');
+                    } else {
+                        $sub.removeClass("curr");
+                        $this.children(".tree").slideUp("fast");
+                        $icon.attr('style', 'transform: rotate(-90deg);-ms-transform: rotate(-90deg);-webkit-transform: rotate(-90deg);-o-transform: rotate(-90deg);');
+                    }
+                }
+            });
+        })
+    </script>
+</html>

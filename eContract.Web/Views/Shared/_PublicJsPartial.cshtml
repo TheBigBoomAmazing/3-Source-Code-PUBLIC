@@ -1,0 +1,52 @@
+﻿@using eContract.Common;
+@{string path = eContract.Common.ConfigHelper.SystemJSPath;
+    string defaultpath = Url.Content("~/ui/scripts");
+
+}
+<script type="text/javascript">
+    var BaseUrl = "@Url.Content("~/")";
+    var CSSPathUrl = "@ConfigHelper.UIPATH";
+</script>
+<script type="text/javascript" src="@defaultpath/jquery-2.1.1.js"></script>
+@*<script type="text/javascript" src="@defaultpath/jquery-1.9.1.min.js"></script>*@
+<script type="text/javascript" src="@defaultpath/bootstrap.min.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<!-- Peity -->
+<script type="text/javascript" src="@defaultpath/plugins/peity/jquery.peity.min.js"></script>
+<!-- Custom and plugin javascript -->
+<script type="text/javascript" src="@defaultpath/inspinia.js"></script>
+
+<!-- jQuery UI -->
+<script type="text/javascript" src="@defaultpath/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- EayPIE -->
+<script type="text/javascript" src="@defaultpath/plugins/easypiechart/jquery.easypiechart.js"></script>
+<!-- Sparkline -->
+<script type="text/javascript" src="@defaultpath/plugins/sparkline/jquery.sparkline.min.js"></script>
+<!-- Sparkline demo data  -->
+
+<script type="text/javascript" src="@defaultpath/plugins/dataTables/dataTables.min.js" chartset="utf-8"></script>
+<!-- iCheck -->
+<script type="text/javascript" src="@defaultpath/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/validate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/validate/jquery.metadata.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/validate/messages_cn.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/validate/jquery.validate.Expand.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript" src="@defaultpath/Jquery.Form.3.0.js"></script>
+<script type="text/javascript" src="@defaultpath/business/Layout.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/select2/select2.full.min.js"></script><!-- jqGrid -->
+<script type="text/javascript" src="@defaultpath/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="@defaultpath/JqGrid.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/popover/bootstrap-popover.js"></script>
+<script type="text/javascript" src="@defaultpath/plugins/My97DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript" src="@defaultpath/plugins/jsTree/jstree.min.js"></script>
+<!-- Microsoft.jQuery.Unobtrusive.Ajax -->
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+    //全局禁用ajax缓存
+    $.ajaxSetup({ cache: false });
+</script>
+

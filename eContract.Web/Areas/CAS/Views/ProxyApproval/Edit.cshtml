@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+}
+@model eContract.Common.Entity.CasProxyApprovalEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content c-edit-wrap">
+                    <form method="post" id="proxyForm" class="form-horizontal" @*action="@Url.Action("Edit")"*@>
+                        @Html.XHiddenFor(m => m.ProxyApprovalId)
+                        @Html.XHiddenFor(m => m.LastModifiedBy)
+                        @Html.XHiddenFor(m => m.LastModifiedTime)
+                        @*@Html.XHiddenFor(m => m.AuthorizedUserId)*@
+                        @if (ViewBag.IsAdmin == "True")
+                        {
+                            <div id='div_Auth' class='form-group'>
+                                <label class='col-sm-2 control-label'>
+                                    Delegator：
+                                </label>
+                                <div class='col-sm-10 controls'>
+                                    <input type="hidden" id="selected_AuthorizedUser" name="AuthorizedUserId" style="height:50px;width:300px">
+                                    <select id="sel_AuthorizedUser" class="js-data-example-ajax form-control" name="AuthorizedUser"></select>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.XTextBox("AuthorizedUserId", xInputType.text, (string)ViewBag.AuthorizedUserName, new UIValidation { DisplayName = "Delegator", required = true, disabled = true }, new { display = Model.AuthorizedUserId })
+                        }
+                        @*@Html.XTextBoxFor(m => m.AgentUserId, new UIValidation { DisplayName = "代理人", required = true }, new { display = Model.AgentUserId })*@
+
+                        <div id='div_Step' class='form-group'>
+                            <label class='col-sm-2 control-label'>
+                                Delegated To：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type="hidden" id="selected_menuUser" name="AgentUserId" style="height:50px;width:300px">
+                                <select id="sel_menuUser" style="width:100%;" multiple="multiple" class="js-data-example-ajax form-control" name="AgentUser"></select>
+                            </div>
+                        </div>
+
+                        @Html.XTextBoxFor(m => m.BeginTime, new UIValidation { DisplayName = "Start from", required = true }, new { @class = "Wdate", display = Model.BeginTime, onClick = "WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" })
+                        @Html.XTextBoxFor(m => m.EndTime, new UIValidation { DisplayName = "End to", required = true }, new { @class = "Wdate", display = Model.EndTime, onClick = "WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" })
+                        @Html.XButtonList(
+                        new[]{new XButton{xButtonType = XButtonType.Button, Id = "btnSave",DisplayName="Save",Icon="icon-save",onClick="onSubmit();", LoadingText="Saving...."},
+
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back",onClick="hideModal();", LoadingText="Returning....",xButtonType=XButtonType.Button}
+                               })
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*@section footer{*@
+    <script src="~/Areas/CAS/Scripts/depUserCommon.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            jForm.xValidate($("#proxyForm"), {});
+
+            loadSelectValue();
+            if ("@ViewBag.IsAdmin" == "True") {
+                loadSelectAuthorizedValue();
+            }
+
+        })
+
+        function onSubmit() {
+            var result = $("#proxyForm").valid();
+            if (result && $("#selected_menuUser").val() == "") {
+                result = false;
+                jNotify.showError("Please choose user as delegated person.");
+            }
+            if ("@ViewBag.IsAdmin" == "True" && $("#selected_AuthorizedUser").val() == "") {
+                result = false;
+                jNotify.showError("Please choose user as delegator.");
+            }
+
+            if (result) {
+                jNotify.Confirm("", "Please confirm the delegated person will approve the contract during the period.",
+                        function (res) {
+                            //$("#proxyForm").submit();
+                            jForm.Ajax({
+                                url: "/ProxyApproval/Edit",//Action
+                                data: jForm.getfrmData($("#proxyForm")),//表单参数
+                                success: function (result) {
+                                    jNotify.showSuccess("Successfully submitted");//显示信息
+                                    hideModal();//关闭模态框
+                                    jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");//列表页刷新
+                                }
+                            });
+                        });
+            }
+        }
+
+
+        //查询用户
+        function loadSelectValue() {
+            $.ajax({
+                url: '/CAS/ProxyApproval/GetAgentUserList',
+                async: true,
+                data: {
+                    proxyApprovalId: "@Model.ProxyApprovalId"
+                },
+                timeout: 5000,    //超时时间
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success: function (data, textStatus, jqXHR) {
+                    selectUser2($("#sel_menuUser"), $("#selected_menuUser"), data);
+                }
+            });
+        };
+        //查询授权人信息
+        function loadSelectAuthorizedValue() {
+            $.ajax({
+                url: '/CAS/ProxyApproval/GetAuthorizedUserList',
+                async: true,
+                data: {
+                    proxyApprovalId: "@Model.ProxyApprovalId"
+                },
+                timeout: 5000,    //超时时间
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success: function (data, textStatus, jqXHR) {
+                    selectUserSingle2($("#sel_AuthorizedUser"), $("#selected_AuthorizedUser"), data);
+                }
+            });
+        };
+    </script>
+@*}*@
+

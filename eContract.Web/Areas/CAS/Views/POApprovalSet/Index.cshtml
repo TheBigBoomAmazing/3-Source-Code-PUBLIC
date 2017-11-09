@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_KEYWORD">Keyword：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_KEYWORD" name="KEYWORD" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            <a data-toggle="modal" data-target="#modalContent" href="@Url.Action("Edit")" class="btn btn-primary">New</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_List.cshtml")
+        </div>
+    </div>
+</div>
+@*@section footer{*@
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+                jqGrid.initGrid($("#DEPTIDGRID"),
+                {
+                    url: "@Url.Action("Index")",
+                    sortname: "PO_APPROVAL_ID",
+                    multiselect: false,
+                    colNames: ['', 'Action', 'Ferrero Party', 'Contract Type'],
+                    colModel: [
+                        { name: 'PO_APPROVAL_ID', index: 'PO_APPROVAL_ID', hidden: true },
+                        {
+                            name: '',
+                            width: 20,
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("edit")?id=' +
+                                    row.PO_APPROVAL_ID + '&type=check' +
+                                    '">Open</a>&nbsp;' +
+                                    '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("edit")?id=' +
+                                    row.PO_APPROVAL_ID +
+                                    '">Edit</a>&nbsp;' +
+                                    '<a href="javascript:void(0)" onclick="aClick(\'' + row.CONTRACT_TYPE_ID + '\',\'' + row.COMPANY + '\')">Delete</a>&nbsp;' +
+                                    " </div>";
+                            }
+                        },
+                        { name: 'COMPANY', index: 'COMPANY', width: 50, search: true },
+                        { name: 'CONTRACT_TYPE_NAME', index: 'CONTRACT_TYPE_NAME', width: 50, search: true }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    });
+
+            });
+            function aClick(idValue,companyValue) {
+                jNotify.Confirm("", "Please confirm to delete the item.",
+                    function () {
+                        jForm.Ajax({
+                            url: "@Url.Action("Delet")",
+                            data: { id: idValue, company: companyValue },
+                            success: function (data) {
+                               jqGrid.grid.jqGrid().trigger("reloadGrid");
+                            }
+                        });
+                    });
+                return false;
+            }
+    </script>
+@*}*@
+

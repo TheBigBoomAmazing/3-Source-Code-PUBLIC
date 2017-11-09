@@ -1,0 +1,505 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model eContract.Common.Entity.CasContractApprovalStepEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content c-edit-wrap">
+                    <form method="post" class="form-horizontal" id="cApproveSetForm" @*action="@Url.Action("Edit")" onsubmit="return onSubmit();"*@>
+                        <div class="form-group">
+                            <div class="col-sm-6 control-label">
+                                <input type='hidden' name='ContractApprovalStepId' id='ContractApprovalStepId' value=@Model.ContractApprovalStepId>
+                            </div>
+                        </div>
+                        <div class='form-group layout-edit-from-checkbox'>
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>申请公司：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <select class="form-control m-b c-edit-select valid" id="Company" name="Company"
+                                        validate="{required:true}" display="" aria-required="true" aria-invalid="true">
+                                    <option value="">===Select===</option>
+                                    <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
+                                    <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
+                                </select><p class="text-danger help-block"></p>
+                            </div>
+                        </div>
+                        <div class='form-group layout-edit-from-checkbox'>
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>合同类型：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <select class="form-control m-b c-edit-select valid" id="ContractTypeId" name="ContractTypeId" validate="{required:true}" display="" aria-required="true" aria-invalid="true">
+                                    <option value="">===Select===</option>
+                                </select><p class="text-danger help-block"></p>
+                            </div>
+                        </div>
+                        <div class='form-group layout-edit-from-checkbox'>
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>审批步骤：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input class="textinput form-control" value="@Model.Step" validate="{required:true}" placeholder="" type="number" min="1" id='Step' name='Step' style="float:left;ime-mode:disabled" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');this.value=this.value.replace('.','');" />@*请输入大于0的整数*@
+                                <p class="text-danger help-block"></p>
+                                <p id="stepValue" class="asteriskField"></p>
+                            </div>
+                        </div>
+                        <div class='form-group layout-edit-from-checkbox'>
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>申请角色：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <div style="float:left"><input id="APPROVAL_ROLE1" type="radio" value="1" name="APPROVAL_ROLE_TYPE" /><label for="APPROVAL_ROLE1">申请部门</label></div>
+                                <div style="float:left"><input id="APPROVAL_ROLE2" type="radio" value="2" name="APPROVAL_ROLE_TYPE" /><label for="APPROVAL_ROLE2">申请用户</label></div>
+                                <div style="float:left"><input id="APPROVAL_ROLE3" type="radio" value="3" name="APPROVAL_ROLE_TYPE" /><label for="APPROVAL_ROLE3">全部部门</label></div>
+                                <input type="hidden" id="ApprovalRole" name="ApprovalRole" />
+                            </div>
+                        </div>
+                        <div class="form-group" id="hide1">
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>申请部门：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type="hidden" id="selected_Dep" name="ApprovalDepValue">
+                                <select id="sel_menuDep" multiple="multiple" class="js-data-example-ajax form-control" name="ApprovalRoleDEP"></select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="hide2">
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>申请用户：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type="hidden" id="selected_menuUser" name="ApprovalUserValue" style="height:50px;width:300px">
+                                <select id="sel_menuUser" multiple="multiple" class="js-data-example-ajax form-control" name="ApprovalRoleUSER"></select>
+                            </div>
+                        </div>
+                        <div class="form-group layout-edit-from-checkbox">
+                            <label class='col-sm-2 control-label'>
+                                是否支持大区总监审批：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                @*<input type='hidden' name='NeedRegionManager' id='NeedRegionManager' value="@Convert.ToBoolean(Model.NeedRegionManager).ToString().ToLower()" />*@
+                                <input type="checkbox" name="NeedRegionManager" checked="@Convert.ToBoolean(Model.NeedRegionManager)" id='chk_NeedRegionManager' />
+                            </div>
+                        </div>
+                        <div class="form-group layout-edit-from-checkbox">
+                            <label class='col-sm-2 control-label'>
+                                是否支持部门总监审批：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                @*<input type='hidden' name='NeedDeptManager' id='NeedDeptManager' value="@Convert.ToBoolean(Model.NeedDeptManager).ToString().ToLower()" />*@
+                                <input type="checkbox" name="NeedDeptManager" checked="@Convert.ToBoolean(Model.NeedDeptManager)" id='chk_NeedDeptManager' />
+                            </div>
+                        </div>
+                        <div class="form-group layout-edit-from-checkbox">
+                            <label class='col-sm-2 control-label'>
+                                是否支持用户领导审批：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type="checkbox" name="NeedLineManager" checked="@Convert.ToBoolean(Model.NeedLineManager)" id='chk_NeedLineManager' />
+                            </div>
+                        </div>
+                        <div class="form-group" id="hide3">
+                            <label class='col-sm-2 control-label'>
+                                审批部门：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type="hidden" id="selected_ExamDep" name="ExaminationValue">
+                                <select id="sel_menuExam" multiple="multiple" class="js-data-example-ajax form-control" name="ApprovalRoleAPPROVAL"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>审批时间：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input value="@Model.ApprovalTime" type='text' validate="{required:true}" id='ApprovalTime' name='ApprovalTime' /> 工作日
+                                <p class="text-danger help-block"></p>
+                            </div>
+                        </div>
+                        <div class="form-group"  id="hide5">
+                            <label class='col-sm-2 control-label'>
+                            </label>
+                            <label class='col-sm-5 controls' style="color:#F00;float:right">
+                                如果同时勾选大区总监审批和部门总监审批，则为并行审批。
+                            </label>
+                        </div>
+                        <div class="form-group" style="display:none;"  id="hide4">
+                            <label class='col-sm-2 control-label'>
+                            </label>
+                            <label class='col-sm-5 controls' style="color:#F00;float:right">
+                               此合同类型已经存在正在审批中的合同，不允许保存修改。
+                            </label>
+                        </div>
+                        
+                        @*@Html.Hidden("submitType")*@
+                        @Html.XButtonList(
+                        new[]{new XButton{Id="btnSave",DisplayName="Save", Icon="icon-save",onClick="onSubmit();", LoadingText="Saving....",xButtonType=XButtonType.Button},
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back",onClick="hideModal();", LoadingText="Returning....",xButtonType=XButtonType.Button},
+                               })
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+    <script src="~/Areas/CAS/Scripts/depUserCommon.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var company = "@Model.Company";
+            var ontractTypeId = "@Model.ContractTypeId";
+            if (company != "") {
+                $("#Company").find("option[value='" + company + "']").attr("selected", true);
+            }
+            if (ontractTypeId != "") {
+                loadontractTypeName(ontractTypeId);
+            }
+            if ("@ViewBag.Type" == "3") {
+                $("#hide5").attr("style", "display:none"); //查看时隐藏提示
+                $("input").attr("disabled", true);
+                $("select").attr("disabled", true);
+                $("button[name=btnSave]").attr("disabled", true);
+                $("input[type=radio][name=APPROVAL_ROLE_TYPE][value='" + "@Model.ApprovalRole" + "']").attr("checked", true);
+                loadSelectValue();
+                loadSelectApprovalValue();
+                if ("@Model.ApprovalRole" == "1") {
+                    $("#hide1").show();
+                    $("#hide2").hide();
+                }
+                if ("@Model.ApprovalRole" == "2") {
+                    $("#hide1").hide();
+                    $("#hide2").show();
+                }
+                if ("@Model.ApprovalRole" == "3") {
+                    $("#hide1").hide();
+                    $("#hide2").hide();
+                }
+            }
+            if ("@ViewBag.EditType" == "0") {
+                $("input[type=radio][name=APPROVAL_ROLE_TYPE]").attr("disabled", true);//角色选择不可编辑
+                $("select[name=Company]").attr("disabled", true);//公司名称不可编辑
+                $("select[name=ContractTypeId]").attr("disabled", true);//合同类型不可编辑
+                $("input[name=Step]").attr("disabled", true);//审批步骤
+                $("input[type=radio][name=APPROVAL_ROLE_TYPE][value='" + "@Model.ApprovalRole" + "']").attr("checked", true);
+                loadSelectValue();
+                $("#sel_menuUser").attr("disabled", true);
+                $("#sel_menuDep").attr("disabled", true);
+                if ("@Model.ApprovalRole" == "1") {
+                    $("#hide1").show();
+                    $("#hide2").hide();
+                }
+                if ("@Model.ApprovalRole" == "2") {
+                    $("#hide1").hide();
+                    $("#hide2").show();
+                }
+                if ("@Model.ApprovalRole" == "3") {
+                    $("#hide1").hide();
+                    $("#hide2").hide();
+                }
+                $("#ApprovalRole").val("@Model.ApprovalRole");
+                loadSelectApprovalValue();
+
+                if ("@ViewBag.Exist"=="1") {
+                    $("button[name=btnSave]").attr("disabled", true);
+                    $("#hide4").removeAttr("style");
+                }
+            }
+            if ("@ViewBag.EditType" == "1") {
+                selectUser($("#sel_menuUser"), $("#selected_menuUser"));
+                selectDept($("#sel_menuDep"), $("#selected_Dep"));
+                selectApprovalDept($("#sel_menuExam"), $("#selected_ExamDep"));
+                $("#APPROVAL_ROLE1").click(function () {
+                    $("#hide1").show();
+                    $("#hide2").hide();
+                    $("#ApprovalRole").val(1);
+                });
+                $("#APPROVAL_ROLE2").click(function () {
+                    $("#hide1").hide();
+                    $("#hide2").show();
+                    $("#ApprovalRole").val(2);
+                });
+                $("#APPROVAL_ROLE3").click(function () {
+                    $("#hide1").hide();
+                    $("#hide2").hide();
+                    $("#ApprovalRole").val(3);
+                });
+                $("#APPROVAL_ROLE1").trigger("click");
+                //公司名称更改
+                $('#Company').change(function () {
+                    $.ajax({
+                        url: "/CAS/Common/GetContractTypeList",
+                        method: "get",
+                        dataType: "json",
+                        data: {},
+                        success: function (result) {
+                            debugger
+                            var contractTypeList = eval("(" + result + ")");
+                            var contractFroupHtml = '<option value="">===Select===</option>';
+                            $("#ContractTypeId").empty();
+                            for (var i = 0; i < contractTypeList.length; i++) {
+                                var item = contractTypeList[i];
+                                var Company = $("#Company").val();
+                                if (Company != "") {
+                                    if (Company == item.FerreroEntity) {
+                                        contractFroupHtml += '<option value="' + item.ContractTypeId + '">' + item.ContractTypeName + '</option>';
+                                    }
+                                }
+                            }
+                            $("#ContractTypeId").append(contractFroupHtml);
+                        }, error: function (res) {
+                            jNotify.showError(res);
+                        }
+                    })
+                });
+                //新增时候合同类型变更
+                @*$('#ContractTypeId').change(function () {
+                    $("#sel_menuDep").select2("val", "");//清空以前选中的值，重新赋值，避免重复
+                    $("#sel_menuUser").select2("val", "");//清空以前选中的值，重新赋值，避免重复
+                    GetExistStep($("#ContractTypeId").val());
+                    $.ajax({
+                        url: "/CAS/ContractApprovalSet/GetContractApprovalStepRole",
+                        method: "get",
+                        dataType: "json",
+                        data: { ContractTypeId: $("#ContractTypeId").val() },
+                        success: function (result) {
+                            var roleResult = result[18];
+                            console.log(result[18])
+                            $("input[type=radio][name=APPROVAL_ROLE_TYPE][value='" + roleResult + "']").attr("checked", true);
+                            if (roleResult != null) {
+                                $("input[type=radio][name=APPROVAL_ROLE_TYPE]").attr("disabled", true);
+                                $("#ApprovalRole").val(roleResult);
+                                $.ajax({
+                                    url: '/CAS/ContractApprovalSet/GetSelectedRole',
+                                    //type: 'POST', //GET
+                                    async: true,    //或false,是否异步
+                                    data: {
+                                        stepId: $("#ContractTypeId").val(), role: roleResult
+                                        //stepId: "@Model.ContractTypeId", role: "@Model.ApprovalRole"
+                                        //stepId: tyid, role: tyid
+                                    },
+                                    timeout: 5000,    //超时时间
+                                    dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                                    success: function (data, textStatus, jqXHR) {
+                                        if (roleResult == "1") {
+                                            selectDept2($("#sel_menuDep"), $("#selected_Dep"), data);
+                                        }
+                                        if (roleResult == "2") {
+                                            selectUser2($("#sel_menuUser"), $("#selected_menuUser"), data);
+                                        }
+                                        $("#sel_menuUser").attr("disabled", true);
+                                        $("#sel_menuDep").attr("disabled", true);
+                                    }
+                                });
+                            }
+                            else {
+                                $("input[type=radio][name=APPROVAL_ROLE_TYPE]").attr("disabled", false);
+                                $("#sel_menuUser").attr("disabled", false);
+                                $("#sel_menuDep").attr("disabled", false);
+                            }
+                            if (roleResult == 2) {
+                                $("#hide1").hide();
+                                $("#hide2").show();
+                            }
+                            if (roleResult == 1) {
+                                $("#hide1").show();
+                                $("#hide2").hide();
+                            }
+                            if (roleResult == 3) {
+                                $("#hide1").hide();
+                                $("#hide2").hide();
+                            }
+                        }, error: function (res) {
+                            jNotify.showError(res);
+                        }
+                    })
+                });*@
+            }
+            if ("@ViewBag.strError" != "") {
+                jNotify.showError("@ViewBag.strError");
+            }
+            //$("input[type=radio][name=APPROVAL_ROLE_TYPE][value='" + 3 + "']").attr("checked", true);//新增页面默认显示部门
+            //$("#APPROVAL_ROLE1").trigger("click");
+        });
+        //查询申请用户
+        function loadSelectValue() {
+            $.ajax({
+                url: '/CAS/ContractApprovalSet/GetSelectedRole',
+                //type: 'POST', //GET
+                async: true,    //或false,是否异步
+                data: {
+                    //stepId: $("#ContractTypeId").val(), role: $("#ApprovalRole").val()
+                    stepId: "@Model.ContractTypeId", role: "@Model.ApprovalRole"
+                    //stepId: tyid, role: tyid
+                },
+                timeout: 5000,    //超时时间
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success: function (data, textStatus, jqXHR) {
+                    selectUser2($("#sel_menuUser"), $("#selected_menuUser"), data);
+                    selectDept2($("#sel_menuDep"), $("#selected_Dep"), data);
+                }
+            });
+        };
+        //查询审批部门
+        function loadSelectApprovalValue() {
+            $.ajax({
+                url: '/CAS/ContractApprovalSet/GetSelectedApprovalRole',
+                //type: 'POST', //GET
+                async: true,    //或false,是否异步
+                data: {
+                    ApprovalStepId: "@Model.ContractApprovalStepId", stepId: "@Model.ContractTypeId", role: "@Model.ApprovalRole"
+                },
+                timeout: 5000,    //超时时间
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success: function (data, textStatus, jqXHR) {
+                    selectApprovalDept2($("#sel_menuExam"), $("#selected_ExamDep"), data);
+                }
+            });
+        };
+
+        //加载合同类型名称
+        function loadontractTypeName(ontractTypeId1) {
+            $.ajax({
+                url: "/CAS/Common/GetContractTypeList",
+                method: "get",
+                dataType: "json",
+                data: {},
+                success: function (result) {
+                    var contractTypeList = eval("(" + result + ")");
+                    var contractFroupHtml = "";
+                    for (var i = 0; i < contractTypeList.length; i++) {
+                        var item = contractTypeList[i];
+                        var Company = $("#Company").val();
+                        if (ontractTypeId1 == item.ContractTypeId) {
+                            contractFroupHtml = "<option selected='selected' value=" + item.ContractTypeId + ">" + item.ContractTypeName + "</option>";
+                        }
+                    }
+                    $("#ContractTypeId").prepend(contractFroupHtml);
+                }, error: function (res) {
+                    jNotify.showError(res);
+                }
+            })
+        };
+        //根据合同类型ID获得已经存在的步骤
+        function GetExistStep(ontractTypeId1) {
+            $.ajax({
+                url: "/CAS/ContractApprovalSet/GetExistStep",
+                method: "get",
+                dataType: "json",
+                data: { contractTypeId: ontractTypeId1 },
+                success: function (result) {
+                    if (result != "" || result != null) {
+                        var htmlValue = "该合同类型已经已经维护的审批步骤:" + result;
+                        $("#stepValue").text(htmlValue)
+                    }
+                }, error: function (res) {
+                    jNotify.showError(res);
+                }
+            })
+        };
+
+        function onSubmit() {
+            console.log(1);
+            $("#Company").removeAttr("disabled");//保存的时候要将disabled的属性去掉，否则得不到值
+            $("#ContractTypeId").removeAttr("disabled");
+            var returnVal = false;
+            try {
+                if ($("#cApproveSetForm").valid()) {
+                    returnVal = true;
+                }
+            } catch (e) {
+                returnVal = false;
+            }
+            if (returnVal) {
+                var companyValue = $("#Company").val();//公司名称
+                var contractType = $("#ContractTypeId").val();//合同名称
+                var stepValue = $("#Step").val();//审批步骤
+                var approvalTime = $("#ApprovalTime").val();//审批时间
+                var regionManager = $("#chk_NeedRegionManager").val();//大区总监
+                var deptManager = $("#chk_NeedDeptManager").val();//部门总监
+                //var lineManager = $("#chk_NeedLineManager").val();//用户领导
+                var selectedExamDep = $("input:hidden[name='ExaminationValue']").val();//审批部门
+                var ApprovalRole = $("#ApprovalRole").val();//申请角色
+                var approvalDepValue = $("input:hidden[name='ApprovalDepValue']").val();//申请部门
+                var approvalUserValue = $("input:hidden[name='ApprovalUserValue']").val();//申请用户
+                if (companyValue == null || companyValue == "") {
+                    returnVal = false;
+                    jNotify.showError("请选择公司名称");
+                }
+                if (contractType == null || contractType == "") {
+                    returnVal = false;
+                    jNotify.showError("请选择合同类型");
+                }
+                if (stepValue == null || stepValue == "") {
+                    returnVal = false;
+                    jNotify.showError("请填写审批步骤");
+                }
+                if (approvalTime == null || approvalTime == "") {
+                    returnVal = false;
+                    jNotify.showError("请填写审批时间");
+                }
+                if (selectedExamDep == "" && regionManager == "false" && deptManager=="false") {
+                    returnVal = false;
+                    jNotify.showError("不允许部门总监、大区总监、审批部门同时为空");
+                }
+                if (ApprovalRole=="1") {
+                    if (approvalDepValue == null || approvalDepValue == "") {
+                        returnVal = false;
+                        jNotify.showError("请选择申请部门");
+                    }
+                }
+                if (ApprovalRole == "2") {
+                    if (approvalUserValue == null || approvalUserValue == "") {
+                        returnVal = false;
+                        jNotify.showError("请选择申请用户");
+                    }
+                }
+            }
+            //return returnVal;
+            if (returnVal) {
+                jForm.Ajax({
+                    url: "/ContractApprovalSet/Edit",//Action
+                    data: jForm.getfrmData($("#cApproveSetForm")),//表单参数
+                    success: function (result) {
+                        if (!result.msgHeader.IsError) {
+                            jNotify.showSuccess("Successfully submitted");//显示信息
+                            hideModal();//关闭模态框
+                            jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");//列表页刷新
+                        }
+                        else {
+                            jNotify.showError(result.msgHeader.Message);//显示信息
+                        }
+                    }
+                });
+            }
+        }
+
+        @*function OnRealSubmit() {
+            console.log(2);
+            var check = onSubmit();
+            console.log(check);
+            if (check) {
+                jForm.Ajax({
+                    url: "/ContractApprovalSet/Edit",//Action
+                    data: jForm.getfrmData($("#cApproveSetForm")),//表单参数
+                    success: function (result) {
+                        jNotify.showSuccess("Successfully submitted");//显示信息
+                        hideModal();//关闭模态框
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");//列表页刷新
+                    }
+                });
+            }
+        }*@
+    </script>
+@*}*@
+

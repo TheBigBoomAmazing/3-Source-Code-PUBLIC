@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "DownloadContractTepPage";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_COMPANY">Ferrero Party：</label>
+                            <div class="form-group">
+                                <select class="form-control m-b c-edit-select valid" id="COMPANY" name="COMPANY">
+                                    <option value="">===Select===</option>
+                                    <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
+                                    <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
+                                </select>
+                                @*<input type="text" id="sel_COMPANY" name="COMPANY" value="" placeholder="Ferrero Party" class="form-control">*@
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_TEMPLATE_NAME">Contract Template Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CONTRACT_TEMPLATE_NAME" name="CONTRACT_TEMPLATE_NAME " value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_DownList.cshtml")
+        </div>
+    </div>
+</div>
+@*@section footer{*@
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+                jqGrid.initGrid($("#ContractTemplateDownLoadGrid"),
+                {
+                    url: "@Url.Action("DownloadContractTepPage")",
+                    sortname: "CREATE_TIME",
+                    multiselect: false,
+                    colNames: ['', 'Action', 'Ferrero Party', 'Contract Template Name', 'Creator', 'Issue Date'],
+                    colModel: [
+                        { name: 'CONTRACT_TEMPLATE_ID', index: 'CONTRACT_TEMPLATE_ID', hidden: true },
+                        {
+                            name: '',
+                            width: 20,
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("CheckDownloadFiles")?id=' +
+                                    row.CONTRACT_TEMPLATE_ID + '&type=check' +
+                                    '">Open</a>&nbsp;' +
+                                    " </div>";
+                            }
+                        },
+                        { name: 'COMPANY', index: 'COMPANY', width: 50, search: true },
+                        { name: 'CONTRACT_TEMPLATE_NAME', index: 'CONTRACT_TEMPLATE_NAME', width: 50, search: true },
+                        { name: 'CREATED_BY', index: 'CREATED_BY', width: 50, search: true },
+                        {
+                            name: 'CREATE_TIME', index: 'CREATE_TIME', width: 50,
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue != null && cellvalue != "") {
+                                    var _date = eval('new ' + (cellvalue.replace(/\//g, '')));
+                                    return _date.format("yyyy-MM-dd HH:mm:ss")
+                                }
+                                else {
+                                    return "";
+                                }
+                            }
+                        }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("DownloadContractTepPage")");
+                    });
+            });
+
+    </script>
+@*}*@
+
+
+
+
+

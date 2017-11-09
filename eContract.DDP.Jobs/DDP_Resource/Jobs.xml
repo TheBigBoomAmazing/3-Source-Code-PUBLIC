@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <Job>
+    <Property Code="TestJob"  Name="测试记录log.txt到D盘" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.TestJob" />
+  </Job>
+  <Job>
+    <Property Code="TimeBackJob"  Name="合同申请、合同审批时间回溯一天" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.TimeBackJob" />
+  </Job>
+  <Job>
+    <Property Code="CallbackContractContinueJob"  Name="打回审批重新提交后3天自动继续审批" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.CallbackContractContinueJob" />
+  </Job>
+  <Job>
+    <Property Code="CommentContinueJob"  Name="批注1天后自动进入审批流程" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.CommentContinueJob" />
+  </Job>
+  <Job>
+    <Property Code="EmployeeTurnoverRemindJob"  Name="员工离职提醒" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.EmployeeTurnoverRemindJob" />
+  </Job>
+  <Job>
+    <Property Code="ContractExpirationReminderJob"  Name="合同到期提醒" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.ContractExpirationReminderJob" />
+  </Job>
+  <Job>
+    <Property Code="PendingApprovalContractRemindJob"  Name="待审批合同清单提醒" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.PendingApprovalContractRemindJob" />
+  </Job>
+  <Job>
+    <Property Code="ContractApprovalAutoOverTimeJob"  Name="合同审批自动过期" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.ContractApprovalAutoOverTimeJob" />
+  </Job>
+  <Job>
+    <Property Code="POApprovalRemindJob"  Name="PO审批提醒" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.POApprovalRemindJob" />
+  </Job>
+  <Job>
+    <Property Code="WordToPDFJob"  Name="Word转PDF" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.WordToPDFJob" />
+  </Job>
+  <Job>
+    <Property Code="UploadSignatureStampContractRemindJob"  Name="合同审批完成后10个工作日提醒上传签字盖章合同" AssemblyName="eContract.DDP.Jobs.dll" ClassName="eContract.DDP.Jobs.UploadSignatureStampContractRemindJob" />
+  </Job>
+</root>

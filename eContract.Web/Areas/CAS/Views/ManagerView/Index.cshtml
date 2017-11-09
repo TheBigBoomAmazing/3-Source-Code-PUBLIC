@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    //Layout = "~/Views/Shared/_ListLayout.cshtml";
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_USER_ACCOUNT">Account：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_USER_ACCOUNT" name="USER_ACCOUNT" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CHINESE_NAME">Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CHINESE_NAME" name="CHINESE_NAME" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_EMAIL">Email：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_EMAIL" name="EMAIL" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_List.cshtml")
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+    <script type="text/javascript">
+
+        $(document)
+            .ready(function () {
+                jqGrid.initGrid($("#userGrid"),
+                {
+                    url: "@Url.Action("Index")",
+                    sortname: "USER_ACCOUNT",
+                    multiselect: false,
+                    colNames: ['ID', 'Account', 'Chinese Name', 'English Name', 'Email', '所属领导'],
+                    colModel: [
+                        { name: 'USER_ID', index: 'USER_ID', search: true, hidden: true },
+                        { name: 'USER_ACCOUNT', index: 'USER_ACCOUNT', search: true },
+                        { name: 'CHINESE_NAME', index: 'CHINESE_NAME', search: true },
+                        { name: 'ENGLISH_NAME', index: 'ENGLISH_NAME', search: true },
+                        { name: 'EMAIL', index: 'EMAIL', search: true },
+                        {
+                            name: '',
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("ManagerViewList")?id=' +
+                                    row.USER_ID +
+                                    '">Open</a>&nbsp;' +
+                                    " </div>";
+                            }
+                        }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    });
+            });
+    </script>
+@*}*@

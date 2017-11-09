@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_PAGE_NAME">Page Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_PAGE_NAME" name="PAGE_NAME" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_MENU_LEVEL">Menu Level：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_MENU_LEVEL" name="MENU_LEVEL" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_PAGE_URL">URL：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_PAGE_URL" name="PAGE_URL" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            <a data-toggle="modal" data-target="#modalContent" href="@Url.Action("Edit")" class="btn btn-primary">New</a>
+                            <button type="button" id="del_btn" class="btn btn-primary">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_List.cshtml")
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+    <script type="text/javascript">
+
+
+        $(document)
+            .ready(function () {
+                jqGrid.initGrid($("#PageManagementGrid"),
+                {
+                    url: "@Url.Action("Index")",
+                    sortname: "MENU_LEVEL,MENU_ORDER",
+                    multiselect: true,
+                    colNames: ['', 'Page Name', 'Is Menu', 'Menu Level', 'Menu Order', 'Url', 'Action'],
+                    colModel: [ 
+                        { name: 'PAGE_ID', index: 'PAGE_ID', hidden: true },
+                        { name: 'PAGE_NAME', index: 'PAGE_NAME', width: 80, search: true },
+                        {
+                            name: 'IS_MENU', index: 'IS_MENU', width: 80, search: false, formatter: function (cellvalue, options, row) {
+                                var html = "";
+                                if (row.IS_MENU === true) {
+                                    html = '<input type="checkbox" checked disabled="true" style="height:30px;line-height:30px" />';
+                                } else {
+                                    html = '<input type="checkbox"  disabled="true" style="height:30px;line-height:30px" />';
+                                }
+                                return html;
+                            }
+                        },
+                        { name: 'MENU_LEVEL', index: 'MENU_LEVEL', width: 80, search: true },
+                        { name: 'MENU_ORDER', index: 'MENU_ORDER', width: 80, search: true },
+                        { name: 'PAGE_URL', index: 'PAGE_URL', search: true },
+                        {
+                            name: '',
+                            index: '',
+                            width: 50,
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                return "<div class=\"c-table-cz\">"
+                                + '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("edit")?id=' + row.PAGE_ID + '">Edit</a>&nbsp;'
+                                + " </div>";
+                            }
+                        }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    });
+
+                $("#del_btn").click(function () {
+                    jqGrid.gridDelete({
+                        url: "@Url.Action("Delete")",
+                        KeyName: 'PAGE_ID'
+                    });
+                });
+            });
+
+    </script>
+@*}*@
+

@@ -1,0 +1,64 @@
+﻿@model eContract.Common.Entity.CasUserEntity
+@{
+    Layout = null;
+
+    string wechatState = eContract.Common.ConfigHelper.GetSetString("System.LocalDomain") + "/account/login";
+    wechatState = ComixSDK.EDI.Utils.EncryptionService.EncryptDES(wechatState, eContract.Common.ConfigHelper.GetSetString("EncryptionKey"));
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>费列罗合同管理系统</title>
+    @RenderPage("/Views/Shared/_PublicCSSPartial.cshtml")
+</head>
+
+<body class="login-bg">
+    <img class="login-bg-img" src="../UI/Css/default/images/common/login-bg.jpg" />
+    <div class="login-wrapper page-login animated fadeInDown">
+        <div class="tab-content">
+            <div class="login-logo">
+                <div class="login-logo1"><img src="/UI/Css/default/images/common/logo1.jpg" width="200"></div>
+                <div class="login-logoChina"><img src="/UI/Css/default/images/common/logoChina.png" width="30"></div>
+                <div class="login-logo2"><img src="/UI/Css/default/images/common/logo2.png" width="170"></div>
+            </div>
+            <div id="login-computer" class="tab-pane active">
+                <div class="login-content">
+                    <form class="form-horizontal" method="post">
+                        <input type="hidden" id="AUTHUserId" name="AUTHUserId" value="@ViewBag.AUTHUserId">
+                        <!-- 错误提醒 -->
+                        @if (!string.IsNullOrEmpty(@ViewBag.strError))
+                        {
+                            <dl class="hint-msg clearfix error">
+                                <dt class="fa"></dt>
+                                <dd>@ViewBag.strError</dd>
+                            </dl>
+                        }
+                        <div class="form-group" style="display:block;">
+                            <img src="/UI/Css/default/images/common/login-user.png" class="login-user" />
+                            <div class="form-input">
+                                <input type="text" class="form-control" name="UserAccount" placeholder="用户名" required="">
+                            </div>
+                        </div>
+                        <div class="form-group" style="display:block;">
+                            <img src="/UI/Css/default/images/common/login-password.png" class="login-password" />
+                            <div class="form-input">
+                                <input type="password" class="form-control" name="password" placeholder="密码" required="">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary block full-width">登录</button>
+                        @*<div class="form-other clearfix">
+                            <a href="#" class="fr">忘记密码</a>
+                        </div>*@
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+</body>
+@RenderPage("/Views/Shared/_PublicJsPartial.cshtml")
+</html>
+

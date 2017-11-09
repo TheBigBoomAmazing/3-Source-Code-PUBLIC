@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "ContractApprovalForm";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<style type="text/css" media="print">
+    #singleButton {
+        display: none;
+    }
+
+    .page-heading {
+        display: none;
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content c-edit-wrap">
+                <form class="form-horizontal">
+                    <input id="ContractId" name="ContractId" value="@ViewData["CONTRACT_ID"]" hidden="hidden" />
+                    <div class="form-group">
+                        <div class="form-group width-6">
+                            <label for="FERRERO_ENTITY" class="col-sm-3 control-label">
+                                公司名称：
+                            </label>
+                            <div class="col-sm-9 controls ">
+                                <input class="textinput form-control " type="text" validate="{required:true}" disabled value="@ViewData["FERRERO_ENTITY"]">
+                            </div>
+                        </div>
+                        <div class="form-group width-6" id="isTEP">
+                            <label for="CONTRACT_GROUP" class="col-sm-3 control-label">
+                                合同类型：
+                            </label>
+                            <div class="col-sm-9 controls ">
+                                <input class="textinput form-control " type="text" validate="{required:true}" disabled value="@ViewData["CONTRACT_GROUP"]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group width-6">
+                            <label for="CONTRACT_NAME" class="col-sm-3 control-label">
+                                合同名称：
+                            </label>
+                            <div class="col-sm-9 controls ">
+                                <input class="textinput form-control " type="text" validate="{required:true}" disabled value="@ViewData["CONTRACT_NAME"]">
+                            </div>
+                        </div>
+                        <div class="form-group width-6">
+                            <label for="CONTRACT_INITIATOR" class="col-sm-3 control-label">
+                                申请人：
+                            </label>
+                            <div class="col-sm-9 controls ">
+                                <input class="textinput form-control " type="text" validate="{required:true}" disabled value="@ViewData["CONTRACT_INITIATOR"]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group width-6">
+                            <label for="CONTRACT_OWNER" class="col-sm-3 control-label">
+                                申请部门：
+                            </label>
+                            <div class="col-sm-9 controls ">
+                                <input class="textinput form-control " type="text" validate="{required:true}" disabled value="@ViewData["CONTRACT_OWNER"]">
+                            </div>
+                        </div>
+                        <div class="form-group width-6">
+                            <label for="COUNTERPARTY_CN" class="col-sm-3 control-label">
+                                相对方：
+                            </label>
+                            <div class="col-sm-9 controls ">
+                                <input class="textinput form-control " type="text" validate="{required:true}" disabled value="@ViewData["COUNTERPARTY_CN"]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group width-6">
+                            <label for="CONTRACT_PRICE" class="col-sm-3 control-label">
+                                合同金额：
+                            </label>
+                            <div class="col-sm-9 controls ">
+                                <input class="textinput form-control " type="text" validate="{required:true}" disabled value="@ViewData["CONTRACT_PRICE"]">
+                            </div>
+                        </div>
+                        <div class="form-group width-6">
+                            <label for="EFFECTIVE_DATE" class="col-sm-3 control-label">
+                                开始时间：
+                            </label>
+                            <div class="col-sm-9 controls ">
+                                <input class="textinput form-control " type="text" validate="{required:true}" disabled value="@(((DateTime)ViewData["EFFECTIVE_DATE"]).ToString("yyyy-MM-dd"))">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group width-6">
+                            <label for="EXPIRATION_DATE" class="col-sm-3 control-label">
+                                结束时间：
+                            </label>
+                            <div class="col-sm-9 controls ">
+                                <input class="textinput form-control " type="text" validate="{required:true}" disabled value="@(((DateTime)ViewData["EXPIRATION_DATE"]).ToString("yyyy-MM-dd"))">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_ContractApprovalList.cshtml")
+        </div>
+    </div>
+</div>
+
+<div class="ibox-content c-edit-wrap">
+    @*<form class="form-horizontal">
+            @Html.XButtonList(new[] { new XButton { Id = "btnBack", DisplayName = "Back to list", Icon = "icon-back", LoadingText = "Returning....", xButtonType = XButtonType.Back } })
+            @Html.XButtonList(new[] { new XButton { Id = "btnPrint", DisplayName = "打印", Icon = "icon-back", LoadingText = "Returning....", xButtonType = XButtonType.Back } })
+            <input id="btnPrint" type="button" value="打印" class="btn btn-primary">
+        </form>*@
+    <div class="form-group form-buttons" id="singleButton">
+        <button type="button" class="btn btn-primary" name="btnBack" id="btnBack" onClick="hideModal();">
+            <i class="icon-back"></i>Back to list
+        </button>
+        @*@if((int)ViewData["Status"]==(int)eContract.Common.ContractStatusEnum.HadApproval || (int)ViewData["Status"]== (int)eContract.Common.ContractStatusEnum.SignedCompleted)
+        {
+          <input id="btnPrint" type="button" value="打印" class="btn btn-primary">
+        }*@
+        
+    </div>
+</div>
+@section footer{
+    <script type="text/javascript">
+        $(document)
+           .ready(function () {
+               var selData = [];
+               jqGrid.initGrid($("#contractApprovalGrid"),
+               {
+                   url: "@Url.Action("ContractApprovalForm")" + "?conid=" + $("#ContractId").val(),
+                   //data: { conid: $("#ContractId").val() },
+                   sortname: "CAR.APPROVAL_TIME",
+                   multiselect: false,
+                   rowNum: 100,
+                   pgbuttons: false,
+                   pginput: false,
+                   colNames: ['审批部门', '审批用户', '审批人角色',  '审批结果', '审批意见', '审批时间'],
+                   colModel: [
+                        { name: 'DEPT_ID', index: 'DEPT_ID', hidden: true, search: true },
+                        { name: 'ENGLISH_NAME', index: 'ENGLISH_NAME', search: true },
+                        {
+                            name: 'APPROVER_TYPE', index: 'APPROVER_TYPE', search: true,
+                            formatter: function (cellvalue, options, row) {
+                                switch (cellvalue) {
+                                    case 1:
+                                        return "领导"
+                                        break;
+                                    case 2:
+                                        return "大区总监"
+                                        break;
+                                    case 3:
+                                        return "部门总监"
+                                        break;
+                                    case 4:
+                                        return "审批人"
+                                        break;
+                                    default:
+                                        return "未知状态";
+                                        break;
+                                }
+                            }
+                        },
+                        {
+                            name: 'APPROVAL_RESULT', index: 'APPROVAL_RESULT', search: true,
+                            formatter: function (cellvalue, options, row) {
+                                switch (cellvalue) {
+                                    case 1:
+                                        return "批注"
+                                        break;
+                                    case 2:
+                                        return "Approved（approved）"
+                                        break;
+                                    case 3:
+                                        return "Approved（not applicable)"
+                                        break;
+                                    case 4:
+                                        return "Rejected"
+                                        break;
+                                    default:
+                                        return "未知状态";
+                                        break;
+                                }
+                            }
+                        },
+                        { name: 'APPROVAL_OPINIONS', index: 'APPROVAL_OPINIONS', search: true },
+                        {
+                            name: 'APPROVAL_TIME', index: 'APPROVAL_TIME',
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue != null && cellvalue != "") {
+                                    var _date = eval('new ' + (cellvalue.replace(/\//g, '')));
+                                    return _date.format("yyyy-MM-dd HH:mm:ss")
+                                }
+                                else {
+                                    return "";
+                                }
+                            }
+                        },
+                   ]
+               });
+
+           });
+        $(function () {
+            $("#btnPrint").click(function () {
+                $("#title").show();
+                var widthValue = $("#contractApprovalGrid").children().children().css('width');
+                $("#contractApprovalGrid").setGridWidth("900", true);
+                if ("@ViewData["IsTemplateContract"]" == "True") {
+                    $("#isTEP").hide();
+                }
+                window.print();
+                $("#isTEP").show();
+                widthValue = widthValue.replace(/px/, "");
+                $("#ContractApprovalItemsGrid").setGridWidth(widthValue, true);
+            });
+        });
+    </script>
+}
+

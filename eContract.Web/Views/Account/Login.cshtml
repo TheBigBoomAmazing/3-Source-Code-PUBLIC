@@ -1,0 +1,129 @@
+﻿@model eContract.Common.Entity.CasUserEntity 
+@{
+    Layout = null;
+    
+    //if(Model!=null&&string.IsNullOrEmpty(Model.UserAccount))
+    //{
+    //    Model.UserAccount = "admin";
+    //    Model.Password = "1";
+    //}
+}
+<!DOCTYPE html>
+<html xml:lang="en">
+    <head>
+        <title>主数据管理系统</title>
+        <link href="@Url.Content("~/Content/LoginStyle.css")?v=@eContract.Common.ConfigHelper.Version" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/LoginStyle201606fix.css")?v=@eContract.Common.ConfigHelper.Version" rel="stylesheet" type="text/css" />
+    </head>
+    <body >
+   <div class="wrapper login">
+	<!-- 顶部 -->
+	<div class="head">
+		<div class="w clearfix">
+			<div class="logo"><img src="/Content/images/logo.png"></div>
+			<ul class="hdLink">
+				<li ><a href="http://bss.comix.com.cn">BSS</a></li>
+				<li class="line"></li>
+				<li class="active"><a href="http://mdm.comix.com.cn">MDM</a></li>
+                 <li class="line"></li>
+				<li><a href="http://mon.comix.com.cn">MON</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- 主体 -->
+	<div class="loginbg">
+		<div class="loginWrap">
+			<div class="logForm">
+				<form method="post" action="@Url.Content("~/Account/Login")" onsubmit="return validate();">
+					<div class="form-tit">登录主数据管理系统</div>
+					<div class="form-hint"><i></i>欢迎使用主数据管理系统</div>
+					<div class="form-item user-form">
+						<div class="form-icon"></div>
+						<div class="ipt-box">
+							<input type="text" class="logipt userIpt"  name="UserAccount" autocomplete="off">
+							<div class="hint">邮箱/用户ID/已验证手机</div>
+						</div>
+					</div>
+					<div class="form-item pwd-form">
+						<div class="form-icon"></div>
+						<div class="ipt-box">
+							<input type="password" class="logipt pwdIpt"  name="password" autocomplete="off">
+							<div class="hint">密码</div>
+						</div>
+					</div>
+					<div class="login-sub">
+						<input type="submit" value="登　录" class="login-btn">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- 底部 -->
+	<div class="footer">
+		<div class="w clearfix">
+			<div class="fr">Copyright &copy; 2017 费列罗贸易(上海)有限公司(<a href="http://www.ferrero.com.cn/" target="_blank"></a>) 版权所有</div>
+		</div>
+	</div>
+</div>
+
+</body>
+<script src="@Url.Content("~/Scripts/jquery/jquery-1.11.1.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Resource/zh_CN.js?v=" + eContract.Common.ConfigHelper.Version)" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/validate/jquery.validate.min.js")" type="text/javascript"></script> 
+<script src="@Url.Content("~/Scripts/validate/jquery.validate.Expand.js?v=" + eContract.Common.ConfigHelper.Version)" type="text/javascript"></script> 
+<script src="@Url.Content("~/Scripts/validate/jquery.metadata.js?v=" + eContract.Common.ConfigHelper.Version)" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/validate/messages_cn.js?v=" + eContract.Common.ConfigHelper.Version)" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Jquery.Form.3.0.js")?v=@eContract.Common.ConfigHelper.Version" type="text/javascript"></script>
+<script language="javascript" type="text/javascript">
+ @if (!string.IsNullOrEmpty(ViewBag.strError))
+{
+      @Html.Raw("$('.form-hint').show().html('<i></i>请输入正确的账户名和密码'); $('.form-hint').addClass('error').removeClass('focus').siblings('.form-item').removeClass('error');");
+                              
+}
+//验证用户名和密码是否填写
+function validate() {
+    var user = $(".userIpt");
+    var pwd = $(".pwdIpt");
+
+    if (user.val() == "" && pwd.val() == "") {
+       $(".form-hint").addClass("error").html('<i></i>请输入账号和密码');
+			$(".form-item").addClass("error").removeClass("focus");
+        return false;
+    } else if (user.val() == "") {
+       $(".form-hint").addClass("error").html('<i></i>请输入账号');
+			user.parents(".form-item").addClass("error").removeClass("focus").siblings(".form-item").removeClass("error");
+        return false;
+    } else if (pwd.val() == "") {
+      	$(".form-hint").addClass("error").html('<i></i>请输入密码');
+			pwd.parents(".form-item").addClass("error").removeClass("focus").siblings(".form-item").removeClass("error");
+        return false;
+    }
+    return true;
+}
+ $(function(){
+	//显示/隐藏 input提示文字
+	$(".logipt").bind('input propertychange', function(){loginHint($(this))});
+	//input获得焦点时
+	$(".logipt").bind("focus", function(){
+		$(this).parents(".form-item").addClass("focus");
+	});
+	//input失去焦点时
+	$(".logipt").bind("blur", function(){
+		$(this).parents(".form-item").removeClass("focus");
+		loginHint($(this));
+	});
+	function loginHint(obj){
+		var _val = obj.val();
+		if(_val!=""){
+			obj.siblings(".hint").hide();
+		}else{
+			obj.siblings(".hint").show();
+		}
+	};
+	$(".logipt").each(function(){loginHint($(this))});
+	
+});
+</script>
+</html>

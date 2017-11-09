@@ -1,0 +1,245 @@
+﻿
+@{
+    ViewBag.Title = "合同审批页";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_FERRERO_ENTITY">Ferrero Party：</label>
+                            <div class="form-group">
+                                <select class="form-control m-b c-edit-select valid" id="FERRERO_ENTITY" name="FERRERO_ENTITY">
+                                    <option value="">===Select===</option>
+                                    <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
+                                    <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
+                                </select>
+                                @*<input type="text" id="sel_FERRERO_ENTITY" name="FERRERO_ENTITY" value="" placeholder="Ferrero Party" class="form-control">*@
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_TYPE_NAME">Contract Type：</label>
+                            <div class="form-group">
+                                @*<input type="text" id="sel_CONTRACT_TYPE_NAME" name="CONTRACT_TYPE_NAME" value="" placeholder="" class="form-control">*@
+                                <select class="form-control m-b c-edit-select valid" id="CONTRACT_TYPE_NAME" name="CONTRACT_TYPE_NAME">
+                                    <option value="">===Select===</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_NAME">Contract Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CONTRACT_NAME" name="CONTRACT_NAME" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_INITIATOR">Initiator：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CONTRACT_INITIATOR" name="CONTRACT_INITIATOR" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_SERIAL_NO">Serial No：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CONTRACT_SERIAL_NO" name="CONTRACT_SERIAL_NO" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        @*<div class="col-sm-3 label-form-4">
+                <label class="control-label" for="sel_CREATE_TIME">Submission Date：</label>
+                <div class="form-group">
+                    <input type="text" id="sel_CREATE_TIME" name="CREATE_TIME" value="" placeholder="" class="form-control">
+                </div>
+            </div>*@
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_List.cshtml")
+        </div>
+    </div>
+</div>
+@*@section footer{*@
+<script src="~/Areas/CAS/Scripts/ContractTypeSelect.js"></script>
+<script type="text/javascript">
+        $(document)
+            .ready(function () {
+                jqGrid.initGrid($("#ContractApprovalGrid"),
+                {
+                    url: "@Url.Action("Index")",
+                    sortname: "LAST_MODIFIED_TIME",
+                    sortorder: "desc",
+                    //multiselect: false,
+                    colNames: ['Action', 'Serial No', 'Ferrero Party', 'Contract Type', 'Contract Name', 'Status', 'Approval Type', 'Step', 'Apply Department', 'Initiator', 'Submission Date'],
+                    colModel: [
+                        {
+                            name: '',
+                            index: '',
+                            sortable: false,
+                            width: 100,
+                            formatter: function (cellvalue, options, row) {
+                                html = "<div class=\"c-table-cz\">";
+                                if ((row.APPROVE_STATUS == "2" || row.APPROVE_STATUS == "4") && row.APPROVER_TYPE != "1") {
+                                    html += '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("Approval")?id=' +
+                                    row.CONTRACT_APPROVER_ID +
+                                    '">Open</a>&nbsp;';
+                                }
+                                if (row.APPROVE_STATUS == "2" && row.APPROVER_TYPE == "1") {
+                                    html += '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("Edit", "ContractComment")?id=' +
+                                    row.CONTRACT_ID +
+                                    '">Open</a>&nbsp;';
+                                }
+                                html += " </div>";
+                                return html;
+                            }
+                        },
+                        { name: 'CONTRACT_SERIAL_NO', index: 'CONTRACT_SERIAL_NO ', search: true, width: 140 },
+                        { name: 'FERRERO_ENTITY', index: 'FERRERO_ENTITY', search: true, width: 270 },
+                        { name: 'CONTRACT_TYPE_NAME', index: 'CONTRACT_TYPE_NAME ', search: true },
+                        {
+                            name: '', index: ' ', search: true,
+                            formatter: function (cellvalue, options, row) {
+                                var contractNameHtml = "";
+                                if (row.IS_TEMPLATE_CONTRACT) {
+                                    contractNameHtml = row.TEMPLATE_NAME;
+                                } else {
+                                    contractNameHtml = row.CONTRACT_NAME;
+                                }
+                                return contractNameHtml;
+                            }
+                        },
+                        {
+                            name: 'STATUS', index: 'STATUS ', search: true, width: 90,
+                            formatter: function (cellvalue, options, row) {
+                                var statusHtml = "";
+                                switch (cellvalue) {
+                                    case 1:
+                                        statusHtml = "Draft";
+                                        break;
+                                    case 2:
+                                        statusHtml = "In review process";
+                                        break;
+                                    case 3:
+                                        statusHtml = "Approved";
+                                        break;
+                                    case 4:
+                                        statusHtml = "Rejected";
+                                        break;
+                                    case 5:
+                                        statusHtml = "Completed";
+                                        break;
+                                    case 6:
+                                        statusHtml = "Closed";
+                                        break;
+                                    case 7:
+                                        statusHtml = "Terminated";
+                                        break;
+                                    case 8:
+                                        statusHtml = "In review process";
+                                        break;
+                                    default:
+                                        statusHtml = "异常状态";
+                                }
+                                return statusHtml;
+                            }
+                        },
+                        {
+                            name: 'APPROVER_TYPE', index: 'APPROVER_TYPE ', search: true,width: 100,
+                            formatter: function (cellvalue, options, row) {
+                                var statusHtml = "";
+                                switch (cellvalue) {
+                                    case 1:
+                                        statusHtml = "Line manager";
+                                        break;
+                                    case 2:
+                                        statusHtml = "RSM";
+                                        break;
+                                    case 3:
+                                        statusHtml = "Department head";
+                                        break;
+                                    case 4:
+                                        statusHtml = "Function Approval";
+                                        break;
+                                    case 5:
+                                        statusHtml = "Initiator";
+                                        break;
+                                    case 6:
+                                        statusHtml = "Initiator";
+                                        break;
+                                    case 7:
+                                        statusHtml = "Initiator";
+                                        break;
+                                    default:
+                                        statusHtml = "Unknown";
+                                        break;
+                                }
+                                return statusHtml;
+                            }
+                        },
+                        { name: 'STEP', index: 'STEP', search: true, width: 80 },
+                    {
+                        name: '', index: '',
+                        formatter: function (cellvalue, options, row) {
+                            var html = "";
+                            if (row.IS_TEMPLATE_CONTRACT) {
+                                html = row.TEMPLATE_OWNER;
+                            } else {
+                                html = row.CONTRACT_OWNER;
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        name: 'CONTRACT_INITIATOR', index: 'CONTRACT_INITIATOR',
+                        formatter: function (cellvalue, options, row) {
+                            var html = "";
+                            if (row.IS_TEMPLATE_CONTRACT) {
+                                html = row.TEMPLATE_INITIATOR;
+                            } else {
+                                html = row.CONTRACT_INITIATOR;
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        name: 'APPLY_DATE', index: 'APPLY_DATE', width: 180,
+                        formatter: function (cellvalue, options, row) {
+                            if (cellvalue != null && cellvalue != "") {
+                                var _date = eval('new ' + (cellvalue.replace(/\//g, '')));
+                                return _date.format("yyyy-MM-dd HH:mm:ss")
+                            }
+                            else {
+                                return "";
+                            }
+                        }
+                    }
+                    ]
+                });
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    });
+            });
+
+</script>
+@*}*@

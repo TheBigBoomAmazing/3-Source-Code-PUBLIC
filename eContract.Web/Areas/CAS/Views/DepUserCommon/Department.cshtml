@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "部门查询公共页";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-3 label-form-4">
+                            <label class="control-label" for="sel_customer_code">部门名称：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_customer_code" name="DEPT_NAME" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">查询</button>
+                            <button type="button" id="Conf_btn" class="btn btn-primary">确认</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_DepList.cshtml")
+        </div>
+    </div>
+</div>
+@section footer{
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+                jqGrid.initGrid($("#DEPTIDGRID"),
+                {
+                    url: "@Url.Action("Department")",
+                    sortname: "DEPT_CODE",
+                    multiselect: true,
+                    colNames: ['', '部门编号', '部门名称'],
+                    colModel: [
+                        { name: 'DEPT_ID', index: 'DEPT_ID', hidden: true },
+                        { name: 'DEPT_CODE', index: 'DEPT_CODE', width: 50, search: true },
+                        { name: 'DEPT_NAME', index: 'DEPT_NAME', width: 50, search: true }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Department")");
+                    });
+
+                $("#Conf_btn").click(function () {
+                    jqGrid.gridConfirm({
+                        url: "@Url.Action("Confirm")",
+                        KeyName: 'DEPT_ID'
+                    });
+                });
+            });
+
+    </script>
+}

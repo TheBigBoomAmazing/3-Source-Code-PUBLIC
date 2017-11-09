@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+    var PageList= (List<eContract.Common.Entity.SecPageEntity>)ViewBag.PageList;
+    Dictionary<string, string> PageListDic = new Dictionary<string, string>();
+    PageListDic.Add("0","主菜单");
+    foreach (var item in PageList)
+    {
+        PageListDic.Add(item.PageId, "【" + (PageList.Where(f => f.PageId == item.ParentId).Count() > 0 ? PageList.Where(f => f.PageId == item.ParentId).First().PageName : "主菜单") + "】" + item.PageName);
+    }
+}
+@model eContract.Common.Entity.SecPageEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content c-edit-wrap">
+                    <form method="post" class="form-horizontal" id="pageForm">
+                        @Html.XHiddenFor(x=>x.PageId)
+                        @Html.XDropDownListFor(m => m.ParentId, true, PageListDic, new UIValidation { DisplayName = "Parent Menu", required = true }, new { display = Model.PageId })
+                        @Html.XTextBoxFor(m => m.PageName, new UIValidation { DisplayName = "Page Name-CN", required = true }, new { display = Model.PageName })
+                        @Html.XTextBoxFor(m => m.PageNameEn, new UIValidation { DisplayName = "Page Name-EN", required = true }, new { display = Model.PageNameEn })
+                        @Html.XCheckBoxFor(m => m.IsMenu, "Is Menu", new { valuetype = "bool", value = "true" }, false, true)
+                        @Html.XTextBoxFor(m => m.MenuLevel, new UIValidation { DisplayName = "Menu Level", required = true }, new { display = Model.MenuLevel })
+                        @Html.XTextBoxFor(m => m.MenuOrder, new UIValidation { DisplayName = "Menu Order", required = true }, new { display = Model.MenuOrder })
+                        @Html.XTextBoxFor(m => m.PageUrl, new UIValidation { DisplayName = "URL", required = true }, new { display = Model.PageUrl })
+                        @Html.XTextArea("Remark", Model.Remark, new UIValidation { DisplayName = "Remark" }, new { rows = 5 })
+
+                        @Html.XButtonList(
+                        new[]{new XButton{Id="btnSave",DisplayName="Save",Icon="icon-save", LoadingText="Saving....",onClick="onSubmit();",xButtonType=XButtonType.Button},
+
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back", LoadingText="Returning....",xButtonType=XButtonType.Button,onClick="hideModal();"}
+                               })
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+
+
+        $(function () {
+            jForm.xValidate($("#pageForm"), {});
+            if ("@ViewBag.strError" != "") {
+                jNotify.showError("@ViewBag.strError");
+            }
+        })
+
+        function onSubmit() {
+            try {
+                if ($("#pageForm").valid()) {
+                    jForm.Ajax({
+                        url: "/PageManagement/Edit",//Action
+                        data: jForm.getfrmData($("#pageForm")),//表单参数
+                        success: function (result) {
+                            jNotify.showSuccess("Successfully submitted");//显示信息
+                            hideModal();//关闭模态框
+
+                            //列表页刷新
+                            //jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                            jqGrid.gridSearch($("#sel_form"), "/PageManagement/Index");
+                        }
+                    });
+                }
+            } catch (e) {
+
+            }
+        }
+    </script>

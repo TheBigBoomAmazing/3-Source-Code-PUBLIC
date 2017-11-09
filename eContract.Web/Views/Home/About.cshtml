@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "关于我们";
+}
+
+<h2>关于</h2>
+<p>
+    将内容放置在此处。
+</p>
+
+<ul id="test_content"></ul>
+@section footer{
+    <script type="text/javascript">
+        $("body")
+            .ready(function () {
+                jQuery.support.cors = true;
+                jQuery.ajax({
+                    url: "http://www.cninfo.com.cn/cninfo-new/announcement/query",
+                    type: "POST",
+                    datatype: "json",
+                    data: 'stock=002301&searchkey=&category=&pageNum=1&pageSize=30&column=szse_sme&tabName=fulltext&sortName=&sortType=&limit=&seDate=',
+                    success: function (obj, result) {
+                        //alert('成功:\n' + obj.totalRecordNum);
+                        //alert(obj.announcements[0].announcementTitle);
+                        console.info(obj);
+                        console.info(result);
+                    }
+                });
+            });
+    </script>
+}

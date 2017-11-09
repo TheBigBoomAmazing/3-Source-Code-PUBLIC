@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    //Layout = "~/Views/Shared/_ListLayout.cshtml";
+}
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_KEYWORD">Delegated To：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_KEYWORD" name="KEYWORD" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_BEGIN_TIME">Start Date：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_BEGIN_TIME" name="BEGIN_TIME" value="" placeholder="" class="form-control Wdate" onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            <a data-toggle="modal" data-target="#modalContent" href="@Url.Action("Edit")" class="btn btn-primary">New</a>
+                            @*<button type="button" id="del_btn" class="btn btn-primary">Delete</button>*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+            @RenderPage("_List.cshtml")
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            jqGrid.initGrid($("#proxyApprovalGrid"),
+                {
+                    url: "@Url.Action("Index")",
+                    sortname: "BEGIN_TIME",
+                    sortorder:"desc",
+                    //multiselect: true,
+                    colNames: ['ID', 'Delegator', 'Delegated To', 'Start Date', 'End Date','Is Terminated', 'Action'],
+                    colModel: [
+                        { name: 'PROXY_APPROVAL_ID', index: 'PROXY_APPROVAL_ID', search: true, hidden: true },
+
+                        { name: 'AUTHORIZED_USER_NAME', index: 'AUTHORIZED_USER_NAME', search: true },
+                        { name: 'AGENT_USER_NAME', index: 'AGENT_USER_NAME', search: true },
+                        {
+                            name: 'BEGIN_TIME', index: 'BEGIN_TIME',
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue != null && cellvalue != "") {
+                                    var _date = eval('new ' + (cellvalue.replace(/\//g, '')));
+                                    return _date.format("yyyy-MM-dd HH:mm:ss")
+                                }
+                                else {
+                                    return "";
+                                }
+                            }, search: true
+                        },
+                        {
+                            name: 'END_TIME', index: 'END_TIME',
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue != null && cellvalue != "") {
+                                    var _date = eval('new ' + (cellvalue.replace(/\//g, '')));
+                                    return _date.format("yyyy-MM-dd HH:mm:ss")
+                                }
+                                else {
+                                    return "";
+                                }
+                            }, search: true
+                        },
+                        {
+                            name: 'IS_DELETED', index: 'IS_DELETED', search: true,
+                            formatter: function (cellvalue, options, row) {
+                                //debugger
+                                return row.IS_DELETED ? "Yes" : "No";
+                            }
+                        },
+                        {
+                            name: '',
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                var html = "";
+                                if (!row.IS_DELETED)
+                                {
+                                    @*html = "<div class=\"c-table-cz\">" +
+                                    '<a href="@Url.Action("Edit")?id=' +
+                                    row.PROXY_APPROVAL_ID +
+                                    '">Termination</a>&nbsp;'
+                                    " </div>";*@
+                                    html = '<a href="javascript://" onclick="Termination(\'' + row.PROXY_APPROVAL_ID + '\')">Termination</a>&nbsp;';;
+                                }
+                                return html;
+                            }
+                        }
+                    ]
+                });
+
+            $("#sel_btn")
+                .click(function () {
+                    jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                });
+
+            $("#del_btn")
+                .click(function () {
+                    jqGrid.gridDelete({
+                        url: "@Url.Action("Delete")",
+                        KeyName: 'PROXY_APPROVAL_ID'
+                    });
+
+                });
+        });
+
+        function Termination(idValue) {
+            jNotify.Confirm("",
+                "Please confirm to terminate the delegation.",
+                function () {
+                    
+                    jForm.Ajax({
+                        url: "@Url.Action("TerminationDelegation")",
+                        data: { id: idValue },
+                        success: function (data) {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index","ProxyApproval")");
+                            //jNotify.showSuccess("成功中止代理审批！");
+                        }
+                        
+                });
+        });
+        }
+    </script>
+@*}*@

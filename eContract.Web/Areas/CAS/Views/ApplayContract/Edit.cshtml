@@ -1,0 +1,1086 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;
+}
+@model eContract.Common.Entity.CasContractEntity
+
+@section header{
+    <link href="~/UI/Css/plugins/autoComplete/jquery-ui.min.css" rel="stylesheet" />
+}
+<style type="text/css">
+    .warning-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .close-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .form-horizontal .form-group {
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+        .form-horizontal .form-group .form-group {
+            margin-left: 0;
+        }
+</style>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+<div class="ibox-content c-edit-wrap" style="overflow-y:auto;max-height:600px;padding-bottom: 50px;">
+    <form method="post" class="form-horizontal" id="applayForm">
+        <input type="hidden" value="@Model.ContractId" name="ContractId" id="ContractId" />
+        <input type="hidden" value="@Model.Status" name="ContractStatus" id="ContractStatus" />
+        <div class="form-group">
+            <div id="div_FerreroEntity" class="form-group width-6">
+                <label for="FerreroEntity" class="col-sm-6 control-label"><span class="asteriskField">*</span>Ferrero Entity<br /><span class="label-cn">(公司名称)：</span></label>
+                <div class="col-sm-6 controls ">
+                    <select class="form-control m-b c-edit-select valid" id="FerreroEntity" name="FerreroEntity"
+                            validate="{required:true}" display="" aria-required="true" aria-invalid="true">
+                        <option value="">===Select===</option>
+                        <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
+                        <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
+                    </select><p class="text-danger help-block"></p>
+                </div>
+            </div>
+            <div id="div_ContractTypeId" class="form-group width-6">
+                <label for="ContractTypeId" class="col-sm-6 control-label"><span class="asteriskField">*</span>Contract Type<br /><span class="label-cn">(合同类型)：</span></label>
+                <div class="col-sm-4 controls ">
+                    <select class="form-control m-b c-edit-select valid" id="ContractTypeId" name="ContractTypeId" validate="{required:true}" display="">
+                        <option value="">===Select===</option>
+                    </select><p class="text-danger help-block"></p>
+                </div>
+                @*<span style="float: right;margin-top: 10px;margin-right: 0;font-size: 10px;"
+                      title="General Purchase Contract:General Services, IT, Admin/HR Services, Marketing, Professional Services, Insurances
+Technical Sourcing Contract:Assets (i.e. construction works, productions lines, machinery), Technical materials (i.e. spare parts, tools), Technical service/maintenance, Hygenic and cleaning materials, Workwear, PPE, Laboratory tools, chemical materials, services
+OS Procurement Contract:Packaging, Raw materials, Logistics
+MPG Contract:Toy and related services
+HR Confidential Contract:Employee C&B, Talent acquisition and other confidential matters
+Standard Distribution/Sub-distribution Contract:Standard distribution agreement, Standard sub-distribution agreement
+Non-standard Distribution/Sub-distribution Contract:Distribution agreement, sub-distribution agreement not using approved standard template
+Other Contract:Confidentiality Agreement, Consumer Settlement etc.
+Standard Template*:Not for contract approval, only applicable to Sales Operation">
+                    Contract Type<br />Explanation
+                </span>*@
+                <button type="button" class="btn btn-default" id="showInfo"> Contract Type Explanation</button>
+            </div>
+        </div>
+
+        <div id="normalContract" style="display:none">
+            <div class="form-group">
+                <div id="div_CounterpartyEn" class="form-group width-6">
+                    <label for="CounterpartyEn" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Counterparty EN<br /><span class="label-cn">(相对方-英)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="CounterpartyEn" name="CounterpartyEn" validate="{required:true}" display="" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9, ]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9, ]/g,'')" oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9, ]/g,'')"
+                               maxlength="100">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+                <div id="div_CounterpartyCn" class="form-group width-6">
+                    <label for="CounterpartyCn" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Counterparty CH<br /><span class="label-cn">(相对方-中)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="CounterpartyCn" name="CounterpartyCn" validate="{required:true}" display="" maxlength="100">
+                        <p class="text-danger help-block"></p>
+                        <span class="label-cn">Please file in the counterparty's complete name in the contract/请填写相对方完整名称</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div id="div_ContractName" class="form-group width-12">
+                    <label for="ContractName" class="col-sm-3 control-label">
+                        <span class="asteriskField">*</span>Contract Name<br /><span class="label-cn">(合同名称)：</span>
+                    </label>
+                    <div class="col-sm-9 controls ">
+                        <input type="hidden" value="@Model.ContractName" name="ContractName" id="ContractName" />
+                        @*<select class="form-control m-b c-edit-select valid" id="ContractNameSel" name="ContractNameSel"
+                                validate="{required:true}" display="" aria-required="true" aria-invalid="true" style="width:48%;display:inline-block">
+                            <option value="">===Select===</option>
+                            <option value="ContractName1">ContractName1</option>
+                            <option value="ContractName2">ContractName2</option>
+                        </select>*@
+                        <input type="hidden" id="selected_ContractName" name="ContractNameVal">
+                        <select id="ContractNameSel" name="ContractNameSel" class="js-data-example-ajax form-control m-b c-edit-select valid" 
+                                validate="{required:true}" display="" aria-required="true" aria-invalid="true" style="width:48%;display:inline-block">
+                        </select>
+                        <input class="textinput form-control " placeholder="" type="text" id="ContractNameTxt" name="ContractNameTxt" validate="{required:false}" display="" maxlength="50"  style="width:50%;display:inline-block">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="div_ContractTerm" class="form-group">
+                <div class="form-group width-12">
+                    <label for="ContractTerm" class="col-sm-3 control-label">
+                        <span class="asteriskField">*</span>Contract Term<br /><span class="label-cn">(合同期限)：</span>
+                    </label>
+                    <div class="col-sm-9 controls">
+                        <input class='textinput form-control Wdate' placeholder='' type='text' id='ContractEffectiveDate' name='ContractEffectiveDate' validate="{required:false}" display="" style="width:200px;display: inline-block;" onClick="WdatePicker({ el: this, dateFmt: 'yyyy-MM-dd'})" />
+                        &nbsp;To(至)&nbsp;
+                        <input class='textinput form-control Wdate' placeholder='' type='text' id='ContractExpirationDate' name='ContractExpirationDate' validate="{required:false}" display="" style="width:200px;display: inline-block;" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" />
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div id="div_ContractOwner" class="form-group width-6">
+                    <label for="ContractOwner" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Contract Owner<br /><span class="label-cn">(合同经办部门)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="ContractOwner" name="ContractOwner" validate="{required:true}" disabled value="@currentUser.CasUserEntity.DeparmentName">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+                <div id="div_ContractInitiator" class="form-group width-6">
+                    <label for="ContractInitiator" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Contract Initiator<br /><span class="label-cn">(申请人)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="ContractInitiator" name="ContractInitiator" validate="{required:true}" disabled value="@currentUser.CasUserEntity.EnglishName ">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div id="div_ApplyDate" class="form-group width-6">
+                    <label for="ContractApplyDate" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Date of Application<br /><span class="label-cn">(申请时间)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="ContractApplyDate" name="ContractApplyDate" validate="{required:true}" disabled value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+
+                <div id="div_Capex" class="form-group width-6">
+                    <label for="Capex" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Capex or not<br /><span class="label-cn">(是否是固定资产)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <select class="form-control m-b c-edit-select valid" id="Capex" name="Capex" onblur="upperCase()"
+                                validate="{required:true}" display="" aria-required="true" aria-invalid="true">
+                            <option value="">===Select===</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div id="div_IsMasterAgreement" class="form-group width-6">
+                    <label for="IsMasterAgreement" class="col-sm-6 control-label"><span class="asteriskField">*</span>Master agreement or not<br /><span class="label-cn">(是否框架合同)：</span></label>
+                    <div class="col-sm-6 controls ">
+                        <select class="form-control m-b c-edit-select valid" id="IsMasterAgreement" name="IsMasterAgreement"
+                                validate="{required:true}" display="" aria-required="true" aria-invalid="true">
+                            <option value="">===Select===</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+                <div id="div_Supplementary" class="form-group layout-edit-from-checkbox width-6">
+                    <label for="Supplementary" class="col-sm-6 control-label"><span class="asteriskField">*</span>Supplementary or not<br /><span class="label-cn">(是否补充合同)：</span></label>
+                    <div class="col-sm-6 controls" style="height:50px;">
+                        @*<input type="checkbox" id='Supplementary' checked="@Convert.ToBoolean(Model.Supplementary)" />
+                            <input type="checkbox" value="Yes" id="supYes" name="supchkbox" />Yes
+                            <input type="checkbox" value="No" id="supNo" name="supchkbox" />No*@
+                        <input type="radio" value="Yes" id="supYes2" name="supRadio" /><label for="supYes2">Yes</label>
+                        <input type="radio" value="No" id="supNo2" name="supRadio" /><label for="supNo2">No</label>
+                        <input type="hidden" name='Supplementary' value="@Convert.ToBoolean(Model.Supplementary).ToString().ToLower()" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="min-height:0px;">
+                <div id="div_OriginalContract" class="form-group width-12" style="display:none;background-color:#eee">
+                    <label for="OriginalContract" class="col-sm-3 control-label"><span class="asteriskField">*</span>Original Contract<br /><span class="label-cn">(原始合同)：</span></label>
+                    <div class="col-sm-9 controls ">
+                        <input type="hidden" id="OriginalFileIds" />
+                        <select class="form-control m-b c-edit-select valid" id="selOriginalContract" name="OriginalContractId"
+                                validate="{required:false}" display="" aria-required="true" aria-invalid="true"
+                                style="width:31%;display:inline-block">
+                            <option value="">===Select===</option>
+                        </select>
+                        <button type="button" class="btn btn-default" name="btnOriginalUpload" id="btnOriginalUpload"><i class="icon-back"></i>Upload</button>
+                        <span style="color:red">Only support PDF file.</span>
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div id="div_BudgetType" class="form-group width-6">
+                    <label for="BudgetType" class="col-sm-6 control-label"><span class="asteriskField">*</span>Budget type<br /><span class="label-cn">(预算类型)：</span></label>
+                    <div class="col-sm-6 controls ">
+                        <select class="form-control m-b c-edit-select valid" id="BudgetType" name="BudgetType"
+                                validate="{required:true}" display="" aria-required="true" aria-invalid="true">
+                            <option value="">===Select===</option>
+                            <option value="0">Overheads</option>
+                            <option value="1">Non-overheads</option>
+                            <option value="2">Industrial</option>
+                            <option value="3">Other</option>
+                        </select>
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+                <div id="div_TemplateNo" class="form-group width-6">
+                    <label for="TemplateNo" class="col-sm-6 control-label">
+                        Template No.<br /><span class="label-cn">（模板编号)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <select class="form-control m-b c-edit-select valid" id="TemplateNoSel" name="ContractTemplateNoSel"
+                                validate="{required:false}" display="" aria-required="true" aria-invalid="true" style="width:50%;display:inline-block;"></select>
+                        <input class="textinput form-control " placeholder="" type="text" id="NormalTemplateNo" name="ContractTemplateNoForSel" style="width:48%;display:inline-block;">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div id="div_ContractPrice" class="form-group width-6">
+                    <label for="ContractPrice" class="col-sm-6 control-label"><span class="asteriskField">*</span>Contract Price<br /><span class="label-cn">(合同含税金额)：</span></label>
+                    <div class="col-sm-6 controls ">
+                        <select class="form-control m-b c-edit-select valid" style="float:left;width:50%" name="TaxCON" id="TaxCON">
+                            <option value="">===Select===</option>
+                            <option value="1">with TAX</option>
+                            <option value="2">without TAX</option>
+                        </select>
+                        <input style="width:50%" class="textinput form-control " placeholder="" type="number" step="0.01" id="ContractPrice" name="ContractPrice" display="">
+                        <p class="text-danger help-block"></p>
+                        <span class="label-cn">Please fill in estimated price when choosing master contract.如选择框架合同，请填入预估金额</span>
+                    </div>
+                </div>
+                <div id="div_EstimatedPrice" class="form-group width-12">
+                    <label for="EstimatedPrice" class="col-sm-6 control-label"><span class="asteriskField">*</span>Estimated Price<br /><span class="label-cn">(合同预估金额)：</span></label>
+                    <div class="col-sm-6 controls ">
+                        <select class="form-control m-b c-edit-select valid" style="float:left;width:50%" name="TaxEST" id="TaxEST">
+                            <option value="">===Select===</option>
+                            <option value="1">with TAX</option>
+                            <option value="2">without TAX</option>
+                        </select>
+                        <input style="width:50%" class="textinput form-control " placeholder="" type="number" step="0.01" id="EstimatedPrice" name="EstimatedPrice" display="">
+                        <p class="text-danger help-block"></p>
+                        <span class="label-cn">Please fill in estimated price when choosing master contract.如选择框架合同，请填入预估金额</span>
+                    </div>
+                </div>
+                <input type="hidden" name="Tax" id="Tax" value="">
+                <div id="div_Currency" class="form-group width-6">
+                    <label for="Currency" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Currency<br /><span class="label-cn">(币种)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <select class="form-control m-b c-edit-select valid" id="Currency" name="CurrencySel"
+                                validate="{required:true}" display="" aria-required="true" aria-invalid="true">
+                            <option value="">===Select===</option>
+                            <option value="CNY">CNY</option>
+                            <option value="USD">USD</option>
+                            <option value="EURO">EURO</option>
+                            <option value="SGD">SGD</option>
+                            <option value="HKD">HKD</option>
+                            <option value="GBP">GBP</option>
+                            <option value="CAD">CAD</option>
+                            <option value="AUD">AUD</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input class="textinput form-control " placeholder="" type="text" id="CurrencyTxt" name="Currency" style="width:48%;display:none;">
+                        <p class="text-danger help-block"></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div id="div_PrepaymentAmount" class="form-group width-6">
+                    <label for="PrepaymentAmount" class="col-sm-6 control-label">
+                        <span class="asteriskField">&nbsp;</span>Prepayment Amount<br /><span class="label-cn">(预付款金额)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="number" step="0.01" id="PrepaymentAmount" name="PrepaymentAmount" validate="{required:false}" display="">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+                <div id="div_PrepaymentPercentage" class="form-group width-6">
+                    <label for="PrepaymentPercentage" class="col-sm-6 control-label">
+                        <span class="asteriskField">&nbsp;</span>Prepayment Percentage<br /><span class="label-cn">(预付款比例)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="number" step="0.01" id="PrepaymentPercentage" name="PrepaymentPercentage" validate="{required:false}" display="" style="width:90%;display:inline-block">&nbsp;%
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div id="div_BudgetAmount" class="form-group width-6">
+                    <label for="BudgetAmount" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Budget Amount<br /><span class="label-cn">(预算金额)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="number" step="0.01" id="BudgetAmount" name="BudgetAmount" validate="{required:false}" display="">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+                <div id="div_InternalORInvestmentOrder" class="form-group width-6">
+                    <label for="InternalORInvestmentOrder" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Internal order/Investment order<br /><span class="label-cn">(内部订单/投资订单)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="InternalORInvestmentOrder" name="InternalORInvestmentOrder" validate="{required:true}" display="" maxlength="100">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="div_ContractKeyPoints" class="form-group">
+                <div class="form-group width-12">
+                    <label for="ContractKeyPoints" class="col-sm-3 control-label" style="height:141px;">
+                        <span class="asteriskField">*</span>Key points of contract<br /><span class="label-cn">(合同要点)：</span>
+                    </label>
+                    <div class="col-sm-9 controls ">
+                        <textarea class="textarea-field form-control valid" placeholder="Key points of contract(合同要点)" id="ContractKeyPoints" name="ContractKeyPoints" rows="5" validate="{required:true}" aria-invalid="false" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9, ]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9, ]/g,'')" oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9, ]/g,'')" maxlength="500"></textarea>
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="templateContract" style="display:none;">
+            <div class="form-group">
+                <div id="div_TemplateNo" class="form-group width-6">
+                    <label for="TemplateNo" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Template No.<br /><span class="label-cn">(模板编号)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="TemplateNo" name="TemplateNoForInput" validate="{required:true}" display="" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9]/g,'')" oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9]/g,'')" maxlength="50">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+                <div id="div_TemplateName" class="form-group width-6">
+                    <label for="TemplateName" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Template Name<br /><span class="label-cn">(模板名称)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="TemplateName" name="TemplateName" validate="{required:true}" display="" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9 ]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9 ]/g,'')" oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9 ]/g,'')" maxlength="100">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="div_TemplateTerm" class="form-group">
+                <div class="form-group width-12">
+                    <label for="TemplateTerm" class="col-sm-3 control-label">
+                        <span class="asteriskField">*</span>Template Term<br /><span class="label-cn">(模板期限)：</span>
+                    </label>
+                    <div class="col-sm-9 controls">
+                        <input class='textinput form-control Wdate' placeholder='' type='text' id='TemplateEffectiveDate' name='TemplateEffectiveDate' validate="{required:false}" display="" style="width:200px;display: inline-block;" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" />
+                        &nbsp;To(至)&nbsp;
+                        <input class='textinput form-control Wdate' placeholder='' type='text' id='TemplateExpirationDate' name='TemplateExpirationDate' validate="{required:false}" display="" style="width:200px;display: inline-block;" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" />
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div id="div_TemplateOwner" class="form-group width-6">
+                    <label for="TemplateOwner" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Template Owner<br /><span class="label-cn">(模板所属部门)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="TemplateOwner" name="TemplateOwner" validate="{required:true}" disabled value="@currentUser.CasUserEntity.DeparmentName">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+                <div id="div_ApplyDate" class="form-group width-6">
+                    <label for="TemplateApplyDate" class="col-sm-6 control-label">
+                        <span class="asteriskField">*</span>Date of Application<br /><span class="label-cn">(申请时间)：</span>
+                    </label>
+                    <div class="col-sm-6 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="TemplateApplyDate" name="TemplateApplyDate" validate="{required:true}" disabled value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div id="div_TemplateInitiator" class="form-group width-12">
+                    <label for="TemplateInitiator" class="col-sm-3 control-label">
+                        <span class="asteriskField">*</span>Template Initiator<br /><span class="label-cn">(模板申请人)：</span>
+                    </label>
+                    <div class="col-sm-9 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="TemplateInitiator" name="TemplateInitiator" validate="{required:true}" disabled value="@currentUser.CasUserEntity.EnglishName ">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="div_ScopeOfApplication" class="form-group">
+                <div class="form-group width-12" style="background-color:#eee;">
+                    <label for="ScopeOfApplication" class="col-sm-3 control-label">
+                        <span class="asteriskField">*</span>Scope of Application<br /><span class="label-cn">(适用范围)：</span>
+                    </label>
+                    <div class="col-sm-9 controls ">
+                        <textarea class="textarea-field form-control valid" placeholder="" id="ScopeOfApplication" name="ScopeOfApplication" rows="5" validate="{required:true}" aria-invalid="false" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9, ]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9, ]/g,'')" oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9, ]/g,'')" maxlength="500"></textarea>
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <div id="div_ContractAttachment" class="form-group" style="display:block;width:100%;background-color: #eee;">
+                <label for="ContractAttachment" class="col-sm-3 control-label">
+                    <span class="asteriskField">*</span>Contract to be reviewed<br /><span class="label-cn">(上传合同原件)：</span>
+                </label>
+                <div class="col-sm-9 controls ">
+                    <input type="hidden" id="fileIds" />
+                    <button type="button" class="btn btn-default" name="btnUpload" id="btnUpload"><i class="icon-back"></i>Upload</button>
+                    <p class="text-danger help-block"></p>
+                </div>
+            </div>
+        </div>
+        @if (Model.ContractSerialNo != ""&& Model.ContractSerialNo!=null)
+        {
+            <div class="form-group">
+                <div id="div_explanation" class="form-group" style="width:100%">
+                    <label for="Contractexplanation" class="col-sm-3 control-label">
+                        <span class="asteriskField">*</span>Contract Serial No<br /><span class="label-cn">(合同流水号)：</span>
+                    </label>
+                    <div class="col-sm-9 controls ">
+                        <input class="textinput form-control " placeholder="" type="text" id="ContractSerialNo" name="ContractSerialNo"  disabled value="@Model.ContractSerialNo">
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.Status == 4)
+        {
+            <div class="form-group">
+                <div id="div_explanation" class="form-group" style="width:100%">
+                    <label for="Contractexplanation" class="col-sm-3 control-label">
+                        <span class="asteriskField">*</span>Summary of revision<br /><span class="label-cn">(修改要点)：</span>
+                    </label>
+                    <div class="col-sm-9 controls ">
+                        <textarea class="textarea-field form-control valid" placeholder="Summary of revision(修改要点)" id="explanation" name="explanation" rows="5" validate="{required:true}" aria-invalid="false" maxlength="500">@Model.explanation</textarea>
+                        <p class="text-danger help-block"></p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @*<div class="modal modal-fade" id="event-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title">
+                                补充说明
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                                <div class="form-group" id="divRemark">
+                                    <label for="min-date" class="col-sm-4 control-label">补充说明原因：</label>
+                                    <div class="col-sm-7">
+                                        <div class="input-group">
+                                            <textarea name="explanation" id="explanation" style="width:240px;height:150px"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        <div class="form-buttons" style="height:100px;">
+            <div class="col-sm-8 col-sm-offset-2">
+                <button type="button" class="btn btn-default" name="btnSave" id="btnSave" data-loading-text="Saving...."
+                        onclick="javaScript: $.ApplayContract.save(1);">
+                    <i class="icon-save"></i>Save
+                </button>
+                <button type="button" class="btn btn-primary " name="btnSubmit" id="btnSubmit" data-loading-text="Submiting...."
+                        @*onclick="javaScript: $.ApplayContract.save(2);"*@
+                        onclick="onSubmit();">
+                    <i class="icon-save"></i>Submit
+                </button>
+                <button type="button" onClick="hideModal();" class="btn btn-default" name="btnBack" id="btnBack" data-loading-text="Returning...."><i class="icon-back"></i>Back to list</button>
+                @*@if (Model.Status == 4)
+                    {
+                        <button type="button" class="btn btn-default" name="btnClose" data-loading-text="关闭ing...."
+                                onclick="onClose();">
+                            <i class="icon-save"></i>关闭
+                        </button>
+                    }*@
+            </div>
+        </div>
+
+    </form>
+</div>
+<div class="modal modal-fade" id="event-modal2">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#fff5c7">
+                <img class="warning-icon" src="~/UI/Css/default/images/common/warning.png" style="display:inline" />
+                <h2 class="modal-title" style="display:inline">
+                    policy
+                </h2>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="event-id" value="">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label style="line-height:30px;" for="min-date" class="col-sm-15 control-label">
+                            <font>This is a Long Term contract under Ferrero policy. Please ensure appropriate level of approval is obtained in accordance with CAPEX and Long Term Contracts Procedures.</font>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <table border="1" cellpadding="3" cellspacing="0" style="width: 60%;margin:auto">
+                            <tr>
+                                <th>Approval level</th>
+                                <th>Approval threshold (EUR)</th>
+                            </tr>
+                            <tr>
+                                <td>Local Approval</td>
+                                <td><= 500,000</td>
+                            </tr>
+                            <tr>
+                                <td>Central Approval</td>
+                                <td>>500,000 & <= 2,000,000</td>
+                            </tr>
+                            <tr>
+                                <td>Investment Committee Approval</td>
+                                <td>>2,000,000 & <= 10,000,000</td>
+                            </tr>
+                            <tr>
+                                <td>FINT Board Approval</td>
+                                <td>>10,000,000</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label for="min-date" class="col-sm-15 control-label">Please consult Wilson Yao wilson.yao@ferrero.com if any question to the above.</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="btnCloseModalEvent" >关闭</button>
+                @*data-dismiss="modal"*@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-fade" id="CAEPX-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#fff5c7">
+                <img class="warning-icon" src="~/UI/Css/default/images/common/warning.png" style="display:inline" />
+                <h2 class="modal-title" style="display:inline">
+                    policy
+                </h2>
+                @*<button style="display:inline" type="button" class="close" data-dismiss="modal"><img class="close-icon" src="~/UI/Css/default/images/common/close.png" /></button>*@
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="event-id" value="">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label style="line-height:30px;" for="min-date" class="col-sm-15">
+                            <font>For CAPEX, please ensure appropriate level of approval is obtained in accordance with CAPEX and Long Term Contracts Procedures.</font>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <table border="1" cellpadding="3" cellspacing="0" style="width: 88%;margin:auto">
+                            <tr>
+                                <th>Departments Approval level</th>
+                                <th>Industrial</th>
+                                <th>IT</th>
+                                <th>Other</th>
+                            </tr>
+                            <tr>
+                                <td>Local Approval Threshold (EUR)</td>
+                                <td><= 500,000</td>
+                                <td><= 100,000</td>
+                                <td><= 500,000</td>
+                            </tr>
+                            <tr>
+                                <td>Central Approval Threshold (EUR)</td>
+                                <td>>500,000 &<= 2,000,000</td>
+                                <td>>100,000 &<= 500,000</td>
+                                <td>>500,000 &<= 2,000,000</td>
+                            </tr>
+                            <tr>
+                                <td>Investment Committee Approval Threshold (EUR)</td>
+                                <td>>2,000,000 &<= 20,000,000</td>
+                                <td>>500,000 &<= 10,000,000</td>
+                                <td>>2,000,000 &<= 10,000,000</td>
+                            </tr>
+                            <tr>
+                                <td>FINT Board Approval Threshold (EUR)</td>
+                                <td>>20,000,000</td>
+                                <td>>10,000,000</td>
+                                <td>>10,000,000</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label style="line-height:30px;" for="min-date" class="col-sm-15">
+                            <font>
+                                * All Investments in Land and Buildings must be submitted for Investment Committee Approval.
+                                Please consult Wilson Yao wilson.yao@ferrero.com if any question to the above.
+                            </font>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="btnCloseModalCax">关闭</button>
+                @*data-dismiss="modal"*@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-fade" id="ShowInfo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#fff5c7">
+                <img class="warning-icon" src="~/UI/Css/default/images/common/warning.png" style="display:inline" />
+                <h2 class="modal-title" style="display:inline">
+                    policy
+                </h2>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="event-id" value="">
+                <form class="form-horizontal">
+                    @*<div class="form-group">
+                        <label style="line-height:30px;" for="min-date" class="col-sm-15">
+                            <font>For CAPEX, please ensure appropriate level of approval is obtained in accordance with CAPEX and Long Term Contracts Procedures.</font>
+                        </label>
+                    </div>*@
+                    <div class="form-group">
+                        General Purchase Contract:General Services, IT, Admin/HR Services, Marketing, Professional Services, Insurances
+                        Technical Sourcing Contract:Assets (i.e. construction works, productions lines, machinery), Technical materials (i.e. spare parts, tools), Technical service/maintenance, Hygenic and cleaning materials, Workwear, PPE, Laboratory tools, chemical materials, services
+                        OS Procurement Contract:Packaging, Raw materials, Logistics
+                        MPG Contract:Toy and related services
+                        HR Confidential Contract:Employee C&B, Talent acquisition and other confidential matters
+                        Standard Distribution/Sub-distribution Contract:Standard distribution agreement, Standard sub-distribution agreement
+                        Non-standard Distribution/Sub-distribution Contract:Distribution agreement, sub-distribution agreement not using approved standard template
+                        Other Contract:Confidentiality Agreement, Consumer Settlement etc.
+                        Standard Template*:Not for contract approval, only applicable to Sales Operation
+                    </div>
+                    <div class="form-group">
+                        @*<label style="line-height:30px;" for="min-date" class="col-sm-15">
+                            <font>
+                                * All Investments in Land and Buildings must be submitted for Investment Committee Approval.
+                                Please consult Wilson Yao wilson.yao@ferrero.com if any question to the above.
+                            </font>
+                        </label>*@
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="showInfoClose">关闭</button>
+                @*data-dismiss="modal"*@
+            </div>
+        </div>
+    </div>
+</div>
+@*@section footer{*@
+<script src="~/Scripts/plupload.full.min.js"></script>
+<script src="~/Areas/CAS/Scripts/UploadHelper.js"></script>
+<script src="~/Areas/CAS/Scripts/ApplayContract.js"></script>
+<script src="~/Areas/CAS/Scripts/ContractNameSelect.js"></script>
+<script type="text/javascript">
+    $("#fileIds").val("@ViewBag.MineFiles");
+    $("#OriginalFileIds").val("@ViewBag.OriginalFiles");
+    $.UploadHelper.init("btnUpload", "fileIds", "@ViewBag.MineFiles", false, true);
+    $.UploadHelper.init("btnOriginalUpload", "OriginalFileIds", "@ViewBag.OriginalFiles", false, true);
+    function upperCase() {
+        var capex = $("#Capex").val();
+        if (capex == "true") {
+            $('#CAEPX-modal').modal();
+        }
+    }
+
+    $(function () {
+        var isMaterValue = $("#IsMasterAgreement").val();
+        if (isMaterValue == "" || isMaterValue == "false") {
+            $("#div_ContractPrice").attr("style", "display: none;");
+            $("#div_EstimatedPrice").attr("style", "display: none;");
+        }
+        if ("@Model.IsMasterAgreement".toLowerCase() == "true") {
+            $("#div_EstimatedPrice").removeAttr("style");
+        }
+        if ("@Model.IsMasterAgreement".toLowerCase() == "false") {
+            $("#div_ContractPrice").removeAttr("style");
+        }
+        $("#IsMasterAgreement").change(function () {
+            var isMaster =$("#IsMasterAgreement option:selected").val();
+            if (isMaster == "true") {
+                $("#div_EstimatedPrice").removeAttr("style");
+                $("#div_ContractPrice").attr("style", "display: none;");
+            }
+            if (isMaster == "false") {
+                $("#div_EstimatedPrice").attr("style", "display: none;");
+                $("#div_ContractPrice").removeAttr("style");
+            }
+        })
+        //load固定合同名称选项
+        selectContractNameSingle($("#ContractNameSel"), $("#selected_ContractName"));
+
+        $("#event-modal2").on("hide.bs.modal", function () {
+            count = 1;
+        });
+        $("#CAEPX-modal").on("hide.bs.modal", function () {
+            count = 1;
+        });
+        $("#btnCloseModalEvent").click(function () {
+            $('#event-modal2').modal("hide");
+            count = 0;
+        });
+        $("#btnCloseModalCax").click(function () {
+            $('#CAEPX-modal').modal("hide");
+            count = 0;
+        });
+        $("#showInfo").click(function () {
+            $('#ShowInfo').modal();
+            count = 1;
+        });
+        $("#showInfoClose").click(function () {
+            $('#ShowInfo').modal("hide");
+            count = 0;
+        });
+        var para = $("#ContractId").val();
+        if (para != null && para!="") {
+            $("#btnBack").css("display", "inline-block");
+        }
+        else {
+            $("#btnBack").css("display","none");
+        }
+        //$("#Capex").blur(function () {
+        //    var capex = $("#Capex").val();
+        //    if (capex == "true") {
+        //        $('#CAEPX-modal').modal();
+        //    }
+        //});
+        $('#TemplateExpirationDate').blur(function () {
+            var beginTime = $("#TemplateEffectiveDate").val();
+            var endTime = $("#TemplateExpirationDate").val();
+            var time1 = Date.parse(new Date(beginTime));
+            var time2 = Date.parse(new Date(endTime));
+            var nDays = Math.abs(parseInt((time2 - time1) / 1000 / 3600 / 24));
+            if (nDays > 365) {
+                $('#event-modal2').modal();
+            }
+        });
+        $('#TemplateEffectiveDate').blur(function () {
+            var beginTime = $("#TemplateEffectiveDate").val();
+            var endTime = $("#TemplateExpirationDate").val();
+            var time1 = Date.parse(new Date(beginTime));
+            var time2 = Date.parse(new Date(endTime));
+            var nDays = Math.abs(parseInt((time2 - time1) / 1000 / 3600 / 24));
+            if (nDays > 365) {
+                $('#event-modal2').modal();
+            }
+        });
+        $('#ContractEffectiveDate').blur(function () {
+            var beginTime = $("#ContractEffectiveDate").val();
+            var endTime = $("#TemplateExpirationDate").val();
+            var time1 = Date.parse(new Date(beginTime));
+            var time2 = Date.parse(new Date(endTime));
+            var nDays = Math.abs(parseInt((time2 - time1) / 1000 / 3600 / 24));
+            if (nDays > 365) {
+                $('#event-modal2').modal();
+            }
+        });
+        $('#ContractExpirationDate').blur(function () {
+            var beginTime = $("#ContractEffectiveDate").val();
+            var endTime = $("#ContractExpirationDate").val();
+            var time1 = Date.parse(new Date(beginTime));
+            var time2 = Date.parse(new Date(endTime));
+            var nDays = Math.abs(parseInt((time2 - time1) / 1000 / 3600 / 24));
+            if (nDays > 365) {
+                $('#event-modal2').modal();
+            }
+        });
+        $("#supYes2").click(function () {
+            document.getElementById("supYes2").checked = true;
+            $("#div_OriginalContract").css("display", "block");
+            $("[name='Supplementary']").val("true");
+            console.log($("[name='Supplementary']").val());
+        });
+        $("#supNo2").click(function () {
+            document.getElementById("supNo2").checked = true;
+            $("#div_OriginalContract").css("display", "none");
+            $("[name='Supplementary']").val("false");
+            console.log($("[name='Supplementary']").val());
+        });
+
+        $("#Currency").change(function () {
+            var value = $("#Currency option:selected").val();
+            if (value == "Other") {
+                $("#CurrencyTxt").val("");
+                $("#CurrencyTxt").css("display", "inline-block");
+                $("#Currency").css("width", "50%");
+                $("#Currency").css("display", "inline-block");
+            }
+            else {
+                $("#CurrencyTxt").val(value);
+                $("#CurrencyTxt").css("display", "none");
+                $("#Currency").css("width", "100%");
+            }
+        });
+
+        $("#TemplateNoSel").change(function () {
+            var value = $("#TemplateNoSel option:selected").val();
+            if (value == "") {
+                $("#NormalTemplateNo").val("");
+                $("#NormalTemplateNo").css("display", "inline-block");
+                $("#TemplateNoSel").css("width", "50%");
+                $("#TemplateNoSel").css("display", "inline-block");
+            }
+            else {
+                $("#NormalTemplateNo").val(value);
+                $("#NormalTemplateNo").css("display", "none");
+                $("#TemplateNoSel").css("width", "100%");
+            }
+        });
+
+        $("#ContractNameSel").change(function () {
+            var selectvalue = $("#ContractNameSel option:selected").val();
+            if (selectvalue != "") {
+                var txtvalue = $("#ContractNameTxt").val();
+                var newvalue = selectvalue;
+                if ($("#ContractNameTxt").val() != "")
+                {
+                    newvalue = selectvalue + "_" + txtvalue;
+                }
+                console.log(newvalue);
+                $("#ContractName").val(newvalue);
+            }
+            else {
+            }
+        });
+        $('#ContractNameTxt').blur(function () {
+            var selectvalue = $("#ContractNameSel option:selected").val();
+            if (selectvalue != "") {
+                var txtvalue = $("#ContractNameTxt").val();
+                var newvalue = selectvalue;
+                if ($("#ContractNameTxt").val() != "") {
+                    newvalue = selectvalue + "_" + txtvalue;
+                }
+                $("#ContractName").val(newvalue);
+            }
+            else {
+            }
+        });
+
+        jForm.xValidate($("#applayForm"), {});
+        if ("@ViewBag.strError" != "") {
+            jNotify.showError("@ViewBag.strError");
+        }
+        //控制显示原合同
+        $('#div_Supplementary').on("ifClicked", function (event) {
+            var checked = $("[name='Supplementary']").val();
+            if (checked == "true") {
+                $("#div_OriginalContract").css("display", "block");
+            } else {
+                $("#div_OriginalContract").css("display", "none");
+            }
+        })
+        if ("@Model.Supplementary" == "True") {
+            $("#div_OriginalContract").css("display", "block");
+            document.getElementById("supYes2").checked = true;
+        }
+        else {
+            document.getElementById("supNo2").checked = true;
+        }
+
+        //加载模板编号数据
+        $.ajax({
+            type: "POST",
+            url: "/ApplayContract/GetTemplateNoList",
+            data: {},
+            async: false,
+            dataType: "json",
+            success: function (result) {
+                $("#uploadLog").hide();
+                var response = eval("(" + JSON.parse(JSON.stringify(result)) + ")");
+                var selTempNoElement = $("select#TemplateNoSel");
+                selTempNoElement.empty();
+                var selHtml = "<option value=''>===Select===</option>";
+                for (var index = 0; index < response.length; index++) {
+                    selHtml += "<option value='" + response[index].TemplateNo + "'>"
+                    + response[index].TemplateNo + "</option>";
+                }
+                selTempNoElement.append(selHtml);
+
+                //原select换成autocomplete控件
+                //var availableOptions = [];
+                //for (var index = 0; index < response.length; index++) {
+                //    availableOptions.push(response[index].TemplateNo);
+                //}
+                //$("#NormalTemplateNo").autocomplete({
+                //    source: availableOptions
+                //});
+            }
+        });
+
+        //加载原合同文件数据
+        $.ajax({
+            type: "POST",
+            url: "/ApplayContract/GetOrigialContractList",
+            data: {},
+            dataType: "json",
+            success: function (result) {
+                $("#uploadLog").hide();
+                var response = eval("(" + JSON.parse(JSON.stringify(result)) + ")");
+                var selOrigialContractElement = $("#selOriginalContract");
+                selOrigialContractElement.empty();
+                var selHtml = "<option value=''>===Select===</option>";
+                for (var index = 0; index < response.length; index++) {
+                    if (response[index].IsTemplateContract) {
+                        selHtml += "<option value='" + response[index].ContractId + "'>"
+                        + response[index].TemplateName + "</option>";
+                    } else {
+                        selHtml += "<option value='" + response[index].ContractId + "'>"
+                        + response[index].ContractName + "</option>";
+                    }
+                }
+                selOrigialContractElement.append(selHtml);
+                $("#selOriginalContract").val("@Model.OriginalContractId");
+            }
+        });
+
+        //初始化数据
+        if ("@Model.ContractId" != "") {
+            $("#FerreroEntity").val("@Model.FerreroEntity");
+            $("#FerreroEntity").trigger("change");//触发FerreroEntity的change事件
+
+            $("#ContractTypeId").val("@Model.ContractTypeId");
+            $("#ContractTypeId").trigger("change");//触发ContractTypeId的change事件
+
+            $("#CounterpartyEn").val("@Model.CounterpartyEn");
+            $("#CounterpartyCn").val("@Model.CounterpartyCn");
+            @*$("#ContractName").val("@Model.ContractName");*@
+            //合同名称由select+text组成，以“_”分隔，若无则为select选项
+            if ("@Model.ContractName".indexOf("_") > 0) {
+                var arr = "@Model.ContractName".split("_");
+                if (arr.length > 1)
+                {
+                    $("#ContractNameSel").val(arr[0]);
+                    $("#ContractNameTxt").val(arr[1]);
+                    var data = [{
+                        id: arr[0],
+                        name: arr[0]
+                    }];
+                    selectContractNameSingle2($("#ContractNameSel"), $("#selected_ContractName"), data);
+                }
+
+            }
+            else {
+                var value = "@Model.ContractName";
+                $("#ContractNameSel").val(value);
+                var data = [{
+                    id: value,
+                    name: value
+                }];
+                selectContractNameSingle2($("#ContractNameSel"), $("#selected_ContractName"), data);
+            }
+
+            //申请部门自动带出
+            //申请人自动带出：当前登录用户
+            //申请时间自动带出：当前时间
+            $("#Capex").val("@Model.Capex".toLowerCase());
+            $("#IsMasterAgreement").val("@Model.IsMasterAgreement".toLowerCase());
+            $("#TaxEST").val("@Model.Tax".toLowerCase());
+            $("#TaxCON").val("@Model.Tax".toLowerCase());
+            $("#ContractPrice").val("@Model.ContractPrice");
+            $("#EstimatedPrice").val("@Model.EstimatedPrice");
+            $("#BudgetAmount").val("@Model.BudgetAmount");
+            $("#InternalORInvestmentOrder").val("@Model.InternalORInvestmentOrder");
+
+            $("#BudgetType").val("@Model.BudgetType");
+
+            //货币值不在列表中，显示other选项，并显示text中
+            $("#Currency").val("@Model.Currency");
+            $("#CurrencyTxt").val("@Model.Currency");
+            if ($("#Currency").val() == null || $("#Currency").val() == undefined) {
+                $("#Currency").find("option[value='Other']").attr("selected", true);
+                $("#CurrencyTxt").css("display", "inline-block");
+                $("#Currency").css("width", "50%");
+                $("#Currency").css("display", "inline-block");
+            }
+            else {
+                $("#CurrencyTxt").css("display", "none");
+            }
+
+            $("#PrepaymentAmount").val("@Model.PrepaymentAmount");
+            $("#PrepaymentPercentage").val("@Model.PrepaymentPercentage");
+            $("#ContractKeyPoints").val("@Model.ContractKeyPoints");
+            $("#ContractEffectiveDate").val(new Date("@Model.EffectiveDate").format("yyyy-MM-dd"));
+            $("#ContractExpirationDate").val(new Date("@Model.ExpirationDate").format("yyyy-MM-dd"));
+            $("#TemplateEffectiveDate").val(new Date("@Model.EffectiveDate").format("yyyy-MM-dd"));
+            $("#TemplateExpirationDate").val(new Date("@Model.ExpirationDate").format("yyyy-MM-dd"));
+
+            //模板编号
+            if ("@Model.IsTemplateContract" == "False") {
+                $("#normalContract").find("#NormalTemplateNo").val("@Model.TemplateNo");
+
+                $("#TemplateNoSel").val("@Model.TemplateNo");
+                if ($("#TemplateNoSel").val() == "" || $("#TemplateNoSel").val() == null || $("#TemplateNoSel").val() == undefined) {
+                    $("#TemplateNoSel").find("option[value='']").attr("selected", true);
+                    $("#NormalTemplateNo").css("display", "inline-block");
+                    $("#TemplateNoSel").css("width", "50%");
+                    $("#TemplateNoSel").css("display", "inline-block");
+                }
+                else {
+                    $("#NormalTemplateNo").css("display", "none");
+                }
+
+            } else {
+                $("#templateContract").find("#TemplateNo").val("@Model.TemplateNo");
+            }
+
+
+            $("#TemplateInitiator").val("@Model.TemplateInitiator");
+            $("#ScopeOfApplication").val("@Model.ScopeOfApplication");
+            $("#TemplateName").val("@Model.TemplateName");
+        }
+    });
+    @*function onClose() {
+            jNotify.Confirm("确认提示", "Please confirm to close the contract.",
+                function () {
+                    jForm.Ajax({
+                        url: "@Url.Action("CloseContractByContractID")",
+                        data: { id: "@Model.ContractId" },
+                        success: function (data) {
+                            jNotify.showSuccess("成功关闭！");
+
+                            window.location = "/CAS/ApplayContract";
+                        }
+                    });
+                });
+        }*@
+    function onSubmit() {
+        $("#btnSubmit").attr("disabled", "disabled");
+        $.ApplayContract.save(2);
+    };
+</script>
+@*}*@

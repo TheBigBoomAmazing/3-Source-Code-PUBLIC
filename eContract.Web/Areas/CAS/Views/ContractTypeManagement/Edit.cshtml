@@ -1,0 +1,626 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@model eContract.Common.Entity.CasContractTypeEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="form-group">
+        <div class="ibox-content c-edit-wrap" style="overflow-y:auto;max-height:600px;">
+            <form method="post" id="cTypeForm" class="form-horizontal" action="@Url.Action("Edit")" onsubmit="return onSubmit();">
+                <input type='hidden' name='ContractTypeId' id='ContractTypeId' value=@Model.ContractTypeId>
+                <div class="form-group">
+                    <div class="form-group width-6 layout-edit-from-checkbox">
+                        <label class='col-sm-6 control-label'>
+                            需要合同批注：
+                        </label>
+                        <div class='controls col-sm-6'>
+                            <input type='hidden' name='NeedComment' id='NeedComment' value="@Convert.ToBoolean(Model.NeedComment).ToString().ToLower()" />
+                            <input type="checkbox" name="NeedComment" checked="@Convert.ToBoolean(Model.NeedComment)" id='chk_NeedComment' />
+                        </div>
+                    </div>
+                    <div id='div_IsTemplateContract' class="form-group width-6 layout-edit-from-checkbox">
+                        <label class='col-sm-6 control-label'>
+                            是模板合同：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='hidden' name='IsTemplateContract' id="IsTemplateContract" value="@Convert.ToBoolean(Model.IsTemplateContract).ToString().ToLower()" />
+                            <input type="checkbox" name="IsTemplateContract" checked="@Convert.ToBoolean(Model.IsTemplateContract)" id='chk_IsTemplateContract' />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div id='div_NotDisplayInMySupport' class="form-group width-12 layout-edit-from-checkbox">
+                        <label class='col-sm-3 control-label'>
+                            不在我支持的合同中显示：
+                        </label>
+                        <div class='col-sm-9 controls'>
+                            <input type='hidden' name='NotDisplayInMySupport' id='NotDisplayInMySupport' value="@Convert.ToBoolean(Model.NotDisplayInMySupport).ToString().ToLower()" />
+                            <input type="checkbox" name="NotDisplayInMySupport" checked="@Convert.ToBoolean(Model.NotDisplayInMySupport)" id='chk_NotDisplayInMySupport' />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div id='div_FerreroEntity' class="form-group width-6 layout-edit-from-checkbox">
+                        <label class='col-sm-6 control-label'>
+                            <span class="asteriskField">*</span>公司名称(Ferrero Entity)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <select class="form-control m-b c-edit-select valid" id="FerreroEntity" name="FerreroEntity"
+                                    validate="{required:true}" display="" aria-required="true" aria-invalid="true">
+                                <option value="">===Select===</option>
+                                <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
+                                <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
+                            </select><p class="text-danger help-block"></p>
+                        </div>
+                    </div>
+                    <div id='div_ContractTypeName' class="form-group width-6 layout-edit-from-checkbox">
+                        <label class='col-sm-6 control-label'>
+                            <span class="asteriskField">*</span>合同类型名称：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input value="@Model.ContractTypeName" validate="{required:true}" placeholder='' type='text' id='ContractTypeName' name='ContractTypeName' style="float:left" />
+                            <p class="text-danger help-block"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide1">
+                    <div id='div_CounterpartyCn' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls'>
+                            <input type='hidden' name='CounterpartyCn' id='CounterpartyCn' value="@Convert.ToBoolean(Model.CounterpartyCn).ToString().ToLower()" />
+                            <input type="checkbox" name="CounterpartyCn" checked="@Convert.ToBoolean(Model.CounterpartyCn)" id='chk_CounterpartyCn' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            相对方-中(Counterparty_CN)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                    <div id='div_CounterpartyEn' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='CounterpartyEn' id='CounterpartyEn' value="@Convert.ToBoolean(Model.CounterpartyEn).ToString().ToLower()" />
+                            <input type="checkbox" name="CounterpartyEn" checked="@Convert.ToBoolean(Model.CounterpartyEn)" id='chk_CCounterpartyEn' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            相对方-英(Counterparty_EN)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide2">
+                    <div id='div_ContractName' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls'>
+                            <input type='hidden' name='ContractName' id='ContractName' value="@Convert.ToBoolean(Model.ContractName).ToString().ToLower()" />
+                            <input type="checkbox" name="ContractName" checked="@Convert.ToBoolean(Model.ContractName)" id='chk_CounterpartyCn' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            合同名称(Contract Name)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                    <div id='div_ContractTerm' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls'>
+                            <input type='hidden' name='ContractTerm' id='ContractTerm' value="@Convert.ToBoolean(Model.ContractTerm).ToString().ToLower()" />
+                            <input type="checkbox" name="ContractTerm" checked="@Convert.ToBoolean(Model.ContractTerm)" id='chk_ContractTerm' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            合同期限(Contract Term)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input class="textinput form-control " placeholder="" validate="{required:false}" display="" style="width:100px;display: inline-block;">&nbsp;To(至)&nbsp;
+                            <input class="textinput form-control " placeholder="" validate="{required:false}" display="" style="width:100px;display: inline-block;">
+                            <p class="text-danger help-block"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide3">
+                    <div id='div_ContractOwner' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls'>
+                            <input type='hidden' name='ContractOwner' id='ContractOwner' value="@Convert.ToBoolean(Model.ContractOwner).ToString().ToLower()" />
+                            <input type="checkbox" name="ContractOwner" checked="@Convert.ToBoolean(Model.ContractOwner)" id='chk_ContractOwner' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            合同经办部门(Contract Owner)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            申请人所在申请部门
+                        </div>
+                    </div>
+
+                    <div id='div_ContractInitiator' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls'>
+                            <input type='hidden' name='ContractInitiator' id='ContractInitiator' value="@Convert.ToBoolean(Model.ContractInitiator).ToString().ToLower()" />
+                            <input type="checkbox" name="ContractInitiator" checked="@Convert.ToBoolean(Model.ContractInitiator)" id='chk_ContractInitiator' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            申请人(Contract Initiator)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            申请人姓名
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div id='div_ApplyDate' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls'>
+                            <input type='hidden' name='ApplyDate' id='ApplyDate' value="@Convert.ToBoolean(Model.ApplyDate).ToString().ToLower()" />
+                            <input type="checkbox" name="ApplyDate" checked="@Convert.ToBoolean(Model.ApplyDate)" id='chk_ApplyDate' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            申请时间(Date of Application)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <span>自动带出当前时间</span>
+                        </div>
+                    </div>
+                    <div id='div_TemplateNo' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls'>
+                            <input type='hidden' name='TemplateNo' id='TemplateNo' value="@Convert.ToBoolean(Model.TemplateNo).ToString().ToLower()" />
+                            <input type="checkbox" name="TemplateNo" checked="@Convert.ToBoolean(Model.TemplateNo)" id='chk_TemplateNo' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            模板编号(Template No)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <select class="form-control m-b c-edit-select valid" style="float:left" id="IsHide12">
+                                <option>模板1</option>
+                                <option>模板2</option>
+                                <option>模板3</option>
+                            </select>
+                            <input type='text' id="IsHide13" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide5">
+                    <div id='div_IsMasterAgreement' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='IsMasterAgreement' id='IsMasterAgreement' value="@Convert.ToBoolean(Model.IsMasterAgreement).ToString().ToLower()" />
+                            <input type="checkbox" name="IsMasterAgreement" checked="@Convert.ToBoolean(Model.IsMasterAgreement)" id='chk_IsMasterAgreement' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            是否框架合同(Master agreement or not)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <select class="form-control m-b c-edit-select valid" style="float:left">
+                                <option>Yes</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id='div_Supplementary' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='Supplementary' id='Supplementary' value="@Convert.ToBoolean(Model.Supplementary).ToString().ToLower()" />
+                            <input type="checkbox" name="Supplementary" checked="@Convert.ToBoolean(Model.Supplementary)" id='chk_Supplementary' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            是否补充合同(Supplementary or not)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            @*<select class="form-control m-b c-edit-select valid" style="float:left">
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                </select>*@
+                            @*<input type="checkbox"  value="Yes" id="supYes" />Yes
+                                <input type="checkbox"  value="No" id="supNo" />No*@
+                            <input type="radio" value="Yes" id="supYes2" name="supRadio" />Yes
+                            <input type="radio" value="No" id="supNo2" name="supRadio" />No
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide6">
+                    <div id='div_BudgetType' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='BudgetType' id='BudgetType' value="@Convert.ToBoolean(Model.BudgetType).ToString().ToLower()" />
+                            <input type="checkbox" name="BudgetType" checked="@Convert.ToBoolean(Model.BudgetType)" id='chk_BudgetTypey' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            预算类型(Budget type)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <select class="form-control m-b c-edit-select valid" style="float:left">
+                                <option>Overheads</option>
+                                <option>Non-overheads</option>
+                                <option>Industrial</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id='div_Capex' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls'>
+                            <input type='hidden' name='Capex' id='Capex' value="@Convert.ToBoolean(Model.Capex).ToString().ToLower()" />
+                            <input type="checkbox" name="Capex" checked="@Convert.ToBoolean(Model.Capex)" id='chk_Capex' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            是否是固定资产(Capex or not)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <select class="form-control m-b c-edit-select valid" style="float:left">
+                                <option>Yes</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide15">
+                    <div id='div_BudgetAmount' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='BudgetAmount' id='BudgetAmount' value="@Convert.ToBoolean(Model.BudgetAmount).ToString().ToLower()" />
+                            <input type="checkbox" name="BudgetAmount" checked="@Convert.ToBoolean(Model.BudgetAmount)" id='chk_BudgetAmount' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            预算金额(Budget amount)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                    <div id='div_InternalORInvestmentOrder' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls'>
+                            <input type='hidden' name='InternalORInvestmentOrder' id='InternalORInvestmentOrder' value="@Convert.ToBoolean(Model.InternalORInvestmentOrder).ToString().ToLower()" />
+                            <input type="checkbox" name="InternalORInvestmentOrder" checked="@Convert.ToBoolean(Model.InternalORInvestmentOrder)" id='chk_Capex' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            内部订单/投资订单(Internal order/Investment order)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide7">
+                    <div id='div_ContractOREstimatedPrice' class="form-group width-6 layout-edit-from-checkbox" >
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='ContractOREstimatedPrice' id='ContractOREstimatedPrice' value="@Convert.ToBoolean(Model.ContractOREstimatedPrice).ToString().ToLower()" />
+                            <input type="checkbox" name="ContractOREstimatedPrice" checked="@Convert.ToBoolean(Model.ContractOREstimatedPrice)" id='chk_ContractOREstimatedPrice' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            合同金额(Contract Price)/合同估计金额(Estimated Price)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <div class='col-sm-6 controls'>
+                                <select class="form-control m-b c-edit-select valid" style="float:left">
+                                    <option value="">===Select===</option>
+                                    <option value="with TAX">with TAX</option>
+                                    <option value="without TAX">without TAX</option>
+                                </select>
+                            </div>
+                            <input type='text' />
+                        </div>
+                    </div>
+                    @*<div id='div_EstimatedPrice' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='EstimatedPrice' id='EstimatedPrice' value="@Convert.ToBoolean(Model.EstimatedPrice).ToString().ToLower()" />
+                            <input type="checkbox" name="EstimatedPrice" checked="@Convert.ToBoolean(Model.EstimatedPrice)" id='chk_EstimatedPrice' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            合同估计金额(Estimated Price)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <select class="form-control m-b c-edit-select valid" style="float:left">
+                                <option value="">===Select===</option>
+                                <option value="with TAX">with TAX</option>
+                                <option value="without TAX">without TAX</option>
+                            </select>
+                            <input type='text' />
+                        </div>
+                    </div>*@
+                    <div id='div_Currency' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='Currency' id='Currency' value="@Convert.ToBoolean(Model.Currency).ToString().ToLower()" />
+
+                            <input type="checkbox" name="Currency" checked="@Convert.ToBoolean(Model.Currency)" id='chk_Currency' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            币种(Currency)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <select class="form-control m-b c-edit-select valid" style="float:left">
+                                <option value="">===Select===</option>
+                                <option value="CNY">CNY</option>
+                                <option value="USD">USD</option>
+                                <option value="EURO">EURO</option>
+                                <option value="SGD">SGD</option>
+                                <option value="HKD">HKD</option>
+                                <option value="GBP">GBP</option>
+                                <option value="CAD">CAD</option>
+                                <option value="AUD">AUD</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide8">
+                    <div id='div_PrepaymentAmount' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='PrepaymentAmount' id='PrepaymentAmount' value="@Convert.ToBoolean(Model.PrepaymentAmount).ToString().ToLower()" />
+
+                            <input type="checkbox" name="PrepaymentAmount" checked="@Convert.ToBoolean(Model.PrepaymentAmount)" id='chk_PrepaymentAmount' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            预付款金额(Prepayment Amount)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                    <div id='div_PrepaymentPercentage' class="form-group width-6 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='PrepaymentPercentage' id='PrepaymentPercentage' value="@Convert.ToBoolean(Model.PrepaymentPercentage).ToString().ToLower()" />
+
+                            <input type="checkbox" name="PrepaymentPercentage" checked="@Convert.ToBoolean(Model.PrepaymentPercentage)" id='chk_PrepaymentPercentage' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            预付款比例(Prepayment Percentage)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div id='div_ContractKeyPoints' class="form-group width-12 layout-edit-from-checkbox">
+                        <div class='col-sm-1 controls ' style="width:4.16666666%">
+                            <input type='hidden' name='ContractKeyPoints' id='ContractKeyPoints' value="@Convert.ToBoolean(Model.ContractKeyPoints).ToString().ToLower()" />
+                            <input type="checkbox" name="ContractKeyPoints" checked="@Convert.ToBoolean(Model.ContractKeyPoints)" id='chk_ContractKeyPoints' />
+                        </div>
+                        <label class='col-sm-2 control-label' style="width:20.83333333%">
+                            合同要点(Key points of contract)：
+                        </label>
+                        <div class='col-sm-9 controls'>
+                            <textarea style="width:400px;height:80px;"></textarea>
+                        </div>
+                    </div>
+                    <div id='div_ScopeOfApplication' class='form-group width-12 layout-edit-from-checkbox'>
+                        <div class='col-sm-1 controls ' style="width:4.16666666%">
+                            <input type='hidden' name='ScopeOfApplication' id='ScopeOfApplication' value="@Convert.ToBoolean(Model.ScopeOfApplication).ToString().ToLower()" />
+                            <input type="checkbox" name="ScopeOfApplication" checked="@Convert.ToBoolean(Model.ScopeOfApplication)" id='chk_ScopeOfApplication' />
+                        </div>
+                        <label class='col-sm-2 control-label' style="width:20.83333333%">
+                            适用范围(Scope of Application)：
+                        </label>
+                        <div class='col-sm-9 controls'>
+                            <textarea style="width:400px;height:80px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div id='div_HasAttachment' class='form-group width-12 layout-edit-from-checkbox'>
+                        <div class='col-sm-1 controls ' style="width:4.16666666%">
+                            <input type='hidden' name='HasAttachment' id='HasAttachment' value="@Convert.ToBoolean(Model.HasAttachment).ToString().ToLower()" />
+                            <input type="checkbox" name="HasAttachment" checked="@Convert.ToBoolean(Model.HasAttachment)" id='chk_HasAttachment' />
+                        </div>
+                        <label class='col-sm-2 control-label' style="width:20.83333333%">
+                            上传合同原件：
+                        </label>
+                        <div class='col-sm-9 controls'>
+                            <select class="form-control m-b c-edit-select valid" style="float:left;width:80%;">
+                                <option>=Select=</option>
+                                <option>合同1</option>
+                                <option>合同2</option>
+                                <option>合同3</option>
+                            </select>
+                            <input type="button" value="Upload" style="height:33px" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide10" hidden="hidden">
+                    <div id='div_TemplateName' class='form-group width-6 layout-edit-from-checkbox'>
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='TemplateName' id='TemplateName' value="@Convert.ToBoolean(Model.TemplateName).ToString().ToLower()" />
+
+                            <input type="checkbox" name="TemplateName" checked="@Convert.ToBoolean(Model.TemplateName)" id='chk_TemplateName' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            模板名称(Template Name)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                    <div id='div_TemplateTerm' class='form-group width-6 layout-edit-from-checkbox'>
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='TemplateTerm' id='TemplateTerm' value="@Convert.ToBoolean(Model.TemplateTerm).ToString().ToLower()" />
+
+                            <input type="checkbox" name="TemplateTerm" checked="@Convert.ToBoolean(Model.TemplateTerm)" id='chk_TemplateTerm' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            模板期限(Template Term)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input class="textinput form-control " placeholder="" validate="{required:false}" display="" style="width:100px;display: inline-block;">&nbsp;To(至)&nbsp;
+                            <input class="textinput form-control " placeholder="" validate="{required:false}" display="" style="width:100px;display: inline-block;">
+                            @*<input type='text' />*@
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="IsHide11" hidden="hidden">
+                    <div id='div_TemplateOwner' class='form-group width-6 layout-edit-from-checkbox'>
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='TemplateOwner' id='TemplateOwner' value="@Convert.ToBoolean(Model.TemplateOwner).ToString().ToLower()" />
+
+                            <input type="checkbox" name="TemplateOwner" checked="@Convert.ToBoolean(Model.TemplateOwner)" id='chk_TemplateOwner' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            模板所属部门(Template Owner)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                    <div id='div_TemplateInitiator' class='form-group width-6 layout-edit-from-checkbox'>
+                        <div class='col-sm-1 controls '>
+                            <input type='hidden' name='TemplateInitiator' id='TemplateInitiator' value="@Convert.ToBoolean(Model.TemplateInitiator).ToString().ToLower()" />
+
+                            <input type="checkbox" name="TemplateInitiator" checked="@Convert.ToBoolean(Model.TemplateInitiator)" id='chk_TemplateInitiator' />
+                        </div>
+                        <label class='col-sm-5 control-label'>
+                            模板申请人(Template Initiator)：
+                        </label>
+                        <div class='col-sm-6 controls'>
+                            <input type='text' />
+                        </div>
+                    </div>
+                </div>
+                @Html.Hidden("submitType")
+                @Html.XButtonList(
+                        new[]{new XButton{Id="btnSave",DisplayName="Save",onClick="onSave();return false;", Icon="icon-save", LoadingText="Saving....",xButtonType=XButtonType.Button},
+                              new XButton{Id="btnUpdate",DisplayName="Submit",onClick="onSave2();return false;", Icon="icon-save", LoadingText="Submiting....",xButtonType=XButtonType.Button},
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back", onClick="hideModal();",LoadingText="Returning....",xButtonType=XButtonType.Button},
+                               })
+                <input id="mySubmit" type="submit" style="display:none;" />
+            </form>
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+<script src="~/Areas/CAS/Scripts/depUserCommon.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var company = "@Model.FerreroEntity";
+        if (company != "") {
+            $("#FerreroEntity").find("option[value='" + company + "']").attr("selected", true);
+        }
+        var checkV = $("#IsTemplateContract").val();
+        if (checkV == "true") {
+            show1();
+        }
+        if (checkV == "false") {
+            show2();
+        }
+        //var IsMaster = $("#IsMasterAgreement").val();
+        //if (IsMaster=="true") {
+        //    $("#div_ContractPrice").hide();
+        //    $("#div_EstimatedPrice").show();
+        //}
+        //if (IsMaster=="false") {
+        //    $("#div_ContractPrice").show();
+        //    $("#div_EstimatedPrice").hide();
+        //}
+        //$("#chk_IsMasterAgreement").click(function () {
+        //    var checked = $(this).is(':checked');
+        //    if (checked) {
+        //        $("#div_ContractPrice").hide();
+        //        $("#div_EstimatedPrice").show();
+        //    }
+        //    else {
+        //        $("#div_ContractPrice").show();
+        //        $("#div_EstimatedPrice").hide();
+        //    }
+        //});
+        $('#chk_IsTemplateContract').click(function () {
+            var checked = $(this).is(':checked');
+            if (checked) {
+                show1();
+            } else {
+                show2();
+            }
+        });
+    });
+    function show1() {
+        $("#IsHide1").hide();
+        $("#IsHide2").hide();
+        $("#IsHide3").hide();
+        $("#IsHide5").hide();
+        $("#IsHide6").hide();
+        $("#IsHide7").hide();
+        $("#IsHide8").hide();
+        $("#div_ContractKeyPoints").hide();
+        $("#IsHide10").show();
+        $("#IsHide11").show();
+        $("#div_ScopeOfApplication").show();
+        $("#IsHide12").hide();
+        $("#IsHide13").show();
+        $("#IsHide15").hide();
+    }
+    function show2() {
+        $("#IsHide1").show();
+        $("#IsHide2").show();
+        $("#IsHide3").show();
+        $("#IsHide5").show();
+        $("#IsHide6").show();
+        $("#IsHide7").show();
+        $("#IsHide8").show();
+        $("#div_ContractKeyPoints").show();
+        $("#IsHide10").hide();
+        $("#IsHide11").hide();
+        $("#div_ScopeOfApplication").hide();
+        $("#IsHide12").show();
+        $("#IsHide13").hide();
+        $("#IsHide15").show();
+    }
+    $(function () {
+        jForm.xValidate($("#cTypeForm"), {});
+        if ("@ViewBag.strError" != "") {
+            jNotify.showError("@ViewBag.strError");
+        }
+        var status = "@Model.Status.ToString()";
+        if ("@ViewBag.Type" == "3" || status == "2") {
+            $("#cTypeForm input").attr("disabled", true);
+            $("#cTypeForm select").attr("disabled", true);
+            $("button[name=btnSave]").attr("disabled", true);
+            $("button[name=btnUpdate]").attr("disabled", true);
+        }
+    })
+    function onSubmit() {
+        try {
+            return $("#cTypeForm ").valid();
+        } catch (e) {
+        }
+        return false;
+    }
+    function onSave() {
+        try {
+            $("#submitType").val("1");//保存的时候状态是1
+            if ($("#cTypeForm ").valid()) {
+                jForm.Ajax({
+                    url: "/ContractTypeManagement/Edit",//Action
+                    data: jForm.getfrmData($("#cTypeForm")),//表单参数
+                    success: function (result) {
+                        jNotify.showSuccess("Successfully submitted");//显示信息
+                        hideModal();//关闭模态框
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");//列表页刷新
+                    }
+                });
+            }
+        } catch (e) {
+            console.info(e)
+        }
+        return false;
+    }
+    function onSave2() {
+        try {
+            $("#submitType").val("2");//提交的时候状态是2
+            if ($("#cTypeForm ").valid()) {
+                jForm.Ajax({
+                    url: "/ContractTypeManagement/Edit",
+                    data: jForm.getfrmData($("#cTypeForm")),
+                    success: function (result) {
+                        jNotify.showSuccess("Successfully submitted");
+                        hideModal();
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    }
+                });
+            }
+        } catch (e) {
+
+        }
+        return false;
+    }
+
+
+</script>
+@*}*@
+

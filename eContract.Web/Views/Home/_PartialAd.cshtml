@@ -1,0 +1,31 @@
+﻿@model List<ComixB2B.Common.Entity.AdAdvertisementEntity>
+@{
+    string adPicUrl = "https://ad.comix.com.cn/b2b";
+}
+<div class="carousel slide c-slide-img100" id="carousel2" data-ride="carousel" data-interval="3500">
+    @if (Model != null)
+    {
+        <ol class="carousel-indicators">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <li data-slide-to="@i" data-target="#carousel2" class="@(i==0?"active":"")"></li>
+            }
+        </ol>
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="item @(i==0?"active":"")">
+                    <a href="http://b2b.comix.com.cn@(Model[i].NavigateUrl)" target="_blank">
+                        <img alt="image" class="img-responsive" src="@(adPicUrl + Model[i].FileUrl)" />
+                    </a>
+                </div>
+            }
+        </div>
+        <a data-slide="prev" href="#carousel2" class="left carousel-control">
+            <span class="icon-prev"></span>
+        </a>
+        <a data-slide="next" href="#carousel2" class="right carousel-control">
+            <span class="icon-next"></span>
+        </a>
+    }
+</div>

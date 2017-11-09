@@ -1,0 +1,208 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+    Dictionary<int, string> GenderDic = new Dictionary<int, string>();
+    GenderDic.Add(0, "男");
+    GenderDic.Add(1, "女");
+    GenderDic.Add(2, "保密");
+
+    Dictionary<string, string> Company = new Dictionary<string, string>();
+    Company.Add("FTS", "Ferrero Trading (Shanghai) Co., Ltd.");
+    Company.Add("FFH", "Ferrero Food (Hangzhou) Co., Ltd.");
+
+    //Dictionary<string, string> Region = new Dictionary<string, string>();
+    //Company.Add("11A0A426-CC49-401A-9719-F141FD4AB9E2", "东区");
+    //Company.Add("3A81AA83-F55E-4577-860D-C290B2106A0B", "南区");
+    //Company.Add("591F4935-BE7B-4A5F-82FE-FF16C7D033B1", "北区");
+    //Company.Add("BFD45836-0898-4438-8D3C-3CD6F56858CC", "中西区");
+    //Company.Add("C0A98F3B-923C-4B74-945E-CF287541DC20", "电商");
+}
+@model eContract.Common.Entity.CasUserEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-content c-edit-wrap">
+                    <form method="post" class="form-horizontal" id="userForm" >
+                        @Html.XHiddenFor(m => m.UserId)
+                        @Html.XHiddenFor(m => m.EnglishName)
+                        @Html.XHiddenFor(m => m.Password)
+                        @Html.XHiddenFor(m => m.LastModifiedBy)
+                        @Html.XHiddenFor(m => m.LastModifiedTime)
+
+                        @Html.XTextBoxFor(m => m.UserAccount, new UIValidation { DisplayName = "登录名", required = true }, new { display = Model.UserAccount })
+                        @Html.XTextBoxFor(m => m.ChineseName, new UIValidation { DisplayName = "姓名", required = true }, new { display = Model.ChineseName })
+                        @Html.XTextBoxFor(m => m.EnglishName, new UIValidation { DisplayName = "英文名", required = true }, new { display = Model.EnglishName })
+                        @Html.XDropDownListFor(m => m.CompanyCode, false, Company, new UIValidation { DisplayName = "所属公司", required = true }, new { display = Model.CompanyCode })
+                        <div class="form-group">
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>所在部门：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type="hidden" id="selected_Dep" name="OwnDepValue">
+                                <select id="sel_menuDep" class="js-data-example-ajax form-control" name="ownDepartment"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>所在城市：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type="hidden" id="selected_City" name="CityCode">
+                                <select id="sel_menuCity" class="js-data-example-ajax form-control" name="ownCityCode"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class='col-sm-2 control-label'>
+                                <span class="asteriskField">*</span>所在大区：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input id="regionValue" type="text" readonly="readonly" class="form-control" value="@ViewBag.RegionName" />
+                            </div>
+                        </div>
+                        @Html.XDropDownListFor(m => m.Gender, false, GenderDic, new UIValidation { DisplayName = "性别", required = true }, new { display = Model.Gender })
+
+                        @Html.XTextBoxFor(m => m.Email, new UIValidation { DisplayName = "Email", required = true }, new { display = Model.Email })
+
+                        @*@Html.XCheckBoxFor(m => m.IsAdmin, "是否管理员", new { valuetype = "int" }, false, true)*@
+                        <div class="form-group layout-edit-from-checkbox" style="display:none;">
+                            <label class='col-sm-2 control-label'>
+                                是否管理员：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type='hidden' name='IsAdmin' id='IsAdmin' value="@Convert.ToBoolean(Model.IsAdmin).ToString().ToLower()" />
+                                <input type="checkbox" name="IsAdmin" checked="@Convert.ToBoolean(Model.IsAdmin)" id='chk_IsAdmin' />
+                            </div>
+                        </div>
+
+
+                        @*@if (!string.IsNullOrEmpty(Model.UserId))
+                            {
+                            <div class="row">
+                                <div class="col-sm-6 control-label">
+                                    <div id='div_Step' class='form-group layout-edit-from-checkbox'>
+                                        <label class='col-sm-4'>
+                                            城市：
+                                        </label>
+                                        <div class='col-sm-8'>
+                                            <input type="text" readonly="readonly" class="form-control" value="@ViewBag.CityName" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 control-label">
+                                    <div id='div_Step' class='form-group layout-edit-from-checkbox'>
+                                        <label class='col-sm-4'>
+                                            大区：
+                                        </label>
+                                        <div class='col-sm-8'>
+                                            <input type="text" readonly="readonly" class="form-control" value="@ViewBag.RegionName" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            }*@
+                        @Html.XButtonList(
+                        new[]{new XButton{Id="btnSave",DisplayName="Save",Icon="icon-save",onClick="onSubmit();", LoadingText="Saving....",xButtonType=XButtonType.Button},
+
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back", LoadingText="Returning....",xButtonType=XButtonType.Button,onClick="hideModal();"}
+                               })
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/CAS/Scripts/depUserCommon.js"></script>
+<script src="~/Areas/CAS/Scripts/CityList.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $(document).ready(function () {
+            if ("@ViewBag.EditType" == "1") {
+                selectDepSingle($("#sel_menuDep"), $("#selected_Dep"));
+                selectCitySingle($("#sel_menuCity"), $("#selected_City"), $("#regionValue"));
+            }
+            if ("@ViewBag.EditType" == "0") {
+                loadSelectDep();//查询用户所在部门
+                loadSelectCity();//查询用户所在的城市
+            }
+            jForm.xValidate($(".form-horizontal"), {});
+        });
+        if ("@ViewBag.EditType" == "0") {
+            $("#AccountValue").attr("disabled", "disabled");
+        }
+        if ("@ViewBag.strError" != "") {
+            jNotify.showError("@ViewBag.strError");
+        }
+    })
+
+    function onSubmit() {
+        var returnVal = $("#userForm").valid();
+        if (returnVal) {
+            var depValue = $("#selected_Dep").val();
+            var cityValue = $("#selected_City").val();
+            if (depValue == null || depValue == "") {
+                returnVal = false;
+                jNotify.showError("请选择所在部门");
+            }
+            if (cityValue == null || cityValue == "") {
+                returnVal = false;
+                jNotify.showError("请选择所在城市");
+            }
+        }
+
+        if (returnVal) {
+            jForm.Ajax({
+                url: "/UserManagement/Edit",//Action
+                data: jForm.getfrmData($("#userForm")),//表单参数
+                success: function (result) {
+                    jNotify.showSuccess("Successfully submitted");//显示信息
+                    hideModal();//关闭模态框
+                    return;
+                    //列表页刷新
+                    jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                }
+            });
+        }
+    }
+
+    //查询用户所在部门
+    function loadSelectDep() {
+        $.ajax({
+            url: '/Admin/UserManagement/loadSelectDepVale',
+            async: true,
+            data: {
+                deptCode: "@Model.DeparmentCode"
+            },
+            timeout: 5000,    //超时时间
+            dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success: function (data, textStatus, jqXHR) {
+                selectDepSingle2($("#sel_menuDep"), $("#selected_Dep"), data);
+            }
+        });
+    };
+    //查询当前用户所在的城市
+    function loadSelectCity() {
+        $.ajax({
+            url: '/CAS/Common/loadSelectCityValue',
+            async: true,
+            data: {
+                cityCode: "@Model.CityCode"
+            },
+            timeout: 5000,    //超时时间
+            dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success: function (data, textStatus, jqXHR) {
+                selectCitySingle2($("#sel_menuCity"), $("#selected_City"), data, $("#regionValue"));
+            }
+        });
+    };
+</script>
+

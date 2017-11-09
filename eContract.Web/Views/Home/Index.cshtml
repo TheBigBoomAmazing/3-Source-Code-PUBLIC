@@ -1,0 +1,282 @@
+﻿@{
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+}
+@*@using eContract.Common.Schema
+    @model eContract.Common.LigerGrid*@
+@section header{
+}
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins layout-list-header">
+                <div class="ibox-content c-list-header">
+                    <form id="sel_form">
+                        <div class="row">
+                            <div class="col-sm-4 label-form-4">
+                                <label class="control-label" for="sel_CONTRACT_NO">Contract Number：</label>
+                                <div class="form-group">
+                                    <input type="text" id="sel_CONTRACT_NO" name="CONTRACT_NO" value="" placeholder="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 label-form-4">
+                                <label class="control-label" for="sel_CONTRACT_NAME">Contract Name：</label>
+                                <div class="form-group">
+                                    <input type="text" id="sel_CONTRACT_NAME" name="CONTRACT_NAME" value="" placeholder="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 label-form-4">
+                                <label class="control-label" for="sel_COUNTERPARTY_CN">Counter Party：</label>
+                                <div class="form-group">
+                                    <input type="text" id="sel_COUNTERPARTY_CN" name="COUNTERPARTY_CN" value="" placeholder="" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 label-form-4">
+                                <label class="control-label" for="sel_FERRERO_ENTITY">Ferrero Party：</label>
+                                <div class="form-group">
+                                    <select class="form-control m-b c-edit-select valid" id="FERRERO_ENTITY" name="FERRERO_ENTITY">
+                                        <option value="">===Select===</option>
+                                        <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
+                                        <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
+                                    </select>
+                                    @*<input type="text" id="sel_FERRERO_ENTITY" name="FERRERO_ENTITY" value="" placeholder="Ferrero Party" class="form-control">*@
+                                </div>
+                            </div>
+                            <div class="col-sm-4 label-form-4">
+                                <label class="control-label" for="sel_EFFECTIVE_DATE">Validate From：</label>
+                                <div class="form-group">
+                                    <input type="text" id="sel_EFFECTIVE_DATE" name="EFFECTIVE_DATE" value="" placeholder="" class="form-control Wdate" onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 label-form-4">
+                                <label class="control-label" for="sel_EXPIRATION_DATE">End To：</label>
+                                <div class="form-group">
+                                    <input type="text" id="sel_EXPIRATION_DATE" name="EXPIRATION_DATE" value="" placeholder="" class="form-control Wdate" onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 label-form-4">
+                                <label class="control-label" for="sel_STATUS">Status：</label>
+                                <div class="form-group">
+                                    <select class="form-control m-b c-edit-select valid" id="STATUS" name="STATUS"
+                                            validate="{required:true}" display="" aria-invalid="true">
+                                        <option value="">===Select===</option>
+                                        <option value="1">Draft</option>
+                                        <option value="2">In review process</option>
+                                        <option value="3">Approved</option>
+                                        <option value="4">Rejected</option>
+                                        @*<option value="5">Completed</option>
+                                            <option value="6">Closed</option>
+                                            <option value="7">Terminated</option>*@
+                                        @*<option value="8">Resubmitted</option>*@
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 label-form-4">
+                                <label class="control-label" for="sel_CONTRACT_GROUP">Contract Group：</label>
+                                <div class="form-group">
+                                    <select class="form-control m-b c-edit-select valid" id="CONTRACT_GROUP" name="CONTRACT_GROUP"
+                                            validate="{required:true}" display="" aria-invalid="true">
+                                        <option value="">===Select===</option>
+                                        <option value="1">Other contract</option>
+                                        <option value="2">History contract</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 label-form-4">
+                                <label class="control-label" for="sel_CONTRACT_SERIAL_NO">Serial No：</label>
+                                <div class="form-group">
+                                    <input type="text" id="sel_CONTRACT_SERIAL_NO" name="CONTRACT_SERIAL_NO" value="" placeholder="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row" hidden="hidden">
+                                <div class="col-sm-3 label-form-4">
+                                    <label class="control-label" for="sel_ExportTypeData">导出类型：</label>
+                                    <div class="form-group">
+                                        <input type="text" id="sel_ExportTypeData" name="ExportTypeData" value="IApplied" placeholder="" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="row" hidden="hidden">
+                                    <div class="col-sm-3 label-form-4">
+                                        <label class="control-label" for="sel_HomeQuery">首页查询：</label>
+                                        <div class="form-group">
+                                            <input type="text" id="sel_HomeQuery" name="HomeQuery" value="HomeQuery" placeholder="" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                                <button type="button" style="display:none" id="sel_Export" class="btn btn-primary">Export</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins layout-list-body">
+                @RenderPage("_List.cshtml")
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section footer{
+    <style type="text/css">
+        body {
+            margin: 0px;
+        }
+
+        .impowerBox {
+            width: 196px;
+        }
+
+            .impowerBox .qrcode {
+                width: 196px;
+                margin-top: 0px;
+            }
+
+            .impowerBox .title {
+                display: none;
+            }
+
+            .impowerBox .info {
+                display: none;
+            }
+
+        .login-wrapper .login-qrcode {
+            border: none;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+                $(".fa-sitemap").parent().click()
+                jqGrid.initGrid($("#ContractByMeGrid"),
+                {
+                    url: "@Url.Action("Index")",
+                    sortname: "LAST_MODIFIED_TIME",
+                    sortorder: "desc",
+                    colNames: ['Action', 'Serial No', 'Ferrero Party', 'Contract Name', 'Contract Number', 'Counter Party', 'Start From', 'Status', 'Contract Group'],
+                    colModel: [
+                        {
+                            name: '',
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a data-toggle="modal" data-target="#modalContent" href="../CAS/ApplayContract/ItemDetails?id=' +
+                                    row.CONTRACT_ID +
+                                    '">Open</a>&nbsp;' +
+                                    '<a data-toggle="modal" data-target="#modalContent" href="../CAS/ContractManagement/ContractAttachmentFiles?id=' +
+                                    row.CONTRACT_ID +
+                                    '">Attachment</a>&nbsp;' +
+                                " </div>";
+                            }
+                        },
+                        { name: 'CONTRACT_SERIAL_NO', index: 'CONTRACT_SERIAL_NO ', search: true,width:140 },
+                        { name: 'FERRERO_ENTITY', index: 'FERRERO_ENTITY ', search: true },
+                        { name: 'CONTRACT_NAME', index: 'CONTRACT_NAME', search: true },
+                        { name: 'CONTRACT_NO', index: 'CONTRACT_NO', search: true },
+                        //{
+                        //    name: '', index: '', search: true,
+                        //    formatter: function (cellvalue, options, row) {
+                        //        var contractNoHtml = "";
+                        //        if (row.CONTRACT_GROUP == "2") {
+                        //            contractNoHtml = row.CONTRACT_SERIAL_NO != null && row.CONTRACT_SERIAL_NO != undefined ? row.CONTRACT_SERIAL_NO : contractNoHtml;
+                        //        } else {
+                        //            contractNoHtml = row.CONTRACT_NO != null && row.CONTRACT_NO != undefined ? row.CONTRACT_NO : contractNoHtml;
+                        //        }
+                        //        return contractNoHtml;
+                        //    }
+                        //},
+                        { name: 'COUNTERPARTY_EN', index: 'COUNTERPARTY_EN', search: true },
+                        {
+                            name: 'EFFECTIVE_DATE', index: 'EFFECTIVE_DATE',
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue != null && cellvalue != "") {
+                                    var _date = eval('new ' + (cellvalue.replace(/\//g, '')));
+                                    return _date.format("yyyy-MM-dd")
+                                }
+                                else {
+                                    return "";
+                                }
+                            }
+                        },
+                        {
+                            name: 'STATUS', index: 'STATUS', search: true,
+                            formatter: function (cellvalue, options, row) {
+                                switch (cellvalue) {
+                                    case 1:
+                                        return "Draft"
+                                        break;
+                                    case 2:
+                                        return "In review process"
+                                        break;
+                                    case 3:
+                                        return "Approved"
+                                        break;
+                                    case 4:
+                                        return "Rejected"
+                                        break;
+                                    case 5:
+                                        return "Completed "
+                                        break;
+                                    case 6:
+                                        return "Closed"
+                                        break;
+                                    case 7:
+                                        return "Terminated"
+                                        break;
+                                    case 8:
+                                        return "In review process";
+                                        break;
+                                    default:
+                                        return "未知状态";
+                                        break;
+                                }
+                            }
+                        },
+                        {
+                            name: 'CONTRACT_GROUP', index: 'CONTRACT_GROUP', search: true,
+                            formatter: function (cellvalue, options, row) {
+                                switch (cellvalue) {
+                                    case 1:
+                                        return "Other contract"
+                                        break;
+                                    case 2:
+                                        return "History contract"
+                                        break;
+                                    default:
+                                        return "Unknown";
+                                        break;
+                                }
+                            }
+                        }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    });
+                $("#sel_Export")
+                    .click(function () {
+                        $("#sel_form").attr('action', "@Url.Action("ExportFileList")");
+                        $("#sel_form").submit();
+                    });
+            });
+
+    </script>
+}

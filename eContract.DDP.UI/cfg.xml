@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<ResouceDir>.\DDP_Resource</ResouceDir>
+	<DataDir>.\Data</DataDir>
+  <LogDir>.\Log-Data</LogDir>
+  <MailDir>.\Mail-Data</MailDir>
+  <UpLoadDir>.\UpLoadDir</UpLoadDir>
+  <SFTPTESTUpLoadLocalDir>TestUpLoadDir-Data</SFTPTESTUpLoadLocalDir>
+  <SFTPUpLoadLocalDir>UpLoadDir-Data</SFTPUpLoadLocalDir>
+  <SFTPUpLoadXMLLocalDir>UpLoadXMLDir-Data</SFTPUpLoadXMLLocalDir>
+  <SFTPTESTUpLoadXMLLocalDir>TestUpLoadXMLDir-Data</SFTPTESTUpLoadXMLLocalDir>
+  <EmailServer>smtp.ferrero.com.cn</EmailServer>
+  <EmailFromAddress>Store@ferrero.com.cn</EmailFromAddress>
+  <EmailUser>Sample@eContractsoft.com</EmailUser>
+  <EmailPassword>hello2836</EmailPassword>
+  <logs>				
+    <log type="SqlServer" TableName="SYS_LOG_DDP"/>
+    <!--<log type="file"/>-->
+	</logs>
+</root>

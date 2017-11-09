@@ -1,0 +1,61 @@
+﻿@model List<eContract.Common.Entity.SysNoticeEntity>
+@{
+    ViewBag.Title = "Notice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var notice = ViewBag.Model as eContract.Common.Entity.SysNoticeEntity;
+}
+@section header{
+    <style>
+        .layout .layout-body .layout-main{margin-left:0;min-height:484px;}
+        .layout .layout-body .layout-main .layout-main{margin-left:10px;}
+        .layout .layout-main-body .layout-main-body-content{padding:10px;}
+        .layout .layout-body .layout-body-left ul.tree li ul.thirdlevel li.active .subMenuName,.layout .layout-body .layout-body-left ul.tree li ul.thirdlevel li a:hover .subMenuName{border-bottom:none;}
+        .layout .layout-body .layout-body-left ul.tree li ul.thirdlevel li a:hover .subMenuName{height: initial;}
+        .layout .layout-body .layout-body-left ul.tree li a{line-height:16px;}
+        .layout .layout-body .layout-main .layout-main-body  span.parMenuName{line-height:40px;}
+        .layout .layout-body .layout-main .layout-main-body .subMenuName,.layout .layout-body .layout-main .layout-main-body .parMenuName{margin-left:20px;}
+        .layout .layout-body .layout-main .layout-main-body .thirdlevel li{padding: 6px 0;}
+        .layout .layout-body .layout-body-left ul.tree li ul.tree{max-height:477px;}
+        .layout .layout-body .layout-body-left ul.tree li ul.tree.scroll{overflow-y: auto;overflow-x: hidden;}
+        .layout .layout-body .layout-body-left ul.tree li ul.tree a{display: table-cell;vertical-align: middle;padding-right: 20px;}
+        .layout .layout-body .layout-main .layout-main-nav{font-size:14px;}
+    </style>
+}
+<div class="layout-body-left">
+    <ul class="tree subtree">
+        <li class="parent active first"><a class=" active subitem" href="javascript:;"><span class="parMeunIcon"></span><span class="parMenuName">系统通知中心</span></a>
+            <ul class="tree thirdlevel curr">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var entity in Model)
+                    {
+                        <li class="">
+                            <a class="@(ViewBag.Id == entity.NoticeID ? "active" : "")" href="/Home/Notice?id=@(entity.NoticeID)" title="@entity.NoticeTitle"><span class="subMeunIcon "></span><span class="subMenuName">@entity.NoticeTitle</span></a>
+                        </li>
+                    }
+                }
+            </ul>
+        </li>
+    </ul>
+</div>
+<div class="layout-main ">
+    <div class="layout-main-nav">
+        @(notice.NoticeTitle)
+    </div>
+    <div class="layout-main-body">
+        <div class="layout-main-body-content">
+            @(Html.Raw(notice.NoticeContent))
+        </div>
+    </div>
+</div>
+@section footer{
+    <script>
+        $(function () {
+            var max_menu_h = 477;
+            var menu_h = $(".thirdlevel").height();
+            if (menu_h >= max_menu_h) {
+                $(".thirdlevel").addClass("scroll");
+            }
+        })
+    </script>
+}

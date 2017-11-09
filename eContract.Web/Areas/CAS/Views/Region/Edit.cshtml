@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+
+    Dictionary<string, string> RegionManagerDic = ViewBag.RegionManagerDic;
+}
+@model eContract.Common.Entity.CasRegionEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-content c-edit-wrap">
+                    <form method="post" class="form-horizontal" id="regionForm">
+                        @Html.XHiddenFor(m => m.RegionId)
+                        @Html.XHiddenFor(m => m.LastModifiedBy)
+                        @Html.XHiddenFor(m => m.LastModifiedTime)
+                        @Html.XTextBoxFor(m => m.RegionCode, new UIValidation { DisplayName = "Region Code", required = true, disabled = true }, new { display = Model.RegionCode })
+                        @Html.XTextBoxFor(m => m.RegionName, new UIValidation { DisplayName = "Region Name", required = true, disabled = true }, new { display = Model.RegionName })
+                        @*@Html.XDropDownListFor(m => m.RegionManager, true, RegionManagerDic, new UIValidation { DisplayName = "大区总监", required = false }, new { display = Model.RegionManager })*@
+                        <div class="form-group" style="line-height:40px;">
+                            <label class='col-sm-2 control-label'>
+                                RSM：
+                            </label>
+                            <div class='col-sm-10 controls'>
+                                <input type="hidden" id="selected_menuUser" name="RegionManager" style="height:50px;width:300px">
+                                <select id="sel_menuUser" class="js-data-example-ajax form-control" name="RegionManagerSelect"></select>
+                            </div>
+                        </div>
+                        @Html.XButtonList(
+                        new[]{new XButton{Id="btnSave",DisplayName="Save",Icon="icon-save", LoadingText="Saving....",xButtonType=XButtonType.Button,onClick="onSubmit();"},
+
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back", LoadingText="Returning....",xButtonType=XButtonType.Button,onClick="hideModal();"}
+                               })
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/CAS/Scripts/depUserCommon.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $(document).ready(function () {
+            if ("@ViewBag.EditType" == "0") {
+                loadSelectManager();//查询区域总监
+            }
+            if ("@ViewBag.EditType" == "1") {
+                selectUserSingle($("#sel_menuUser"), $("#selected_menuUser"));
+            }
+            jForm.xValidate($(".form-horizontal"), {});
+        });
+        if ("@ViewBag.EditType" == "0") {
+            $("#AccountValue").attr("disabled", "disabled");
+        }
+        if ("@ViewBag.strError" != "") {
+            jNotify.showError("@ViewBag.strError");
+        }
+    })
+
+    function onSubmit() {
+        if ($("#regionForm").valid()) {
+            jForm.Ajax({
+                url: "/Region/Edit",//Action
+                data: jForm.getfrmData($("#regionForm")),//表单参数
+                success: function (result) {
+                    jNotify.showSuccess("Successfully submitted");//显示信息
+                    hideModal();//关闭模态框
+                    //列表页刷新
+                    jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                }
+            });
+        }
+    }
+    //查询区域总监
+    function loadSelectManager() {
+        $.ajax({
+            url: '/CAS/Region/loadRegionManager',
+            async: true,
+            data: {
+                regionManagerId: "@Model.RegionManager"
+            },
+            timeout: 5000,    //超时时间
+            dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+            success: function (data, textStatus, jqXHR) {
+                selectUserSingle2($("#sel_menuUser"), $("#selected_menuUser"), data);
+
+            }
+        });
+    };
+</script>
+

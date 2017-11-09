@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+    Dictionary<string, string> RoleTypeDic = new Dictionary<string, string>();
+    RoleTypeDic.Add("1", "总部");
+    RoleTypeDic.Add("2", "门店");
+    RoleTypeDic.Add("0", "系统管理");
+}
+@model eContract.Common.Entity.SecRoleEntity
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="wrapper wrapper-content layout-main-edit">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content c-edit-wrap">
+                    <form method="post" class="form-horizontal" id="roleForm">
+                        @Html.XHiddenFor(m => m.RoleId)
+                        @Html.XTextBoxFor(m => m.RoleName, new UIValidation { DisplayName = "Role Name", required = true }, new { display = Model.RoleName })
+                        @*@Html.XDropDownListFor(m => m.RoleType, true, RoleTypeDic, new UIValidation { DisplayName = "角色类型", required = true }, new { display = Model.RoleType })*@
+                        @Html.XTextArea("Remark", Model.Remark, new UIValidation { DisplayName = "Role Description" }, new { rows = 5 })
+
+                        @Html.XButtonList(
+                        new[]{new XButton{Id="btnSave",DisplayName="Save",Icon="icon-save", LoadingText="Saving....",xButtonType=XButtonType.Button,onClick="onSubmit();"},
+
+                              new XButton{Id="btnBack",DisplayName="Back to list",Icon="icon-back", LoadingText="Returning....",xButtonType=XButtonType.Button,onClick="hideModal();"}
+                               })
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+
+
+        $(function () {
+            jForm.xValidate($("#roleForm"), {});
+            if ("@ViewBag.strError" != "") {
+                jNotify.showError("@ViewBag.strError");
+            }
+        })
+
+        function onSubmit() {
+            if ($("#roleForm").valid()) {
+                jForm.Ajax({
+                    url: "/FunctionRoleManagement/Edit",//Action
+                    data: jForm.getfrmData($("#roleForm")),//表单参数
+                    success: function (result) {
+                        jNotify.showSuccess("Successfully submitted");//显示信息
+                        hideModal();//关闭模态框
+                        //列表页刷新
+                        //jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    }
+                });
+            }
+        }
+    </script>
+

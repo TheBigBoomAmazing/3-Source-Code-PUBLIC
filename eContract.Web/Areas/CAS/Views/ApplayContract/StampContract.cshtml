@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "StampContract";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_FERRERO_ENTITY">Ferrero Party：</label>
+                            <div class="form-group">
+                                <select class="form-control m-b c-edit-select valid" id="FERRERO_ENTITY" name="FERRERO_ENTITY">
+                                    <option value="">===Select===</option>
+                                    <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
+                                    <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
+                                </select>
+                                @*<input type="text" id="sel_FERRERO_ENTITY" name="FERRERO_ENTITY" value="" placeholder="Ferrero Party" class="form-control">*@
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_TYPE_NAME">Contract Type：</label>
+                            <div class="form-group">
+                                @*<input type="text" id="sel_CONTRACT_TYPE_NAME" name="CONTRACT_TYPE_NAME" value="" placeholder="" class="form-control">*@
+                                <select class="form-control m-b c-edit-select valid" id="CONTRACT_TYPE_NAME" name="CONTRACT_TYPE_NAME">
+                                    <option value="">===Select===</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_NAME">Contract Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CONTRACT_NAME" name="CONTRACT_NAME" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_APPLY_DATE">Submission Date：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_APPLY_DATE" name="APPLY_DATE" value="" placeholder="" class="form-control Wdate" onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_SERIAL_NO">Serial No：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CONTRACT_SERIAL_NO" name="CONTRACT_SERIAL_NO" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_StampList.cshtml")
+        </div>
+    </div>
+</div>
+@*@section footer{*@
+    <script src="~/Areas/CAS/Scripts/ContractTypeSelect.js"></script>
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+                jqGrid.initGrid($("#StampContractGrid"),
+                {
+                    url: "@Url.Action("StampContract")",
+                    sortname: "CREATE_TIME",
+                    //multiselect: false,
+                    colNames: ['Action', 'Serial No', 'Ferrero Party', 'Contract Type', 'Contract Name', 'Status', 'Submission Date'],
+                    colModel: [
+                        {
+                            name: '',
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                var html= "<div class=\"c-table-cz\">" +
+                                    '<a href="javascript://" onclick="FormPrint(\'' + row.CONTRACT_ID + '\',\'' + row.IS_TEMPLATE_CONTRACT + '\')">Form print</a>&nbsp;';
+
+                                if (row.STATUS == "3")
+                                {
+                                    html += '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("UploadStampContract")?id=' +
+                                    row.CONTRACT_ID +
+                                    '">Upload</a>&nbsp;';
+                                }
+                                //原禁用改直接隐藏
+                                //if (row.STATUS == "5") {
+                                //    html += '<a style="pointer-events:none;" ' +
+                                //    ' disabled="disabled">Upload</a>&nbsp;';
+                                //}
+                                html += '<a target="_blank" href="@Url.Action("PREDIT","PO")?id=' +
+                                    row.CONTRACT_ID +
+                                    '">PR input</a>&nbsp;'
+                                " </div>";
+                                return html;
+                            }
+                        },
+                        { name: 'CONTRACT_SERIAL_NO', index: 'CONTRACT_SERIAL_NO ', search: true, width: 140 },
+                        { name: 'FERRERO_ENTITY', index: 'FERRERO_ENTITY', search: true },
+                        { name: 'CONTRACT_TYPE_NAME', index: 'CONTRACT_TYPE_NAME ', search: true },
+                        { name: 'CONTRACT_NAME', index: 'CONTRACT_NAME', search: true },
+                        {
+                            name: 'STATUS', index: 'STATUS ', search: true,
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue == 3) {
+                                    return "Approved"
+                                }
+                                if (cellvalue == 5) {
+                                    return "Completed"
+                                }
+                            }
+                        },
+                        {
+                            name: 'APPLY_DATE', index: 'APPLY_DATE',
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue != null && cellvalue != "") {
+                                    var _date = eval('new ' + (cellvalue.replace(/\//g, '')));
+                                    return _date.format("yyyy-MM-dd HH:mm:ss")
+                                }
+                                else {
+                                    return "";
+                                }
+                            }
+                        }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("StampContract")");
+                    });
+            });
+
+        function FormPrint(idValue,IsTEMPLATE) {
+            var id = idValue;
+                if (id != "") {
+                    if (IsTEMPLATE == "true") {
+                        window.open("../CAS/Report/TemplateReviewProcessReport?id=" + id);
+                    }
+                    else {
+                        window.open("../CAS/Report/ContractReviewProcessReport?id=" + id);
+                    }
+                }
+        };
+
+    </script>
+@*}*@
+

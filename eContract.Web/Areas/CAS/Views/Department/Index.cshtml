@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    //Layout = "~/Views/Shared/_ListLayout.cshtml";
+}
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_KEYWORD">Keyword：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_KEYWORD" name="KEYWORD" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_DEPT_TYPE">Department Type：</label>
+                            <div class="form-group">
+                                <select class="form-control m-b c-edit-select valid" id="DEPT_TYPE" name="DEPT_TYPE"
+                                        validate="{required:true}" display="" aria-invalid="true">
+                                    <option value="">===Select===</option>
+                                    <option value="1">Apply Department</option>
+                                    <option value="2">Function Department</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            <a data-toggle="modal" data-target="#modalContent" href="@Url.Action("Edit")" class="btn btn-primary">New</a>
+                            <button type="button" id="del_btn" class="btn btn-primary">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            @RenderPage("_List.cshtml")
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+                jqGrid.initGrid($("#departmentGrid"),
+                {
+                    url: "@Url.Action("Index")",
+                    sortname: "DEPT_CODE",
+                    multiselect: true,
+                    colNames: ['ID', 'Department Type', 'Ferrero Party', 'Department Name', 'Department Alias', 'Department Header', 'Action'],
+                    colModel: [
+                        { name: 'DEPT_ID', index: 'DEPT_ID', search: true, hidden: true },
+                        {
+                            name: 'DEPT_TYPE',
+                            index: 'DEPT_TYPE',
+                            formatter: function (cellvalue, options, row) {
+                                return row.DEPT_TYPE == "1" ? "Apply Department" : "Function Department";
+                            },
+                            search: true
+                        },
+                        { name: 'COMPANY_CODE', index: 'COMPANY_CODE', search: true },
+                        { name: 'DEPT_NAME', index: 'DEPT_NAME', search: true },
+                        { name: 'DEPT_ALIAS', index: 'DEPT_ALIAS', search: true },
+                        { name: 'ENGLISH_NAME', index: 'ENGLISH_NAME', search: true },
+                        {
+                            name: '',
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("Edit")?id=' +
+                                    row.DEPT_ID +
+                                    '">Edit</a>&nbsp;' +
+                                    " </div>";
+                            }
+                        }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function () {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    });
+
+                $("#del_btn")
+                    .click(function () {
+                        jqGrid.gridDelete({
+                            url: "@Url.Action("Delete")",
+                            KeyName: 'DEPT_ID'
+                        });
+
+                    });
+            });
+    </script>
+@*}*@

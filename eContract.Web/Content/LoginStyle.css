@@ -1,0 +1,26 @@
+﻿body { font-size:12px; font-family: Microsoft YaHei, "Segoe UI", Verdana, Helvetica, Sans-Serif;margin:0;padding:0; background:#F2F2F2;outline:none;}
+.login{}
+.login .header{width:980px;margin:0 auto; background:url(images/Logo3.png) no-repeat 40px 0px;height:70px;_background: none;
+_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../Content/images/Logo3.png',sizingMethod='crop');}
+.login .header span{color:#3a3a3a;font-size: 24px;display:inline-block;height:70px;line-height:70px;margin-left:200px;}
+.login .content{min-width:980px;width:100%;height:476px;}
+.login .content .loginForm{ height:476px; width:980px;margin:0 auto; position:relative;}
+.login .content .loginForm .loginTable{width:347px;height:350px;background: #fff;float:right;right:10px;margin-top:40px;}
+.login .content .loginForm .loginTable .loginTitle{width:307px;height:30px;margin:0 auto;padding-top:20px;padding-bottom:20px;}
+.login .content .loginForm .loginTable .loginTitle .loginleft{height:20px;line-height:20px; float: left; width: 180px;font-size: 18px;font-family: Microsoft Yahei;color: #666666;}
+.login .content .loginForm .loginTable .LoginTips{width: 306px;height: 26px;line-height: 26px;border: #ffe57d solid 1px;margin:0 auto; background: #fff6d2 url(images/light001.jpg) no-repeat 10px 5px;}
+.login .content .loginForm .loginTable .LoginTips span{padding-left:30px;}
+.login .content .loginForm .loginTable .input-controls{width: 304px;height: 38px;border: 1px solid #c4c4c4;margin-left: auto;margin-right: auto; margin-top: 20px;}
+.login .content .loginForm .loginTable .input-controls .icon{width:38px;height: 38px;float: left;border-right:1px solid #c4c4c4;background: #fafafa url(images/LoginIcon02.jpg) no-repeat 11px 11px;}
+.login .content .loginForm .loginTable .input-controls .iconback2{background: #fafafa url(images/LoginIcon03.jpg) no-repeat 11px 11px;}
+.login .content .loginForm .loginTable .input-controls .input-control{width:260px;height: 38px;float:left;}
+.login .content .loginForm .loginTable .input-controls input{width:250px;height:32px;line-height:32px; border:0;margin:0 auto;padding-left:5px;outline:none; }
+.login .content .loginForm .remember{width: 307px;margin:0 auto; height: 60px;line-height: 60px;text-align: right;padding-left: 5px;}
+.login .content .loginForm .remember span{display:inline-block;float:left;}
+.login .content .loginForm .remember span input{margin-bottom:3px; vertical-align: middle;}
+.login .content .loginForm .remember .btnGetPwd{text-decoration:none;}
+.login .content .loginForm .remember .btnGetPwd:hover { color: #E4393C;text-decoration: underline;}
+.login .content .loginForm .LoginInfoBtn{width: 307px;height: 60px;line-height: 60px; margin-left: auto;margin-right: auto; text-align: center;margin-top:30px;}
+.login .content .loginForm .LoginInfoBtn input{display: block;width: 307px;height: 33px;text-align: center;line-height: 33px;background: #f42d32;color: #fff;font-size: 18px;border:0;cursor:pointer;}
+.login .content .loginForm .loginTable input.error{border:1px solid red;}
+.login .content .loginForm .loginTable .errorTips{width: 306px; margin: 0 auto;margin-top: 10px;color: red;font-weight: bold;font-size: 12px;text-align: center;}

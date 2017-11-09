@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "UserDataScope";
+    Layout = null;
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+          
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-3 label-form-4">
+                            <label class="control-label" for="sel_CUSTOMER_CODE">系统码：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CUSTOMER_CODE" name="CUSTOMER_CODE" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3 label-form-4">
+                            <label class="control-label" for="sel_CUSTOMER_NAME">系统名称：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CUSTOMER_NAME" name="CUSTOMER_NAME" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">查询</button>
+                            <button type="button" class="btn btn-primary" onclick="SaveDataScope();">Save</button>
+                            <a class="btn btn-outline btn-primary" href="@Url.Action("Index")">Back to list</a>
+                            @*<button type="button" id="del_btn" class="btn btn-primary">删除</button>*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_ListUDS.cshtml")
+        </div>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        var selectCustomerCodes = "@ViewBag.SelectCustomerCodes".split(",");
+        $(document)
+            .ready(function() {
+                var selData = [];
+
+                jqGrid.initGrid($("#userPowerGrid"),
+                {
+                    url: "@Url.Action("UserEnterpriseGroupDataScope")",
+                    sortname: "CUSTOMER_CODE",
+                    multiselect: true,
+                    colNames: ['系统码', '系统名称', ""],
+                    colModel: [
+                        { name: 'CUSTOMER_CODE', index: 'CUSTOMER_CODE', search: true },
+                        { name: 'CUSTOMER_NAME', index: 'CUSTOMER_NAME', search: true },
+                        {
+                            name: '',
+                            hidden: true,
+                            formatter: function (cellvalue, options, row) {
+                                //Oracle此处Row_Number换成大写
+                                if ($.inArray(row.CUSTOMER_CODE, selectCustomerCodes) !== -1) {
+                                    if ($.inArray(row.ROW_NUMBER, selData) === -1)
+                                        selData.push(row.ROW_NUMBER);
+                                }
+                                return "";
+                            }
+                        }
+                    ],
+                    onSelectRow: function(rowid, status) {
+                        var selCustomerCode = $("#userPowerGrid").jqGrid("getRowData", rowid)["CUSTOMER_CODE"];
+                        var selIndex = $.inArray(selCustomerCode, selectCustomerCodes);
+                        if (!status) {
+                            if (selIndex !== -1) {
+                                selectCustomerCodes.splice(selIndex, 1);
+                            }
+                        } else {
+                            if (selIndex === -1) {
+                                selectCustomerCodes.push(selCustomerCode);
+                            }
+                        }
+                    },
+                    onSortCol: function() {
+                        selData = [];
+                    },
+                    gridComplete: function() {
+                        jqGrid.isPage = false;
+                        $("#userPowerGrid").jqGrid('resetSelection');
+                        var page = $("#userPowerGrid").jqGrid("getGridParam", "page");
+                        var rowNum = $("#userPowerGrid").jqGrid("getGridParam", "rowNum");
+                        for (var index = 0; index < selData.length; index++) {
+                            if (page === parseInt(selData[index] / rowNum) + 1)
+                                $("#userPowerGrid").jqGrid('setSelection', selData[index] % rowNum);
+                        }
+                    }
+                });
+
+                $("#sel_btn")
+                    .click(function() {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("UserEnterpriseGroupDataScope")");
+                    });
+
+                @*$("#del_btn").click(function () {
+                    jqGrid.gridDelete({
+                        url: "@Url.Action("Delete")",
+                        KeyName: 'CUSTOMER_CODE'
+                });
+
+        });*@
+            });
+
+        function SaveDataScope() {
+            jForm.Ajax({
+                url: "@Url.Action("SaveUserDataScope")",
+                data: { userId: "@ViewBag.UserId", groupKeys: selectCustomerCodes.join(",") },
+                success: function(data) {
+                    jNotify.showSuccess("数据权限更新成功！");
+                },
+                error: function(message) {
+                    jNotify.showError("数据权限更新失败！");
+                }
+            });
+        }
+
+    </script>

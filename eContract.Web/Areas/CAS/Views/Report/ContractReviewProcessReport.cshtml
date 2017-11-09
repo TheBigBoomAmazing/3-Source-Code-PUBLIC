@@ -1,0 +1,486 @@
+﻿
+@{
+    Layout = null;
+}
+@model eContract.Common.Entity.CasContractEntity
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Ferrero Contract Review Process Record</title>
+    <script src="~/UI/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/UI/Scripts/Jquery.Form.3.0.js"></script>
+</head>
+<style type="text/css">
+    #report {
+        font-family: Arial;
+        font-size: 8pt;
+    }
+
+    .title {
+        font-size: 10pt;
+    }
+
+    .txtcenter {
+        text-align: center;
+    }
+
+    .txtvcenter {
+        vertical-align: middle;
+    }
+
+    .w20 {
+        width: 20%;
+    }
+
+    .w30 {
+        width: 30%;
+    }
+
+    .w80 {
+        width: 80%;
+    }
+
+    .w100 {
+        width: 100%;
+    }
+</style>
+
+<body>
+    <div id="report">
+        <div><img src="~/UI/Css/default/images/report/reportlogo.png" /></div>
+        <div class="title txtcenter">
+            Ferrero Contract Review Process Record	<br />
+            费列罗合同审核流程表
+        </div>
+        <div id="reportDetail">
+            <table id="reportInfo" class="w100" border="1" style="border-collapse:collapse;">
+                <!--cellspacing="0" cellpadding="0"-->
+                <tr rowspan="2" class="title txtcenter">
+                    <td colspan="10">
+                        Basic Information<br />
+                        基本信息
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Contract No.<br />
+                        合同编号
+                    </td>
+                    <td colspan="8" class="w80">
+                        @Model.ContractNo
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Ferrero Entity<br />
+                        费列罗方
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.FerreroEntity
+                    </td>
+                    <td colspan="2" class="w20">
+                        Contract Type<br />
+                        合同类型
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.ContractTypeName
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Counterparty(EN)<br />
+                        相对方-英(英文名称）
+                    </td>
+                    <td colspan="8" class="w80">
+                        @Model.CounterpartyEn
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Counterparty (CH)<br />
+                        相对方-中(中文名称）
+                    </td>
+                    <td colspan="8" class="w80">
+                        @Model.CounterpartyCn
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" rowspan="2" class="w20">
+                        Contract Name<br />
+                        合同名称
+                    </td>
+                    <td colspan="3" rowspan="2" class="30">
+                        @Model.ContractName
+                    </td>
+                    <td rowspan="2" colspan="2" class="w20">
+                        Contract Term<br />
+                        合同期限
+                    </td>
+                    <td colspan="3" class="w30">
+                        <table class="w100">
+                            <tr>
+                                <td colspan="2" class="w20">
+                                    From<br />
+                                    自
+                                </td>
+                                <td colspan="3"><span id="ContractEffectiveDate"></span></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="w30">
+                        <table class="w100">
+                            <tr>
+                                <td colspan="2" class="w20">
+                                    To<br />
+                                    至
+                                </td>
+                                <td colspan="3"><span id="ContractExpirationDate"></span></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Contract Owner<br />
+                        申请部门
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.ContractOwner
+                    </td>
+                    <td colspan="2" class="w20">
+                        Contract Initiator<br />
+                        申请人
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.ContractInitiator
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Date of Application<br />
+                        申请时间
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.CreateTime
+                    </td>
+                    <td colspan="2" class="w20">
+                        Capex or not<br />
+                        是否是固定资产
+                    </td>
+                    <td colspan="3" class="w30">
+                        @if ((bool)Model.Capex)
+                        {
+                            <span>Yes</span>
+                        }
+                        else
+                        {
+                            <span>No</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Master Agreement or not<br />
+                        是否框架合同
+                    </td>
+                    <td colspan="3" class="w30">
+                        @if ((bool)Model.IsMasterAgreement)
+                        {
+                            <span>Yes</span>
+                        }
+                        else
+                        {
+                            <span>No</span>
+                        }
+                    </td>
+                    <td colspan="2" class="w20">
+                        Supplementary or not<br />
+                        是否补充合同
+                    </td>
+                    <td colspan="3" class="w30">
+                        @if ((bool)Model.Supplementary)
+                        {
+                            <span>Yes</span>
+                        }
+                        else
+                        {
+                            <span>No</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Budget type<br />
+                        预算类型
+                    </td>
+                    <td colspan="3" class="w30">
+                        @if (Model.BudgetType == 0)
+                        {
+                            <span>Overheads</span>
+                        }
+                        else if (Model.BudgetType == 1)
+                        {
+                            <span>Non-overheads</span>
+                        }
+                        else if (Model.BudgetType == 2)
+                        {
+                            <span>Industrial</span>
+                        }
+                        else if (Model.BudgetType == 3)
+                        {
+                            <span>Other</span>
+                        }
+                        else
+                        {
+                            <span>Error</span>
+                        }
+                    </td>
+                    <td colspan="2" class="w20">
+                        Template No.<br />
+                        模板编号
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.TemplateNo
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Contract Price with Tax<br />
+                        合同含税金额
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.ContractPrice
+                    </td>
+                    <td colspan="2" class="w20">
+                        Currency<br />
+                        币种
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.Currency
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="w20">
+                        Prepayment Amount<br />
+                        预付款金额
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.PrepaymentAmount
+                    </td>
+                    <td colspan="2" class="w20">
+                        Prepayment Percentage<br />
+                        预付款比列
+                    </td>
+                    <td colspan="3" class="w30">
+                        @Model.PrepaymentPercentage
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" rowspan="4" class="w20">
+                        Key points of contract<br />
+                        合同要点
+                    </td>
+                    <td colspan="8" rowspan="4">
+                        @Model.ContractKeyPoints
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table id="reportApprove" class="w100" border="1" style="border-collapse:collapse;">
+                <tr class="title txtcenter">
+                    <td colspan="5">
+                        Review & Approval Process(审批流程)
+                    </td>
+                </tr>
+                <tr>
+                    <td width="22%">
+                        Approver(审批人)
+                    </td>
+                    <td width="16%">
+                        Function(部门)
+                    </td>
+                    <td width="20%">
+                        Date(审批时间)
+                    </td>
+                    <td width="20%">
+                        Status(审批状态)
+                    </td>
+                    <td width="22%">
+                        Comment(审批意见)
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        $("#ContractEffectiveDate").text(new Date("@Model.EffectiveDate").format("yyyy-MM-dd"));
+        $("#ContractExpirationDate").text(new Date("@Model.ExpirationDate").format("yyyy-MM-dd"));
+
+        var jsonObj = eval("(" + escape2Html("@ViewBag.ApprovalResult") + ")");
+        var otherhtml = "<tr class='title txtcenter'><td colspan='5'> Review & Approval Process(审批流程)</td></tr><tr><td width='22%'>Approver(审批人)</td><td width='16%'>Function(部门)</td><td width='20%'>Date(审批时间)</td><td width='20%'>Status(审批状态)</td><td width='22%'>Comment(审批意见)</td></tr>";
+
+        if (jsonObj != null && typeof (jsonObj) != "undefined" && $(jsonObj).length > 0)
+        {
+            $("#reportApprove").empty();
+            $("#reportApprove").append(otherhtml);
+            for (var i = 0; i < $(jsonObj).length; i++)
+            {
+                var time = print_empty($(jsonObj)[i].APPROVAL_TIME);
+                if (time != "")
+                {
+                    time = new Date($(jsonObj)[i].APPROVAL_TIME).format("yyyy-MM-dd HH:mm:ss");
+                }
+                var html = "<tr><td>" + $(jsonObj)[i].ENGLISH_NAME + "</td><td>" + print_empty($(jsonObj)[i].DEPARMENT_NAME)
+                    + "</td><td>" + time + "</td><td>" + $(jsonObj)[i].APPROVAL_RESULT
+                    + "</td><td>" + print_empty($(jsonObj)[i].APPROVAL_OPINIONS) + "</td></tr>";
+                $("#reportApprove").append(html);
+            }
+        }
+        
+        watermark({ watermark_txt: "Ferrero China CAS" });
+        
+        //window.print();
+        CloseAfterPrint();
+    });
+
+    function CloseAfterPrint() {
+        //var HKEY_Root, HKEY_Path, HKEY_Key;
+
+        //HKEY_Root = "HKEY_CURRENT_USER";
+
+        //HKEY_Path = "\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+
+        //var head, foot, top, bottom, left, right;
+
+        //var Wsh = new ActiveXObject("WScript.Shell");
+
+        //HKEY_Key = "header";
+
+        ////设置页眉（为空） 根据你自己要设置的填入 
+
+        //Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "");
+
+        //HKEY_Key = "footer";
+
+        ////设置页脚（为空） 根据你自己要设置的填入 
+
+        //Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "");
+
+        if (tata = document.execCommand("print")) {
+            //console.log("print");
+            window.opener = null;  //强制自动关闭
+            window.open('', '_self');
+            window.close();
+        }
+        else {
+            //console.log("noprint");
+            setTimeout("CloseAfterPrint();", 1000);
+        }
+    }
+
+    function print_empty(str) {
+        if (str == null || str == undefined) {
+            return "";
+        }
+        else {
+            return str;
+        }
+    }
+
+    function escape2Html(str) {
+        var arrEntities = { 'lt': '<', 'gt': '>', 'nbsp': ' ', 'amp': '&', 'quot': '"' };
+        return str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function (all, t) { return arrEntities[t]; });
+    }
+
+    function watermark(settings) {
+
+        //默认设置
+        var defaultSettings = {
+            watermark_txt: "text",
+            watermark_x: 20,//水印起始位置x轴坐标
+            watermark_y: 60,//水印起始位置Y轴坐标
+            watermark_rows: 20,//水印行数
+            watermark_cols: 20,//水印列数
+            watermark_x_space: 100,//水印x轴间隔
+            watermark_y_space: 50,//水印y轴间隔
+            watermark_color: '#aaa',//水印字体颜色
+            watermark_alpha: 0.2,//水印透明度
+            watermark_fontsize: '30px',//水印字体大小
+            watermark_font: '微软雅黑',//水印字体
+            watermark_width: 250,//水印宽度
+            watermark_height: 100,//水印长度
+            watermark_angle: 15//水印倾斜度数
+        };
+        //采用配置项替换默认值，作用类似jquery.extend
+        if (arguments.length === 1 && typeof arguments[0] === "object") {
+            var src = arguments[0] || {};
+            for (key in src) {
+                if (src[key] && defaultSettings[key] && src[key] === defaultSettings[key])
+                    continue;
+                else if (src[key])
+                    defaultSettings[key] = src[key];
+            }
+        }
+
+        var oTemp = document.createDocumentFragment();
+
+        //获取页面最大宽度
+        var page_width = Math.max(document.body.scrollWidth, document.body.clientWidth);
+        //获取页面最大长度
+        var page_height = Math.max(document.body.scrollHeight, document.body.clientHeight);
+
+        //如果将水印列数设置为0，或水印列数设置过大，超过页面最大宽度，则重新计算水印列数和水印x轴间隔
+        if (defaultSettings.watermark_cols == 0 || (parseInt(defaultSettings.watermark_x + defaultSettings.watermark_width * defaultSettings.watermark_cols + defaultSettings.watermark_x_space * (defaultSettings.watermark_cols - 1)) > page_width)) {
+            defaultSettings.watermark_cols = parseInt((page_width - defaultSettings.watermark_x + defaultSettings.watermark_x_space) / (defaultSettings.watermark_width + defaultSettings.watermark_x_space));
+            defaultSettings.watermark_x_space = parseInt((page_width - defaultSettings.watermark_x - defaultSettings.watermark_width * defaultSettings.watermark_cols) / (defaultSettings.watermark_cols - 1));
+        }
+        //如果将水印行数设置为0，或水印行数设置过大，超过页面最大长度，则重新计算水印行数和水印y轴间隔
+        if (defaultSettings.watermark_rows == 0 || (parseInt(defaultSettings.watermark_y + defaultSettings.watermark_height * defaultSettings.watermark_rows + defaultSettings.watermark_y_space * (defaultSettings.watermark_rows - 1)) > page_height)) {
+            defaultSettings.watermark_rows = parseInt((defaultSettings.watermark_y_space + page_height - defaultSettings.watermark_y) / (defaultSettings.watermark_height + defaultSettings.watermark_y_space));
+            defaultSettings.watermark_y_space = parseInt(((page_height - defaultSettings.watermark_y) - defaultSettings.watermark_height * defaultSettings.watermark_rows) / (defaultSettings.watermark_rows - 1));
+        }
+        var x;
+        var y;
+        for (var i = 0; i < defaultSettings.watermark_rows; i++) {
+            y = defaultSettings.watermark_y + (defaultSettings.watermark_y_space + defaultSettings.watermark_height) * i;
+            for (var j = 0; j < defaultSettings.watermark_cols; j++) {
+                x = defaultSettings.watermark_x + (defaultSettings.watermark_width + defaultSettings.watermark_x_space) * j;
+
+                var mask_div = document.createElement('div');
+                mask_div.id = 'mask_div' + i + j;
+                mask_div.className = 'mask_div';
+                mask_div.appendChild(document.createTextNode(defaultSettings.watermark_txt));
+                //设置水印div倾斜显示
+                mask_div.style.webkitTransform = "rotate(-" + defaultSettings.watermark_angle + "deg)";
+                mask_div.style.MozTransform = "rotate(-" + defaultSettings.watermark_angle + "deg)";
+                mask_div.style.msTransform = "rotate(-" + defaultSettings.watermark_angle + "deg)";
+                mask_div.style.OTransform = "rotate(-" + defaultSettings.watermark_angle + "deg)";
+                mask_div.style.transform = "rotate(-" + defaultSettings.watermark_angle + "deg)";
+                mask_div.style.visibility = "";
+                mask_div.style.position = "absolute";
+                mask_div.style.left = x + 'px';
+                mask_div.style.top = y + 'px';
+                mask_div.style.overflow = "hidden";
+                mask_div.style.zIndex = "9999";
+                //mask_div.style.border="solid #eee 1px";
+                mask_div.style.opacity = defaultSettings.watermark_alpha;
+                mask_div.style.fontSize = defaultSettings.watermark_fontsize;
+                mask_div.style.fontFamily = defaultSettings.watermark_font;
+                mask_div.style.color = defaultSettings.watermark_color;
+                mask_div.style.textAlign = "center";
+                mask_div.style.width = defaultSettings.watermark_width + 'px';
+                mask_div.style.height = defaultSettings.watermark_height + 'px';
+                mask_div.style.display = "block";
+                oTemp.appendChild(mask_div);
+            };
+        };
+        document.body.appendChild(oTemp);
+    }
+</script>
+</html>

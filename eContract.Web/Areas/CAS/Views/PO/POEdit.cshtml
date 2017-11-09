@@ -1,0 +1,237 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+    //Layout = null;
+}
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            @RenderPage("_POEditList.cshtml")
+        </div>
+    </div>
+</div>
+<div class="modal modal-fade" id="event-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    PO
+                </h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="event-id" value="">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="min-date" class="col-sm-4 control-label">PR Number</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <input name="contractFilingId" type="hidden" />
+                                <input name="pRNo" type="text" readonly="readonly" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="min-date" class="col-sm-4 control-label">PO Number</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <input name="contractFilingId" type="hidden" />
+                                <input name="pONo" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save_btn">
+                    Save
+                </button>
+                <button type="button" class="btn btn-primary" id="submit_btn">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-fade" id="reject-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    PO Return
+                </h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="event-id" value="">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="min-date" class="col-sm-4 control-label">Return Reason</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <textarea name="remark"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="reject_btn">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            jqGrid.initGrid($("#POEditGrid"),
+            {
+                url: "@Url.Action("POEdit")" + "?id=" + "@ViewBag.ContractId.ToString()",
+                sortname: "CONTRACT_FILING_ID",
+                multiselect: false,
+                autowidth: true,
+                shrinkToFit: true,
+                gridComplete: function () {
+                    var width = $('#modalContent').width() * 0.73;
+
+                    $("#attachmentListGrid").setGridWidth(width, true);
+                },
+                colNames: ['ID', 'PR Number', 'PO Number', 'Status', 'Action'],
+                colModel: [
+                    { name: 'CONTRACT_FILING_ID', index: 'CONTRACT_FILING_ID', search: true, hidden: true },
+                    { name: 'PR_NO', index: 'PR_NO', search: true },
+                    { name: 'PO_NO', index: 'PO_NO', search: true }, {
+                        name: 'STATUS', index: 'STATUS', search: true,
+                        formatter: function (cellvalue, options, row) {
+                            switch (cellvalue) {
+                                case 1: return "已保存"; break;
+                                case 2: return "已申请"; break;
+                                case 3: return "PO保存"; break;
+                                case 4: return "已审批"; break;
+                                case 5: return "已拒绝"; break;
+                                default: return cellvalue;
+                            }
+                        }
+                    },
+                    {
+                        name: '',
+                        index: '',
+                        sortable: false,
+                        formatter: function (cellvalue, options, row) {
+                            if (row.STATUS == "@eContract.Common.ContractFilingEnum.Apply.GetHashCode()"
+                                || row.STATUS == "@eContract.Common.ContractFilingEnum.POSave.GetHashCode()") {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a href="#" onclick="Edit(\'' + row.CONTRACT_FILING_ID + '\',\'' + row.PR_NO + '\',\'' + row.PO_NO + '\');">Approve</a>&nbsp;' +
+                                    '<a href="#" onclick="Reject(\'' + row.CONTRACT_FILING_ID + '\',\'' + row.PR_NO + '\');">Return</a>&nbsp;' +
+                                " </div>";
+                            }
+                            else {
+                                return "<div class=\"c-table-cz\">" +
+                                 '<a href="#" onclick="View(\'' + row.CONTRACT_FILING_ID + '\',\'' + row.PR_NO + '\',\'' + row.PO_NO + '\');">View</a>&nbsp;' +
+                                 " </div>";
+                            }
+                        }
+                    }]
+            });
+            $("#save_btn")
+                .click(function () {
+                    var contractFilingId = $("input[name='contractFilingId']").val();
+                    var pONo = $("input[name='pONo']").val();
+                    $.ajax({
+                        url: "/CAS/PO/POSave",
+                        method: "get",
+                        dataType: "json",
+                        data: {
+                            contractFilingId: contractFilingId,
+                            pONo: pONo
+                        },
+                        success: function (result) {
+                            jqGrid.gridSearch($("#sel_form"), "@Url.Action("POEdit")" + "?id=" + "@ViewBag.ContractId.ToString()");
+                        }, error: function (result) {
+
+                        }
+                    })
+                    $('#event-modal').modal('hide');
+                });
+            $("#submit_btn")
+                .click(function () {
+                    var contractFilingId = $("input[name='contractFilingId']").val();
+                    var pONo = $("input[name='pONo']").val();
+                    $.ajax({
+                        url: "/CAS/PO/POAprove",
+                        method: "get",
+                        dataType: "json",
+                        data: {
+                            contractFilingId: contractFilingId,
+                            pONo: pONo
+                        },
+                        success: function (result) {
+                            jqGrid.gridSearch($("#sel_form"), "@Url.Action("POEdit")" + "?id=" + "@ViewBag.ContractId.ToString()");
+                        }, error: function (result) {
+
+                        }
+                    })
+                    $('#event-modal').modal('hide');
+                });
+            $("#reject_btn")
+                .click(function () {
+                    var contractFilingId = $("input[name='contractFilingId']").val();
+                    var remark = $("textarea[name='remark']").val();
+                    if (remark == "")
+                    {
+                        jNotify.showError("Please input return reason.");
+                        return;
+                    }
+                    $.ajax({
+                        url: "/CAS/PO/POReject",
+                        method: "get",
+                        dataType: "json",
+                        data: {
+                            contractFilingId: contractFilingId,
+                            remark: remark
+                        },
+                        success: function (result) {
+                            jqGrid.gridSearch($("#sel_form"), "@Url.Action("POEdit")" + "?id=" + "@ViewBag.ContractId.ToString()");
+                        }, error: function (result) {
+
+                        }
+                    })
+                    $('#reject-modal').modal('hide');
+                });
+        });
+
+        function View(contractFilingId, pRNo, pONo) {
+            $("#save_btn").hide();
+            $("#submit_btn").hide();
+            $("input[name='contractFilingId']").val(contractFilingId);
+            $('input[name="pRNo"]').val(pRNo);
+            $('input[name="pONo"]').val(pONo);
+            $('#event-modal').modal();
+        }
+
+        function Edit(contractFilingId, pRNo, pONo) {
+            $("#save_btn").show();
+            $("#submit_btn").show();
+            $("input[name='contractFilingId']").val(contractFilingId);
+            if (pONo == 'undefined')
+            {
+                pONo = "";
+            }
+            $('input[name="pRNo"]').val(pRNo);
+            $('input[name="pONo"]').val(pONo);
+            $('#event-modal').modal();
+        }
+
+        function Reject(contractFilingId, pRNo) {
+            $("input[name='contractFilingId']").val(contractFilingId);
+            $('#reject-modal').modal();
+        }
+    </script>
+@*}*@

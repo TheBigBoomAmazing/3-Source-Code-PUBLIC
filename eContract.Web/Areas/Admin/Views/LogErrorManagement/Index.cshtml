@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_MACHINE_NAME">Machine Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_MACHINE_NAME" name="MACHINE_NAME" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_IP">IP：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_IP" name="IP" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_MESSAGE">Error Message：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_MESSAGE" name="MESSAGE" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_LOG_TIME">Date：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_LOG_TIME" name="LOG_TIME" value="" placeholder="" class="form-control WDate" onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            @*<a href="@Url.Action("Edit")" class="btn btn-primary">新增</a>*@
+                            @*<button type="button" id="del_btn" class="btn btn-primary">删除</button>*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            <div class="ibox-title">
+                @*<h5>数据导入信息</h5>*@
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href="#">Config option 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Config option 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            @RenderPage("_List.cshtml")
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+<script type="text/javascript">
+    $(document)
+      .ready(function () {
+          jqGrid.initGrid($("#logErrorGrid"),
+          {
+              url: "@Url.Action("Index")",
+              sortname: "LOG_TIME",
+              sortorder: "DESC",
+              multiselect: false,
+              colNames: ['', 'Machine Name', 'IP', 'Error Message', 'Date', 'Action'],
+              colModel: [
+                  { name: 'LOG_ERROR_ID', index: 'LOG_ERROR_ID', hidden: true },
+                  { name: 'MACHINE_NAME', index: 'MACHINE_NAME', search: true },
+                  { name: 'IP', index: 'IP', search: true },
+                  { name: 'MESSAGE', index: 'MESSAGE', search: true },
+                  {
+                      name: 'LOG_TIME', index: 'LOG_TIME', search: true,
+                      formatter: function (cellvalue, options, row) {
+                          if (cellvalue != null && cellvalue != "") {
+                              var _date = eval('new ' + (cellvalue.replace(/\//g, '')));
+                              return _date.format("yyyy-MM-dd HH:mm:ss")
+                          }
+                          else {
+                              return "";
+                          }
+                      }
+                  },
+                  {
+                      name: '',
+                      index: '',
+                      sortable: false,
+                      formatter: function (cellvalue, options, row) {
+                          return "<div class=\"c-table-cz\">"
+                            + '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("edit")?id=' + row.LOG_ERROR_ID + '">Open</a>&nbsp;'
+                            + " </div>";
+                      }
+                  }
+              ]
+          });
+
+          $("#sel_btn")
+              .click(function () {
+                  jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+              });
+
+      });
+
+</script>
+@*}*@

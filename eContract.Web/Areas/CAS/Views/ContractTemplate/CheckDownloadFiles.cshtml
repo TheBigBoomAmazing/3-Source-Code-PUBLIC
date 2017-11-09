@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "CheckDownloadFiles";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    string templateID = (string)ViewBag.tempalteid;
+    string company = (string)ViewBag.company;
+    string contractName = (string)ViewBag.contractName;
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content c-edit-wrap">
+                <form class="form-horizontal">
+                    @Html.XTextBox("User_Code", xInputType.text, company, new UIValidation { DisplayName = "Ferrero Party", required = false, disabled = true }, new { display = company })
+                    @Html.XTextBox("User_Name", xInputType.text, contractName, new UIValidation { DisplayName = "Contract Template Name", required = false, disabled = true }, new { display = contractName })
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_AttachmentList.cshtml")
+        </div>
+    </div>
+</div>
+
+<div class="ibox-content c-edit-wrap">
+    <form class="form-horizontal">
+        @*@Html.Label("", "备注：领导列表不包含部门总监", new { style = "color:red" })*@
+        @Html.XButtonList(new[] { new XButton { Id = "btnBack", DisplayName = "Back to list", Icon = "icon-back",onClick="hideModal();", LoadingText = "Returning....", xButtonType = XButtonType.Button } })
+    </form>
+</div>
+@*@section footer{*@
+    <script type="text/javascript">
+        $(document)
+           .ready(function () {
+               var selData = [];
+               jqGrid.initGrid($("#attachmentListGrid"),
+               {
+                   url: "@Url.Action("CheckDownloadFiles")?SOURCE_ID=@ViewBag.tempalteid",
+                   sortname: "last_modified_time",
+                   multiselect: false,
+                   colNames: ['', 'Contract Template File', 'Action'],
+                   colModel: [
+                       { name: 'ATTACHMENT_ID', index: 'ATTACHMENT_ID', search: true, hidden: true },
+                        { name: 'FILE_NAME', index: 'FILE_NAME', search: true,  },
+                        {
+                            name: '',
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a target="_blank" href="@Url.Action("index", "CommonPDF")?path=' +  
+                                    row.PDF_FILE_PATH +
+                                    '">View</a>&nbsp;' +
+                                    '<a href="@Url.Action("DownFiles")?attachmentid=' + 
+                                    row.ATTACHMENT_ID +
+                                    '">Download</a>&nbsp;' +
+                                    " </div>";
+                            }
+                        }
+                   ]
+               });
+               @*$("#sel_btn")
+                   .click(function () {
+                       jqGrid.gridSearch($("#sel_form"), "@Url.Action("CheckDownloadFiles")?id=@ViewBag.tempalteid");
+                   });*@
+
+           });
+    </script>
+@*}*@
+
+
+
+
+
+
+
+
+
+

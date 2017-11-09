@@ -1,0 +1,148 @@
+﻿@{
+    ViewBag.Title = "DeptUserEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-3 label-form-4">
+                            <label class="control-label" for="sel_USER_ACCOUNT">Account：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_USER_ACCOUNT" name="USER_ACCOUNT" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3 label-form-4">
+                            <label class="control-label" for="sel_CHINESE_NAME">Chinese Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CHINESE_NAME" name="CHINESE_NAME" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3 label-form-4">
+                            <label class="control-label" for="sel_EMAIL">Emial：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_EMAIL" name="EMAIL" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            <button type="button" class="btn btn-primary" onclick="Save();">Save</button>
+                            <a class="btn btn-outline btn-primary" href="@Url.Action("Index")">Back to list</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_ListURE.cshtml")
+        </div>
+    </div>
+</div>
+
+@section footer{
+    <script type="text/javascript">
+        var selectUserIds = "@ViewBag.SelectUserIds".split(",");
+        $(document)
+           .ready(function () {
+               var selData = [];
+               jqGrid.initGrid($("#DeptUserEditGrid"),
+               {
+                   url: "@Url.Action("DeptUserEdit")?id=@ViewBag.DeptId",
+                   sortname: "USER_ACCOUNT",
+                   multiselect: true,
+                   colNames: ['UserID', 'Account', 'Chinese Name', 'Email', ""],
+                   colModel: [
+                       { name: 'USER_ID', index: 'USER_ID', hidden: true, search: true },
+                       { name: 'USER_ACCOUNT', index: 'USER_ACCOUNT', search: true },
+                       { name: 'CHINESE_NAME', index: 'CHINESE_NAME', search: true },
+                       { name: 'EMAIL', index: 'EMAIL', search: true },
+                       {
+                           name: '',
+                           hidden: true,
+                           formatter: function (cellvalue, options, row) {
+                               if ($.inArray(row.USER_ID, selectUserIds) !== -1) {
+                                   if ($.inArray(row.Row_Number, selData) === -1) {
+                                       selData.push(row.Row_Number);
+                                   }
+                               }
+                               return "";
+                           }
+                       }
+                   ],
+                   onSelectAll: function (aRowids, status) {
+                       for (var i = 0; i < aRowids.length; i++) {
+                           var rowid = aRowids[i];
+                           var selectUserId = $("#DeptUserEditGrid").jqGrid("getRowData", rowid)["USER_ID"];
+                           var selIndex = $.inArray(selectUserId, selectUserIds);
+                           if (!status) {
+                               if (selIndex !== -1) {
+                                   selectUserIds.splice(selIndex, 1);
+                               }
+                           } else {
+                               if (selIndex === -1) {
+                                   selectUserIds.push(selectUserId);
+                               }
+                           }
+                       }
+                   },
+                   onSelectRow: function (rowid, status) {
+                       var selectUserId = $("#DeptUserEditGrid").jqGrid("getRowData", rowid)["USER_ID"];
+                       var selIndex = $.inArray(selectUserId, selectUserIds);
+                       if (!status) {
+                           if (selIndex !== -1) {
+                               selectUserIds.splice(selIndex, 1);
+                           }
+                       } else {
+                           if (selIndex === -1) {
+                               selectUserIds.push(selectUserId);
+                           }
+                       }
+                   },
+                   onSortCol: function () {
+                       selData = [];
+                   },
+                   gridComplete: function () {
+                       jqGrid.isPage = false;
+                       $("#DeptUserEditGrid").jqGrid('resetSelection');
+                       var page = $("#DeptUserEditGrid").jqGrid("getGridParam", "page");
+                       var rowNum = $("#DeptUserEditGrid").jqGrid("getGridParam", "rowNum");
+                       for (var index = 0; index < selData.length; index++) {
+                           if (page === parseInt((selData[index] - 1) / rowNum) + 1)
+                               $("#DeptUserEditGrid").jqGrid('setSelection', selData[index] % (rowNum + 1));
+                       }
+                       console.info(selectUserIds);
+                   }
+               });
+               $("#sel_btn")
+                   .click(function () {
+                       jqGrid.gridSearch($("#sel_form"), "@Url.Action("DeptUserEdit")?id=@ViewBag.DeptId");
+                   });
+           });
+
+        function Save() {
+
+            jForm.Ajax({
+                url: "@Url.Action("DeptUserAddSave")",
+                data: { DeptId: "@ViewBag.DeptId", strUserIds: selectUserIds.join(",") },
+                success: function (data) {
+                    window.location.href = "@Url.Action("Index")";
+                }
+            });
+        }
+    </script>
+}
+

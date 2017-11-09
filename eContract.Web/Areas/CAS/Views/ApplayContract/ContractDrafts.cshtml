@@ -1,0 +1,189 @@
+﻿@{
+    ViewBag.Title = "ContractDrafts";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_TYPE_NAME">Contract Type：</label>
+                            <div class="form-group">
+                                @*<input type="text" id="sel_CONTRACT_TYPE_NAME" name="CONTRACT_TYPE_NAME " value="" placeholder="" class="form-control">*@
+                                <select class="form-control m-b c-edit-select valid" id="CONTRACT_TYPE_NAME" name="CONTRACT_TYPE_NAME">
+                                    <option value="">===Select===</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_NAME">Contract Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CONTRACT_NAME" name="CONTRACT_NAME " value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_FERRERO_ENTITY">Ferrero Party：</label>
+                            <div class="form-group">
+                                <select class="form-control m-b c-edit-select valid" id="FERRERO_ENTITY" name="FERRERO_ENTITY">
+                                    <option value="">===Select===</option>
+                                    <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
+                                    <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
+                                </select>
+                                @*<input type="text" id="sel_FERRERO_ENTITY" name="FERRERO_ENTITY" value="" placeholder="" class="form-control">*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_CONTRACT_SERIAL_NO">Serial No：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_CONTRACT_SERIAL_NO" name="CONTRACT_SERIAL_NO" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_COUNTERPARTY_EN">Counterparty-EN：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_COUNTERPARTY_EN" name="COUNTERPARTY_EN" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            @*<button type="button" id="del_btn" class="btn btn-primary">Delete</button>*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_DraftsList.cshtml")
+        </div>
+    </div>
+</div>
+@*@section footer{*@
+<script src="~/Areas/CAS/Scripts/ContractTypeSelect.js"></script>
+<script type="text/javascript">
+    $(document)
+        .ready(function () {
+            jqGrid.initGrid($("#ContractDraftsGrid"),
+            {
+                url: "@Url.Action("ContractDrafts")",
+                sortname: "CREATE_TIME",
+                //multiselect: true,
+                colNames: ['ID', 'Action', 'Serial No', 'Ferrero Party', 'Contract Type', 'Contract Name', 'Status', 'Counterparty-EN', 'Submission Date'],
+                colModel: [
+                     { name: 'CONTRACT_ID', index: 'CONTRACT_ID', search: true, hidden: true },
+                    {
+                        name: '',
+                        index: '',
+                        sortable: false,
+                        multiselect: true,
+                        formatter: function (cellvalue, options, row) {
+                            var html = "<div class=\"c-table-cz\">" +
+                                '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("edit")?id=' +
+                                row.CONTRACT_ID +
+                                '">Edit</a>&nbsp;';
+                            if (row.CONTRACT_GROUP == "2") {
+                                html = "<div class=\"c-table-cz\">" +
+                                '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("edit", "HistoryContract")?id=' +
+                                row.CONTRACT_ID +
+                                '">Edit</a>&nbsp;';
+                            }
+                            html += '<a href="javascript://" onclick="CloseContract(\'' + row.CONTRACT_ID + '\')">Close</a>&nbsp;';
+                            " </div>";
+                            return html;
+                        }
+                    },
+                    { name: 'CONTRACT_SERIAL_NO', index: 'CONTRACT_SERIAL_NO ', search: true, width: 140 },
+                    { name: 'FERRERO_ENTITY', index: 'FERRERO_ENTITY', search: true },
+                        { name: 'CONTRACT_TYPE_NAME', index: 'CONTRACT_TYPE_NAME ', search: true },
+                        { name: 'CONTRACT_NAME', index: 'CONTRACT_NAME ', search: true },
+                        {
+                            name: 'STATUS', index: 'STATUS ', search: true,
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue == 1) {
+                                    return "Draft"
+                                }
+                                if (cellvalue == 4) {
+                                    return "Rejected"
+                                }
+                                if (cellvalue == 8) {
+                                    return "Resubmitted"
+                                }
+                            }
+                        },
+                    //{ name: 'CONTRACT_INITIATOR', index: 'CONTRACT_INITIATOR ', search: true },
+                    { name: 'COUNTERPARTY_EN', index: 'COUNTERPARTY_EN', search: true },
+                    {
+                        name: 'APPLY_DATE', index: 'APPLY_DATE',
+                        formatter: function (cellvalue, options, row) {
+                            if (cellvalue != null && cellvalue!="") {
+                                var _date = eval('new ' + (cellvalue.replace(/\//g, '')));
+                                return _date.format("yyyy-MM-dd HH:mm:ss")
+                            }
+                            else {
+                                return "";
+                            }
+
+                        }
+                    }
+                ]
+            });
+
+            $("#sel_btn")
+                .click(function () {
+                    jqGrid.gridSearch($("#sel_form"), "@Url.Action("ContractDrafts")");
+                });
+            @*$("#del_btn")
+                    .click(function () {
+                        jqGrid.gridDelete({
+                            url: "@Url.Action("Delete")",
+                            KeyName: 'CONTRACT_ID'
+                        });
+                 });*@
+
+        });
+
+    function CloseContract(idValue) {
+        jNotify.Confirm("Please confirm",
+            "Please confirm to close the contract!",
+            function () {
+                //jNotify.hideLoading();
+                @*jqGrid.gAjax("@Url.Action("CloseContractByContractID")",
+                        { id: idValue },
+                        function (res) {
+                            if (res.msgHeader.IsError)
+                                jNotify.showError(res.msgHeader.Message);
+                            else {
+                                setTimeout(jNotify.showSuccess("成功关闭"), 2000);
+                            }
+                        });*@
+                jForm.Ajax({
+                    url: "@Url.Action("CloseContractByContractID")",
+                    data: { id: idValue },
+                    success: function (data) {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("ContractDrafts")");
+                        //jNotify.showSuccess("成功关闭！");
+                    }
+                });
+            });
+    }
+
+</script>
+@*}*@
+
+

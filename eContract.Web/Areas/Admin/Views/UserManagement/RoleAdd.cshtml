@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "RoleAdd";
+    Layout = null;
+}
+
+
+<div class="layout-list">
+    <div class="layout-list-search">
+        <form method="post" id="gridSearch">
+            <table cellpadding="0" cellspacing="0" >
+        </table>    
+        </form>
+    </div>
+    <div class="layout-list-button">
+        <a style="display:none" href="@Url.Content("~/Admin/ExportExcel")" id="Export" target="_blank"></a>
+        <input type="button"  id="btnSubmit" onclick="Save();" value="Save"  />
+        <a class="button" href="@Url.Action("UserRoleEdit")?id=@ViewBag.UserId">Back to list</a>
+    </div>
+    <div class="layout-list-grid">
+        <div class="grid">            
+        </div>        
+    </div>
+</div>
+   <script type="text/javascript">
+     var g;
+    $(function () {
+        $(document).ready(function () {
+            g= jForm.initGrid($(".grid"), {
+                url: "@Url.Action("RoleAdd")",
+               parms: [{ name: "keyWord", value:""},{name:"id",value:"@ViewBag.UserId"}],
+               sortName: "a.LAST_MODIFY_TIME",
+               sortOrder: "desc",
+               enabledEdit: false,
+               checkbox:true,
+               width:970,
+              columns: [
+                        { display: '角色编号', name: 'ROLE_ID', type: 'string', width:200, align: 'center',format:'', isSort:true, editor:{type:'text'}}
+                       ,{ display: '角色类型', name: 'role_type_name', type: 'string', width:200, align: 'center',format:'', isSort:true, editor:{type:'text'}}
+                       ,{ display: '角色名称', name: 'ROLE_NAME', type: 'string', width:200, align: 'center',format:'', isSort:true, editor:{type:'text'}}
+                       ,{ display: '角色描述', name: 'REMARK', type: 'string', align: 'left',format:'', isSort:true,editor:{type:'text'}}
+               ]
+           });
+        });
+    });
+
+
+    function Save()
+        {
+          var strRoleIds="";
+          var checkData= jForm.GetCheckedRows(g);
+          if (checkData == null || checkData.length <= 0) {
+            jNotify.showError("请选择需要添加的角色！");
+            return false;
+            }
+          for(var i=0;i<checkData.length;i++)
+          {
+                if(strRoleIds=="")
+                {
+                    strRoleIds=checkData[i].ROLE_ID;
+                }
+                else
+                {
+                   strRoleIds+=","+checkData[i].ROLE_ID;
+                }
+           }
+            jForm.Ajax({
+                url:"@Url.Action("RoleAddSave")",
+                data: { UserId:"@ViewBag.UserId",strRoleIds:strRoleIds },
+                success: function (data) {
+                    jNotify.showSuccess("保存成功！",function(){
+                        window.location.href ="@Url.Action("UserRoleEdit")?id=@ViewBag.UserId";
+                    });
+                    
+                }
+            });
+        } 
+   </script>

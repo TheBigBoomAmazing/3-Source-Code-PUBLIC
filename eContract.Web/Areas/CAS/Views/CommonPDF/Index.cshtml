@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "PDF预览";
+    Layout = null;
+}
+<script src="~/UI/Scripts/jquery-2.1.1.js"></script>
+<iframe id="show_content"
+        frameborder="0" scrolling="false" style="overflow-y: auto; width: 100%;height:100%"
+        src=""></iframe>
+<script type="text/javascript">
+    var filesPath = "@ViewBag.filePath";
+    $(function () {
+        $.ajax({
+            type: "get",
+            url: "@Url.Action("GetPreviewPdf")",
+            data: {
+                attachPath: GetQueryString("path")
+            },
+            dataType: 'json',
+            success: function (result) {
+                autoHeight();
+                if (!result.msgHeader.IsError) {
+                    $('#show_content').attr({
+                        "src": "../../Content/PDFJSInNet/web/viewer.html?file=" + result.msgHeader.Message
+                    });
+                }
+                else {
+                    alert("您查看的PDF文件正在转换，请稍后再试");
+                    window.opener = null;
+                    window.open('', '_self');
+                    window.close();
+                }
+
+            },
+            statusCode: {
+
+            },
+            error: function (result, status) {
+            }
+        });
+
+        window.onresize = function () {
+            autoHeight();
+        };
+
+        function autoHeight() {
+            //$('#show_content').css("height", document.documentElement.clientHeight + "px");
+            //$('#show_content').css("height", "1200px");
+        };
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+    });
+</script>
+
+

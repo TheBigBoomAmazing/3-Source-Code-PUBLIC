@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0FFA2C82-2F27-46A1-AA70-EA22A683DE2F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>eContract.BusinessService</RootNamespace>
+    <AssemblyName>eContract.BusinessService</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ComixSDK.EDI.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceDll\ComixSDK.EDI.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="fastJSON">
+      <HintPath>..\ReferenceDll\fastJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="Gma.QrCodeNet.Encoding">
+      <HintPath>..\ReferenceDll\Gma.QrCodeNet.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceDll\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Json, Version=1.0.5093.20555, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceDll\Json.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJson, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceDll\LitJson.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Net20">
+      <HintPath>..\ReferenceDll\Newtonsoft.Json.Net20.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceDll\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\ReferenceDll\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\ReferenceDll\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\ReferenceDll\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.DataAccess, Version=2.112.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceDll\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Winista.HtmlParser">
+      <HintPath>..\ReferenceDll\Winista.HtmlParser.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessData\BusinessRule\CommonHelperBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\ContractApprovalBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\ContractFieldBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\ProxyApprovalBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\POBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\ContractCommentBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\ContractApplayBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\ContractApprovalSetBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\ContractManagementBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\ContractTemplateBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\ContractTypeManagementBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\DepUserCommonBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\POApprovalSetBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\UploadSignatureStampContractRemind.cs" />
+    <Compile Include="BusinessData\BusinessRule\WordToPDFBLL.cs" />
+    <Compile Include="BusinessData\CommonQuery\AllContractFTSQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\AllContractFFHQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractApplayListQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\HistoryContractQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractApprovalByMeQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractApprovalUserQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ISupportedContractQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\MyDepContractQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ProxyApprovalQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\PRIndexQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\POIndexQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractAttachmentQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\PRQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\POQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractCommentQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractApplayQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractApprovalSetQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractDraftsQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractManagementQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractTemplateAttachmentQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractTemplateDownloadQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractTemplateQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\ContractTypeManagementQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\DepUserCommonQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\GetContractApprolvalResQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\POApprovalSetQuery.cs" />
+    <Compile Include="BusinessData\CommonQuery\UploadStampContractQuery.cs" />
+    <Compile Include="BusinessData\Service\BusinessDataService.cs" />
+    <Compile Include="Common\BusinessBase.cs" />
+    <Compile Include="Common\DomainBase.cs" />
+    <Compile Include="Common\ISQL.cs" />
+    <Compile Include="Helper\APIHelper.cs" />
+    <Compile Include="Helper\ExportData.cs" />
+    <Compile Include="Helper\ValidateCodeHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DATAService.cs" />
+    <Compile Include="SystemManagement\BusinessRule\HolidayBLL.cs" />
+    <Compile Include="SystemManagement\BusinessRule\DepartmentBLL.cs" />
+    <Compile Include="SystemManagement\BusinessRule\BusinessRoleBLL.cs" />
+    <Compile Include="SystemManagement\BusinessRule\FunctionRoleBLL.cs" />
+    <Compile Include="SystemManagement\BusinessRule\LogErrorBLL.cs" />
+    <Compile Include="SystemManagement\BusinessRule\PageBLL.cs" />
+    <Compile Include="SystemManagement\BusinessRule\RegionBLL.cs" />
+    <Compile Include="SystemManagement\BusinessRule\RolePageBLL.cs" />
+    <Compile Include="SystemManagement\BusinessRule\SecUserRoleBLL.cs" />
+    <Compile Include="SystemManagement\BusinessRule\UserBLL.cs" />
+    <Compile Include="SystemManagement\CommonQuery\CasRegionQuery.cs" />
+    <Compile Include="SystemManagement\CommonQuery\QueryLogError.cs" />
+    <Compile Include="SystemManagement\CommonQuery\QueryManager.cs" />
+    <Compile Include="SystemManagement\CommonQuery\QueryUser.cs" />
+    <Compile Include="SystemManagement\CommonQuery\CasDepartmentQuery.cs" />
+    <Compile Include="SystemManagement\CommonQuery\SecPageQuery.cs" />
+    <Compile Include="SystemManagement\CommonQuery\SecRoleQuery.cs" />
+    <Compile Include="SystemManagement\DA\BusinessRoleDA.cs" />
+    <Compile Include="SystemManagement\DA\FunctionRoleDA.cs" />
+    <Compile Include="SystemManagement\DA\UserDA.cs" />
+    <Compile Include="SystemManagement\Domain\BusinessRoleDomain.cs" />
+    <Compile Include="SystemManagement\Domain\CasRegionDomain.cs" />
+    <Compile Include="SystemManagement\Domain\FunctionRoleDomain.cs" />
+    <Compile Include="SystemManagement\Domain\LogErrorDomain.cs" />
+    <Compile Include="SystemManagement\Domain\CasDepartmentDomain.cs" />
+    <Compile Include="SystemManagement\Domain\PageDomain.cs" />
+    <Compile Include="SystemManagement\Domain\RolePageDomain.cs" />
+    <Compile Include="SystemManagement\Domain\SecUserRoleDomain.cs" />
+    <Compile Include="SystemManagement\Domain\UserDomain.cs" />
+    <Compile Include="SystemManagement\Service\SystemService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\eContract.Common\eContract.Common.csproj">
+      <Project>{b5ad9c25-5f2e-4c93-91ba-c6f161e6a192}</Project>
+      <Name>eContract.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLDataAccess\DataAccess\DataAccess.csproj">
+      <Project>{4429187F-AD20-4C25-A7EE-C5223E3BA01F}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLDataAccess\EntityCore\EntityCore.csproj">
+      <Project>{5D08968E-9B69-4CEA-B77A-38660127C9EB}</Project>
+      <Name>EntityCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-4 label-form-4">
+                            <label class="control-label" for="sel_KEYWORD">Contract Type：</label>
+                            <div class="form-group">
+                                @*<input type="text" id="sel_KEYWORD" name="KEYWORD" value="" placeholder="" class="form-control">*@
+                                <select class="form-control m-b c-edit-select valid" id="CONTRACT_TYPE_NAME" name="CONTRACT_TYPE_NAME">
+                                    <option value="">===Select===</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            <a href="@Url.Action("Edit")" class="btn btn-primary" data-toggle="modal" data-target="#modalContent">New</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_List.cshtml")
+        </div>
+    </div>
+</div>
+
+@*@section footer{*@
+<script src="~/Areas/CAS/Scripts/ContractTypeSelect.js"></script>
+    <script type="text/javascript">
+        $(document)
+            .ready(function() {
+                jqGrid.initGrid($("#ContractApprovalSetGrid"),
+                {
+                    url: "@Url.Action("Index")",
+                    sortname: "T2.CONTRACT_TYPE_NAME,T1.STEP",
+                    //multiselect: false,
+                    colNames: ['', 'Action', 'Ferrero Party', 'Contract Type', 'Step', 'Apply Role', 'Approval Users', 'RSM Approval', 'Department Header Approval', 'Approval Time（Working Day）'],
+                    colModel: [
+                        { name: 'CONTRACT_APPROVAL_STEP_ID', index: 'CONTRACT_APPROVAL_STEP_ID', search: true, hidden: true },
+                        {
+                            name: '',
+                            width: 80,
+                            index: '',
+                            sortable: false,
+                            formatter: function(cellvalue, options, row) {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("edit")?id=' +
+                                    row.CONTRACT_APPROVAL_STEP_ID + '&type=check' +
+                                    '">Open</a>&nbsp;' +
+                                    '<a data-toggle="modal" data-target="#modalContent" href="@Url.Action("edit")?id=' +
+                                    row.CONTRACT_APPROVAL_STEP_ID +
+                                    '">Edit</a>&nbsp;' +
+                                   @*'<a href="@Url.Action("Delet")?id=' +
+                                    row.CONTRACT_APPROVAL_STEP_ID +
+                                    '">删除</a>&nbsp;' +*@
+                                    '<a href="javascript:void(0)" onclick="aClick(\'' + row.CONTRACT_APPROVAL_STEP_ID + '\')">Delete</a>&nbsp;' +
+                                    " </div>";
+                            }
+                        },
+                        { name: 'COMPANY', index: 'COMPANY', search: true,width:200 },
+                        { name: 'CONTRACT_TYPE_NAME', index: 'CONTRACT_TYPE_NAME', width: 200, search: true },
+                        { name: 'STEP', index: 'STEP', width: 50 },//审批步骤
+                        {
+                            name: 'APPROVAL_ROLE', index: 'APPROVAL_ROLE', width: 80,
+                            formatter: function (cellvalue, options, row) {
+                                switch (cellvalue) {
+                                    case 1:
+                                        return "部门申请"
+                                        break;
+                                    case 2:
+                                        return "用户申请"
+                                        break;
+                                    case 3:
+                                        return "全部部门"
+                                        break;
+                                    default:
+                                        return "未知状态";
+                                        break;
+                                }
+                            }
+                        },
+                        {//审批用户查看
+                            name: '',
+                            width: 60,
+                            index: '',
+                            sortable: false,
+                            formatter: function (cellvalue, options, row) {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a data-toggle="modal" data-target="#modalContent"  href="@Url.Action("QueryApprovalUser")?appSetid=' +
+                                    row.CONTRACT_APPROVAL_STEP_ID +
+                                    '">View</a>&nbsp;' +
+                                    "</div>";
+                            }
+                        },
+                        {
+                            name: 'NEED_REGION_MANAGER', index: 'NEED_REGION_MANAGER', width: 70,
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue) {
+                                    return "Yes"
+                                }
+                                else {
+                                    return "No"
+                                }                             
+                            }
+                        },
+                        { name: 'NEED_DEPT_MANAGER', index: 'NEED_DEPT_MANAGER', width: 70,
+                            formatter: function (cellvalue, options, row) {
+                                if (cellvalue) {
+                                    return "Yes"
+                                }
+                                else {
+                                    return "No"
+                                }                             
+                            }},
+                        { name: 'APPROVAL_TIME', index: 'APPROVAL_TIME' }
+                    ]
+                });
+
+                $("#sel_btn")
+                    .click(function() {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("Index")");
+                    });
+            });
+        function aClick(idValue) {
+            jNotify.Confirm("", "Please confirm to delete the item.",
+                function () {
+                    jForm.Ajax({
+                        url: "@Url.Action("Delet")",
+                        data: { id: idValue },
+                    success: function (data) {
+                        jqGrid.grid.jqGrid().trigger("reloadGrid");
+                    }
+                });
+        });
+        return false;
+        }
+    </script>
+@*}*@
+

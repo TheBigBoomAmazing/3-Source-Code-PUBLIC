@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "UserRoleEdit";
+    Layout = null;
+}
+@using eContract.Common.Schema
+@model eContract.Common.LigerGrid
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+          
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-3 label-form-4">
+                            <label class="control-label" for="sel_role_id">Role ID：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_role_id" name="role_id" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-3 label-form-4">
+                            <label class="control-label" for="sel_role_type">Role Type：</label>
+                            <div class="form-group">
+                                <select name="role_type" id="sel_role_type" class="form-control">
+                                    <option value="" selected="">全部</option>
+                                    <option value="1">总部</option>
+                                    <option value="2">门店</option>
+                                    <option value="0">系统管理</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3 label-form-4">
+                            <label class="control-label" for="sel_role_name">Role Name：</label>
+                            <div class="form-group">
+                                <input type="text" id="sel_role_name" name="role_name" value="" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
+                            <button type="button" class="btn btn-primary" onclick="Save();">Save</button>
+                            @*<a class="btn btn-outline btn-primary" href="@Url.Action("Index")">Back to list</a>*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-body">
+            @RenderPage("_ListURE.cshtml")
+        </div>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        var selectUserRoleIds = "@ViewBag.SelectUserRoleIds".split(",");
+        $(document)
+           .ready(function () {
+               var selData = [];
+               jqGrid.initGrid($("#functionRoleEditGrid"),
+               {
+                   url: "@Url.Action("UserRoleEdit")",
+                   sortname: "last_modified_time",
+                   multiselect: true,
+                   shrinkToFit: true,
+                   pager: "#pager-content1",
+                   colNames: ['Role ID', 'Role Name', 'Role Description', ""],
+                   colModel: [
+                       { name: 'role_id', index: 'role_id', hidden: true, search: true },
+                       { name: 'role_name', index: 'role_name',width:100, search: true },
+                       { name: 'remark', index: 'remark', width: 200, search: true },
+                       {
+                           name: '',
+                           hidden: true,
+                           formatter: function (cellvalue, options, row) {
+                               if ($.inArray(row.role_id, selectUserRoleIds) !== -1) {
+                                   if ($.inArray(row.Row_Number, selData) === -1) {
+                                       selData.push(row.Row_Number);
+                                   }
+                               }
+                               return "";
+                           }
+                       }
+                   ],
+                   onSelectAll: function (aRowids, status) {
+                       for (var i = 0; i < aRowids.length; i++) {
+                           var rowid = aRowids[i];
+                           var selectUserRoleId = $("#functionRoleEditGrid").jqGrid("getRowData", rowid)["role_id"];
+                           var selIndex = $.inArray(selectUserRoleId, selectUserRoleIds);
+                           if (!status) {
+                               if (selIndex !== -1) {
+                                   selectUserRoleIds.splice(selIndex, 1);
+                               }
+                           } else {
+                               if (selIndex === -1) {
+                                   selectUserRoleIds.push(selectUserRoleId);
+                               }
+                           }
+                       }
+                   },
+                   onSelectRow: function (rowid, status) {
+                       var selectUserRoleId = $("#functionRoleEditGrid").jqGrid("getRowData", rowid)["role_id"];
+                       var selIndex = $.inArray(selectUserRoleId, selectUserRoleIds);
+                       if (!status) {
+                           if (selIndex !== -1) {
+                               selectUserRoleIds.splice(selIndex, 1);
+                           }
+                       } else {
+                           if (selIndex === -1) {
+                               selectUserRoleIds.push(selectUserRoleId);
+                           }
+                       }
+                   },
+                   onSortCol: function () {
+                       selData = [];
+                   },
+                   gridComplete: function () {
+                       jqGrid.isPage = false;
+                       $("#functionRoleEditGrid").jqGrid('resetSelection');
+                       var page = $("#functionRoleEditGrid").jqGrid("getGridParam", "page");
+                       var rowNum = $("#functionRoleEditGrid").jqGrid("getGridParam", "rowNum");
+                       for (var index = 0; index < selData.length; index++) {
+                           if (page === parseInt(selData[index] / rowNum) + 1)
+                               $("#functionRoleEditGrid").jqGrid('setSelection', selData[index] % rowNum);
+                       }
+
+                       var width = $('.jqGrid_wrapper').width()*0.8;
+                       $("#functionRoleEditGrid").setGridWidth(width, true);
+                   }
+               });
+
+               $("#sel_btn")
+                   .click(function () {
+                       jqGrid.gridSearch($("#sel_form"), "@Url.Action("UserRoleEdit")");
+                   });
+
+           });
+
+        function Save() {
+            jForm.Ajax({
+                url: "@Url.Action("RoleAddSave")",
+                data: { UserId: "@ViewBag.UserId", strRoleIds: selectUserRoleIds.join(",") },
+                success: function (data) {
+                    jNotify.showSuccess("Successfully submitted", function () {
+                        hideModal();//关闭模态框
+                        //window.location.href = "@Url.Action("Index")";
+                    });
+
+                }
+            });
+        }
+    </script>
+

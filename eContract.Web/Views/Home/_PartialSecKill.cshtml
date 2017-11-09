@@ -1,0 +1,181 @@
+﻿@model eContract.Web.Models.Interface.B2BSecKillModel
+@{
+    var isLogin = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null ? true : false;
+}
+@if (Model != null)
+{
+    if (Model.data.Buying != null && Model.data.Buying.Count > 0)
+    {
+        @*<script type="text/javascript">
+                year = @(Model.data.Buying[0].EndDate.Year)
+                month = @(Model.data.Buying[0].EndDate.Month - 1)
+                day = @(Model.data.Buying[0].EndDate.Day)
+                hour = @(Model.data.Buying[0].EndDate.Hour)
+                minute = @(Model.data.Buying[0].EndDate.Minute)
+                second = @(Model.data.Buying[0].EndDate.Second)
+                CountDown(year,month,day,hour,minute,second,dif,"CTTime1");
+            </script>*@
+        <div class="row" id="secKillData" year="@(Model.data.Buying[0].EndDate.Year)" month="@(Model.data.Buying[0].EndDate.Month - 1)" day="@(Model.data.Buying[0].EndDate.Day)" hour="@(Model.data.Buying[0].EndDate.Hour)" minute="@(Model.data.Buying[0].EndDate.Minute)" second="@(Model.data.Buying[0].EndDate.Second)" sectype="1">
+            <div class="col-md-5">
+                <div class="c-product-images">
+                    <img src="@Model.data.Buying[0].ImageUrl">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div style="overflow:hidden;">
+                    <h2 class="font-bold m-b-xs" style="float:left;font-size:20px;color:#372d2b;">正在秒杀</h2>
+                    <div class="SpecialCountDownRight">
+                        <div class="SpecialCountDown1">距结束还有</div>
+                        <div class="CountDown2Comming CTTime1">00</div>
+                        <div class="CountDown3Comming">:</div>
+                        <div class="CountDown2Comming CTTime1">00</div>
+                        <div class="CountDown3Comming">:</div>
+                        <div class="CountDown2Comming CTTime1">00</div>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <a class="btn btn-primary pull-right" href="http://b2b.comix.com.cn/Promo/FlashBuy" target="_blank">立即抢购</a>
+                    <h1 class="product-main-price">
+                        <small class="text-muted">@Model.data.Buying[0].Description 此商品剩余数量为 @Model.data.Buying[0].RemainQty ，您还能秒杀 @Model.data.Buying[0].EachLimtQty</small>
+                    </h1>
+                </div>
+                <hr>
+                <h4>秒杀价</h4>
+                @if (isLogin)
+                {
+                    <div class="c-product-price">￥@Model.data.Buying[0].Price</div>
+                    <div class="c-product-desc">
+                        正常价：￥@Model.data.Buying[0].OriginalPrice<br>
+                        * 订单提交后，需在当天24:00点前完成支付哦，否则系统将会自动取消订单<br>
+                        * 秒杀活动需采用现金支付<br>
+                    </div>
+                }
+                else
+                {
+                    <div class="c-product-price">￥价格登录显示</div>
+                    <div class="c-product-desc">
+                        正常价：￥价格登录显示<br>
+                        * 订单提交后，需在当天24:00点前完成支付哦，否则系统将会自动取消订单<br>
+                        * 秒杀活动需采用现金支付<br>
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+    else if (Model.data.Comming != null && Model.data.Comming.Count > 0)
+    {
+        @*<script type="text/javascript">
+                yearComming = @(Convert.ToDateTime(Model.data.Comming[0].StartDate).Year)
+                monthComming = @(Convert.ToDateTime(Model.data.Comming[0].StartDate).Month - 1)
+                dayComming = @(Convert.ToDateTime(Model.data.Comming[0].StartDate).Day)
+                hourComming = @(Convert.ToDateTime(Model.data.Comming[0].StartDate).Hour)
+                minuteComming = @(Convert.ToDateTime(Model.data.Comming[0].StartDate).Minute)
+                secondComming = @(Convert.ToDateTime(Model.data.Comming[0].StartDate).Second)
+                CountDown(yearComming,monthComming,dayComming,hourComming,minuteComming,secondComming,dif,"CTTime2");
+            </script>*@
+        <div class="row" id="secKillData" year="@(Model.data.Comming[0].StartDate.Year)" month="@(Model.data.Comming[0].StartDate.Month - 1)" day="@(Model.data.Comming[0].StartDate.Day)" hour="@(Model.data.Comming[0].StartDate.Hour)" minute="@(Model.data.Comming[0].StartDate.Minute)" second="@(Model.data.Comming[0].StartDate.Second)" sectype="2">
+            <div class="col-md-5">
+                <div class="c-product-images">
+                    <img src="@Model.data.Comming[0].ImageUrl">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div style="overflow:hidden;">
+                    <h2 class="font-bold m-b-xs" style="float:left;font-size:20px;color:#372d2b;">@Model.data.Comming[0].StartDate.ToShortTimeString() 整点开抢</h2>
+                    <div class="SpecialCountDownRight">
+                        <div class="SpecialCountDown1">距开始还有</div>
+                        <div class="CountDown2Comming CTTime2">00</div>
+                        <div class="CountDown3Comming">:</div>
+                        <div class="CountDown2Comming CTTime2">00</div>
+                        <div class="CountDown3Comming">:</div>
+                        <div class="CountDown2Comming CTTime2">00</div>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <button class="btn btn-primary pull-right">即将开始</button>
+                    <h1 class="product-main-price">
+                        <small class="text-muted">@Model.data.Comming[0].Description 此商品剩余数量为 @Model.data.Comming[0].RemainQty ，您还能秒杀 @Model.data.Comming[0].EachLimtQty</small>
+                    </h1>
+                </div>
+                <hr>
+                <h4>秒杀价</h4>
+                @if (isLogin)
+                {
+                    <div class="c-product-price">￥@Model.data.Comming[0].Price</div>
+                    <div class="c-product-desc">
+                        正常价：￥@Model.data.Comming[0].OriginalPrice<br>
+                        * 订单提交后，需在当天24:00点前完成支付哦，否则系统将会自动取消订单<br>
+                        * 秒杀活动需采用现金支付<br>
+                    </div>
+                }
+                else
+                {
+                    <div class="c-product-price">￥价格登录显示</div>
+                    <div class="c-product-desc">
+                        正常价：￥价格登录显示<br>
+                        * 订单提交后，需在当天24:00点前完成支付哦，否则系统将会自动取消订单<br>
+                        * 秒杀活动需采用现金支付<br>
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+    else if (Model.data.Over != null && Model.data.Over.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-5">
+                <div class="c-product-images">
+                    <img src="@Model.data.Over[0].ImageUrl">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div style="overflow:hidden;">
+                    <h2 class="font-bold m-b-xs" style="float:left;font-size:20px;color:#372d2b;">本秒杀已结束</h2>
+                    <div class="SpecialCountDownRight">
+                        <div class="SpecialCountDown1"></div>
+                        <div class="CountDown2Comming CTTime1">00</div>
+                        <div class="CountDown3Comming">:</div>
+                        <div class="CountDown2Comming CTTime1">00</div>
+                        <div class="CountDown3Comming">:</div>
+                        <div class="CountDown2Comming CTTime1">00</div>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <button class="btn btn-primary pull-right">秒杀结束</button>
+                    <h1 class="product-main-price">
+                        @*<small class="text-muted">@Model.data.Over[0].Description 此商品剩余数量为 @Model.data.Over[0].RemainQty ，您还能秒杀 @Model.data.Over[0].EachLimtQty</small>*@
+                    </h1>
+                </div>
+                <hr>
+                <h4>秒杀价</h4>
+                @if (isLogin)
+                {
+                    <div class="c-product-price">￥@Model.data.Over[0].Price</div>
+                    <div class="c-product-desc">
+                        正常价：￥@Model.data.Comming[0].OriginalPrice<br>
+                        * 订单提交后，需在当天24:00点前完成支付哦，否则系统将会自动取消订单<br>
+                        * 秒杀活动需采用现金支付<br>
+                    </div>
+                }
+                else
+                {
+                    <div class="c-product-price">￥价格登录显示</div>
+                    <div class="c-product-desc">
+                        正常价：￥价格登录显示<br>
+                        * 订单提交后，需在当天24:00点前完成支付哦，否则系统将会自动取消订单<br>
+                        * 秒杀活动需采用现金支付<br>
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+}
+
+
+

@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B5AD9C25-5F2E-4C93-91BA-C6F161E6A192}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>eContract.Common</RootNamespace>
+    <AssemblyName>eContract.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ComixSDK.EDI.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceDll\ComixSDK.EDI.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="Enyim.Caching">
+      <HintPath>..\ReferenceDll\Enyim.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceDll\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\ReferenceDll\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\ReferenceDll\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\ReferenceDll\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\ReferenceDll\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\ReferenceDll\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ReferenceDll\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\GetWechatAccessToken.cs" />
+    <Compile Include="Common\WeiXinLoginModel.cs" />
+    <Compile Include="ConstHelper.cs" />
+    <Compile Include="Const\CommonEnum.cs" />
+    <Compile Include="Const\ExtendCommonEnum.cs" />
+    <Compile Include="Const\SysConst.cs" />
+    <Compile Include="Const\UploadPath.cs" />
+    <Compile Include="DataUpateHeader.cs" />
+    <Compile Include="DataUpdateBody.cs" />
+    <Compile Include="DataUpdateDomain.cs" />
+    <Compile Include="Encryption.cs" />
+    <Compile Include="EntitySort.cs" />
+    <Compile Include="Entity\CasAttachmentEntity.cs" />
+    <Compile Include="Entity\CasCityEntity.cs" />
+    <Compile Include="Entity\CasContractApprovalResultEntity.cs" />
+    <Compile Include="Entity\CasContractApprovalStepApplyDeptEntity.cs" />
+    <Compile Include="Entity\CasContractApprovalStepApprovalDeptEntity.cs" />
+    <Compile Include="Entity\CasContractApprovalStepEntity.cs" />
+    <Compile Include="Entity\CasContractApproverEntity.cs" />
+    <Compile Include="Entity\CasContractEntity.cs" />
+    <Compile Include="Entity\CasContractFilingEntity.cs" />
+    <Compile Include="Entity\CasContractTemplateEntity.cs" />
+    <Compile Include="Entity\CasContractTypeEntity.cs" />
+    <Compile Include="Entity\CasDepartmentEntity.cs" />
+    <Compile Include="Entity\CasDeptUserEntity.cs" />
+    <Compile Include="Entity\CasHolidayEntity.cs" />
+    <Compile Include="Entity\CasPoApprovalSettingsEntity.cs" />
+    <Compile Include="Entity\CasProxyApprovalEntity.cs" />
+    <Compile Include="Entity\CasRegionEntity.cs" />
+    <Compile Include="Entity\CasUserEntity.cs" />
+    <Compile Include="Entity\CasUserPermissionEntity.cs" />
+    <Compile Include="Entity\SecLogErrorEntity.cs" />
+    <Compile Include="Entity\SecPageControlEntity.cs" />
+    <Compile Include="Entity\SecPageEntity.cs" />
+    <Compile Include="Entity\SecRoleEntity.cs" />
+    <Compile Include="Entity\SecRolePageEntity.cs" />
+    <Compile Include="Entity\SecUserRoleEntity.cs" />
+    <Compile Include="ExcelHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExcelHelperEx.cs" />
+    <Compile Include="ExceptionMessages\BizException.cs" />
+    <Compile Include="ExState.cs" />
+    <Compile Include="FieldUpdateInfo.cs" />
+    <Compile Include="FileHelper.cs" />
+    <Compile Include="HtmlToExcel.cs" />
+    <Compile Include="HttpHelper.cs" />
+    <Compile Include="IApplicationSession.cs" />
+    <Compile Include="ImageHelper.cs" />
+    <Compile Include="ListSort.cs" />
+    <Compile Include="MVC\AjaxResult.cs" />
+    <Compile Include="MVC\ConfigHelper.cs" />
+    <Compile Include="MVC\FilterGroup.cs" />
+    <Compile Include="MVC\FilterParam.cs" />
+    <Compile Include="MVC\FilterRule.cs" />
+    <Compile Include="MVC\JqGrid.cs" />
+    <Compile Include="MVC\LigerGrid.cs" />
+    <Compile Include="MVC\QueryTableHelper.cs" />
+    <Compile Include="MVC\TranslatorFilter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SBase64.cs" />
+    <Compile Include="Schema\CasAttachmentTable.cs" />
+    <Compile Include="Schema\CasCityTable.cs" />
+    <Compile Include="Schema\CasContractApprovalResultTable.cs" />
+    <Compile Include="Schema\CasContractApprovalStepApplyDeptTable.cs" />
+    <Compile Include="Schema\CasContractApprovalStepApprovalDeptTable.cs" />
+    <Compile Include="Schema\CasContractApprovalStepTable.cs" />
+    <Compile Include="Schema\CasContractApproverTable.cs" />
+    <Compile Include="Schema\CasContractFilingTable.cs" />
+    <Compile Include="Schema\CasContractTable.cs" />
+    <Compile Include="Schema\CasContractTemplateTable.cs" />
+    <Compile Include="Schema\CasContractTypeTable.cs" />
+    <Compile Include="Schema\CasDepartmentTable.cs" />
+    <Compile Include="Schema\CasDeptUserTable.cs" />
+    <Compile Include="Schema\CasHolidayTable.cs" />
+    <Compile Include="Schema\CasPoApprovalSettingsTable.cs" />
+    <Compile Include="Schema\CasProxyApprovalTable.cs" />
+    <Compile Include="Schema\CasRegionTable.cs" />
+    <Compile Include="Schema\CasUserPermissionTable.cs" />
+    <Compile Include="Schema\CasUserTable.cs" />
+    <Compile Include="Schema\SecLogErrorTable.cs" />
+    <Compile Include="Schema\SecPageControlTable.cs" />
+    <Compile Include="Schema\SecPageTable.cs" />
+    <Compile Include="Schema\SecRolePageTable.cs" />
+    <Compile Include="Schema\SecRoleTable.cs" />
+    <Compile Include="Schema\SecUserRoleTable.cs" />
+    <Compile Include="SendEmail.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Validator.cs" />
+    <Compile Include="ValidatorHelper.cs" />
+    <Compile Include="WebUtils\CachingService.cs" />
+    <Compile Include="WebUtils\EcanRMB.cs" />
+    <Compile Include="WebUtils\MenuDataItem.cs" />
+    <Compile Include="WebUtils\WebCaching.cs" />
+    <Compile Include="XmlHelper.cs" />
+    <Compile Include="ZipClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SQLDataAccess\DataAccess\DataAccess.csproj">
+      <Project>{4429187f-ad20-4c25-a7ee-c5223e3ba01f}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLDataAccess\EntityCore\EntityCore.csproj">
+      <Project>{5d08968e-9b69-4cea-b77a-38660127c9eb}</Project>
+      <Name>EntityCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

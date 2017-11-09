@@ -1,0 +1,209 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+    //Layout = null;
+}
+@model eContract.Common.LigerGrid
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins layout-list-header">
+            <div class="ibox-content c-list-header">
+                <form id="sel_form">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" id="add_btn" class="btn btn-primary">New</button>
+                            <button type="button" id="del_btn" class="btn btn-primary">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            @RenderPage("_PREditList.cshtml")
+        </div>
+    </div>
+</div>
+<div class="modal modal-fade" id="event-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    PR
+                </h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="event-id" value="">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="min-date" class="col-sm-4 control-label">PR Number</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <input name="contractFilingId" type="hidden" />
+                                <input name="contractId" type="hidden" value="@ViewBag.ContractId" />
+                                <input name="pRNo" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="divRemark">
+                        <label for="min-date" class="col-sm-4 control-label">Return Reason</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <textarea name="remark" readonly="readonly"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>*@
+                <button type="button" class="btn btn-primary" id="save_btn">
+                    Save
+                </button>
+                <button type="button" class="btn btn-primary" id="submit_btn">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@section footer{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            jqGrid.initGrid($("#PREditGrid"),
+            {
+                url: "@Url.Action("PREdit")" + "?id=" + "@ViewBag.ContractId.ToString()",
+                sortname: "CONTRACT_FILING_ID",
+                multiselect: true,
+                colNames: ['ID', 'PR Number', 'PO Number', 'Status', 'Action'],
+                colModel: [
+                    { name: 'CONTRACT_FILING_ID', index: 'CONTRACT_FILING_ID', search: true, hidden: true },
+                    { name: 'PR_NO', index: 'PR_NO', search: true },
+                    { name: 'PO_NO', index: 'PO_NO', search: true },
+                    {
+                        name: 'STATUS', index: 'STATUS', search: true,
+                        formatter: function (cellvalue, options, row) {
+                            switch (cellvalue)
+                            {
+                                case 1: return "已保存"; break;
+                                case 2: return "已申请"; break;
+                                case 3: return "PO保存"; break;
+                                case 4: return "已审批"; break;
+                                case 5: return "已拒绝"; break;
+                                default: return cellvalue;
+                            }
+                        }
+                    },
+                    {
+                        name: '',
+                        index: '',
+                        sortable: false,
+                        formatter: function (cellvalue, options, row) {
+                            if (row.STATUS == "@eContract.Common.ContractFilingEnum.Save.GetHashCode()"
+                                || row.STATUS == "@eContract.Common.ContractFilingEnum.Reject.GetHashCode()") {
+                                return "<div class=\"c-table-cz\">" +
+                                    '<a href="#" onclick="Edit(\'' + row.CONTRACT_FILING_ID + '\',\'' + row.PR_NO + '\',\'' + row.REMARK + '\');">Edit</a>&nbsp;' +
+                                " </div>";
+                            }
+                            else {
+                                return "<div class=\"c-table-cz\">" +
+                                 '<a href="#" onclick="View(\'' + row.CONTRACT_FILING_ID + '\',\'' + row.PR_NO + '\',\'' + row.REMARK + '\');">View</a>&nbsp;' +
+                                 " </div>";
+                            }
+                        }
+                    }]
+            });
+            $("#del_btn")
+                .click(function () {
+                    jqGrid.gridDelete({
+                        url: "@Url.Action("PRDelete")",
+                        KeyName: 'CONTRACT_FILING_ID'
+                    });
+
+                });
+            $("#add_btn")
+                .click(function () {
+                    $('input[name="contractFilingId"]').val("");
+                    $("#divRemark").hide();
+                    $('#event-modal').modal();
+                    $("#save_btn").show();
+                    $("#submit_btn").show();
+                    $("input[name='pRNo']").val("");
+                });
+            $("#save_btn")
+                .click(function () {
+                    var contractFilingId = $("input[name='contractFilingId']").val();
+                    var contractId = $("input[name='contractId']").val();
+                    var pRNo = $("input[name='pRNo']").val();
+                    $.ajax({
+                        url: "/CAS/PO/PRSave",
+                        method: "get",
+                        dataType: "json",
+                        data: {
+                            contractFilingId: contractFilingId,
+                            contractId: contractId,
+                            pRNo: pRNo
+                        },
+                        success: function (result) {
+                            jqGrid.gridSearch($("#sel_form"), "@Url.Action("PREdit")" + "?id=" + "@ViewBag.ContractId.ToString()");
+                        }, error: function (result) {
+
+                        }
+                    })
+                    $('#event-modal').modal('hide');
+                });
+            $("#submit_btn")
+                .click(function () {
+                    var contractFilingId = $("input[name='contractFilingId']").val();
+                    var contractId = $("input[name='contractId']").val();
+                    var pRNo = $("input[name='pRNo']").val();
+                    $.ajax({
+                        url: "/CAS/PO/PRSubmit",
+                        method: "get",
+                        dataType: "json",
+                        data: {
+                            contractFilingId: contractFilingId,
+                            contractId: contractId,
+                            pRNo: pRNo
+                        },
+                        success: function (result) {
+                            jqGrid.gridSearch($("#sel_form"), "@Url.Action("PREdit")" + "?id=" + "@ViewBag.ContractId.ToString()");
+                        }, error: function (result) {
+
+                        }
+                    })
+                    $('#event-modal').modal('hide');
+                });
+        });
+
+        function View(contractFilingId, pRNo, remark) {
+            $("#save_btn").hide();
+            $("#submit_btn").hide();
+            $("input[name='contractFilingId']").val(contractFilingId);
+            $('input[name="pRNo"]').val(pRNo);
+            if (remark && remark != undefined && remark != "") {
+                $("#divRemark").show();
+                $("textarea[name='remark']").val(remark);
+            }
+            else {
+                $("#divRemark").hide();
+            }
+            $('#event-modal').modal();
+        }
+
+        function Edit(contractFilingId, pRNo, remark) {
+            $("#save_btn").show();
+            $("#submit_btn").show();
+            $("input[name='contractFilingId']").val(contractFilingId);
+            $('input[name="pRNo"]').val(pRNo);
+            if (remark && remark != 'undefined' && remark != "") {
+                debugger
+                $("#divRemark").show();
+                $("textarea[name='remark']").val(remark);
+            }
+            else {
+                $("#divRemark").hide();
+            }
+            $('#event-modal').modal();
+        }
+    </script>
+}
