@@ -872,6 +872,10 @@ namespace eContract.BusinessService.BusinessData.BusinessRule
 
         public CasContractEntity PrepareEntity(CasContractEntity oldEntity)
         {
+
+            #region 问题
+            //这一块一直有问题
+            #endregion
             CasContractEntity newEntity = new CasContractEntity();
             CasContractTypeEntity casContractTypeEntity = BusinessDataService.ContractTypeManagementService
                 .GetById<CasContractTypeEntity>(oldEntity.ContractTypeId);
