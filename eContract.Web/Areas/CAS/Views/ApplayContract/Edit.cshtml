@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "Edit";
     Layout = null;
-    //Layout = "~/Views/Shared/_Layout.cshtml";
     var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;
 }
 @model eContract.Common.Entity.CasContractEntity
@@ -56,18 +55,6 @@
                         <option value="">===Select===</option>
                     </select><p class="text-danger help-block"></p>
                 </div>
-                @*<span style="float: right;margin-top: 10px;margin-right: 0;font-size: 10px;"
-                      title="General Purchase Contract:General Services, IT, Admin/HR Services, Marketing, Professional Services, Insurances
-Technical Sourcing Contract:Assets (i.e. construction works, productions lines, machinery), Technical materials (i.e. spare parts, tools), Technical service/maintenance, Hygenic and cleaning materials, Workwear, PPE, Laboratory tools, chemical materials, services
-OS Procurement Contract:Packaging, Raw materials, Logistics
-MPG Contract:Toy and related services
-HR Confidential Contract:Employee C&B, Talent acquisition and other confidential matters
-Standard Distribution/Sub-distribution Contract:Standard distribution agreement, Standard sub-distribution agreement
-Non-standard Distribution/Sub-distribution Contract:Distribution agreement, sub-distribution agreement not using approved standard template
-Other Contract:Confidentiality Agreement, Consumer Settlement etc.
-Standard Template*:Not for contract approval, only applicable to Sales Operation">
-                    Contract Type<br />Explanation
-                </span>*@
                 <button type="button" class="btn btn-default" id="showInfo"> Contract Type Explanation</button>
             </div>
         </div>
@@ -103,12 +90,6 @@ Standard Template*:Not for contract approval, only applicable to Sales Operation
                     </label>
                     <div class="col-sm-9 controls ">
                         <input type="hidden" value="@Model.ContractName" name="ContractName" id="ContractName" />
-                        @*<select class="form-control m-b c-edit-select valid" id="ContractNameSel" name="ContractNameSel"
-                                validate="{required:true}" display="" aria-required="true" aria-invalid="true" style="width:48%;display:inline-block">
-                            <option value="">===Select===</option>
-                            <option value="ContractName1">ContractName1</option>
-                            <option value="ContractName2">ContractName2</option>
-                        </select>*@
                         <input type="hidden" id="selected_ContractName" name="ContractNameVal">
                         <select id="ContractNameSel" name="ContractNameSel" class="js-data-example-ajax form-control m-b c-edit-select valid" 
                                 validate="{required:true}" display="" aria-required="true" aria-invalid="true" style="width:48%;display:inline-block">
@@ -197,9 +178,6 @@ Standard Template*:Not for contract approval, only applicable to Sales Operation
                 <div id="div_Supplementary" class="form-group layout-edit-from-checkbox width-6">
                     <label for="Supplementary" class="col-sm-6 control-label"><span class="asteriskField">*</span>Supplementary or not<br /><span class="label-cn">(是否补充合同)：</span></label>
                     <div class="col-sm-6 controls" style="height:50px;">
-                        @*<input type="checkbox" id='Supplementary' checked="@Convert.ToBoolean(Model.Supplementary)" />
-                            <input type="checkbox" value="Yes" id="supYes" name="supchkbox" />Yes
-                            <input type="checkbox" value="No" id="supNo" name="supchkbox" />No*@
                         <input type="radio" value="Yes" id="supYes2" name="supRadio" /><label for="supYes2">Yes</label>
                         <input type="radio" value="No" id="supNo2" name="supRadio" /><label for="supNo2">No</label>
                         <input type="hidden" name='Supplementary' value="@Convert.ToBoolean(Model.Supplementary).ToString().ToLower()" />
@@ -484,32 +462,6 @@ Standard Template*:Not for contract approval, only applicable to Sales Operation
                 </div>
             </div>
         }
-
-        @*<div class="modal modal-fade" id="event-modal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title">
-                                补充说明
-                            </h4>
-                        </div>
-                        <div class="modal-body">
-                                <div class="form-group" id="divRemark">
-                                    <label for="min-date" class="col-sm-4 control-label">补充说明原因：</label>
-                                    <div class="col-sm-7">
-                                        <div class="input-group">
-                                            <textarea name="explanation" id="explanation" style="width:240px;height:150px"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
         <div class="form-buttons" style="height:100px;">
             <div class="col-sm-8 col-sm-offset-2">
                 <button type="button" class="btn btn-default" name="btnSave" id="btnSave" data-loading-text="Saving...."
@@ -517,7 +469,6 @@ Standard Template*:Not for contract approval, only applicable to Sales Operation
                     <i class="icon-save"></i>Save
                 </button>
                 <button type="button" class="btn btn-primary " name="btnSubmit" id="btnSubmit" data-loading-text="Submiting...."
-                        @*onclick="javaScript: $.ApplayContract.save(2);"*@
                         onclick="onSubmit();">
                     <i class="icon-save"></i>Submit
                 </button>

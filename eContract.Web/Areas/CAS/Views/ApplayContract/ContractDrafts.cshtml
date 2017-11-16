@@ -16,7 +16,6 @@
                         <div class="col-sm-4 label-form-4">
                             <label class="control-label" for="sel_CONTRACT_TYPE_NAME">Contract Type：</label>
                             <div class="form-group">
-                                @*<input type="text" id="sel_CONTRACT_TYPE_NAME" name="CONTRACT_TYPE_NAME " value="" placeholder="" class="form-control">*@
                                 <select class="form-control m-b c-edit-select valid" id="CONTRACT_TYPE_NAME" name="CONTRACT_TYPE_NAME">
                                     <option value="">===Select===</option>
                                 </select>
@@ -36,7 +35,6 @@
                                     <option value="Ferrero Trading (Shanghai) Co., Ltd.">Ferrero Trading (Shanghai) Co., Ltd.</option>
                                     <option value="Ferrero Food (Hangzhou) Co., Ltd.">Ferrero Food (Hangzhou) Co., Ltd.</option>
                                 </select>
-                                @*<input type="text" id="sel_FERRERO_ENTITY" name="FERRERO_ENTITY" value="" placeholder="" class="form-control">*@
                             </div>
                         </div>
                     </div>
@@ -58,7 +56,6 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <button type="button" id="sel_btn" class="btn btn-primary">Search</button>
-                            @*<button type="button" id="del_btn" class="btn btn-primary">Delete</button>*@
                         </div>
                     </div>
                 </form>
@@ -83,7 +80,6 @@
             {
                 url: "@Url.Action("ContractDrafts")",
                 sortname: "CREATE_TIME",
-                //multiselect: true,
                 colNames: ['ID', 'Action', 'Serial No', 'Ferrero Party', 'Contract Type', 'Contract Name', 'Status', 'Counterparty-EN', 'Submission Date'],
                 colModel: [
                      { name: 'CONTRACT_ID', index: 'CONTRACT_ID', search: true, hidden: true },
@@ -126,7 +122,6 @@
                                 }
                             }
                         },
-                    //{ name: 'CONTRACT_INITIATOR', index: 'CONTRACT_INITIATOR ', search: true },
                     { name: 'COUNTERPARTY_EN', index: 'COUNTERPARTY_EN', search: true },
                     {
                         name: 'APPLY_DATE', index: 'APPLY_DATE',
@@ -162,22 +157,11 @@
         jNotify.Confirm("Please confirm",
             "Please confirm to close the contract!",
             function () {
-                //jNotify.hideLoading();
-                @*jqGrid.gAjax("@Url.Action("CloseContractByContractID")",
-                        { id: idValue },
-                        function (res) {
-                            if (res.msgHeader.IsError)
-                                jNotify.showError(res.msgHeader.Message);
-                            else {
-                                setTimeout(jNotify.showSuccess("成功关闭"), 2000);
-                            }
-                        });*@
                 jForm.Ajax({
                     url: "@Url.Action("CloseContractByContractID")",
                     data: { id: idValue },
                     success: function (data) {
                         jqGrid.gridSearch($("#sel_form"), "@Url.Action("ContractDrafts")");
-                        //jNotify.showSuccess("成功关闭！");
                     }
                 });
             });
