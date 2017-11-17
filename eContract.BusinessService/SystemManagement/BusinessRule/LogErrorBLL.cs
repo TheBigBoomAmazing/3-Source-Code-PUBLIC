@@ -104,6 +104,7 @@ namespace eContract.BusinessService.SystemManagement.BusinessRule
             err.MachineName = Dns.GetHostName();
             err.Message = ex.Message;
             err.StackTrace = ex.StackTrace; //+relationData;
+            err.LastModifiedTime = DateTime.Now;
             if (WebCaching.CurrentContext == null || WebCaching.CurrentContext.Request == null)
             {
             }
