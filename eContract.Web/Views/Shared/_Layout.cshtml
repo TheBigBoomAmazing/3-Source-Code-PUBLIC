@@ -262,12 +262,16 @@
                         {
                             <li>
                                 <a href="@Url.Content("~/account/LogOff")" style="font-weight: normal;">
-                                    <i class="fa fa-sign-out"></i> EXIT
+                                    <i class="fa fa-sign-out"></i> 退出
                                 </a>
                             </li>
                         }
                         else
                         {
+                            <li>
+                                <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin"></a>
+                                <i class="fa fa-sign-out"></i> 登录
+                            </li>
                         }
                     </ul>
                     <div class="border-width-line"></div>

@@ -17,16 +17,16 @@ using eContract.BusinessService.BusinessData.Service;
 
 namespace eContract.Web.Controllers
 {
-    public class HomeController : AuthBaseController
+    public class HomeController : BaseController
     {
         public const string SYSTEM_NAME = "MDM";
 
         public ActionResult Index(JqGrid grid, FormCollection data)
         {
-            if (CurrentUser == null || CurrentUser.CasUserEntity == null || string.IsNullOrEmpty(CurrentUser.CasUserEntity.UserId))
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            //if (CurrentUser == null || CurrentUser.CasUserEntity == null || string.IsNullOrEmpty(CurrentUser.CasUserEntity.UserId))
+            //{
+            //    return RedirectToAction("Login", "Account");
+            //}
             string strError = "";
             //string strResult = ComixSDK.EDI.Utils.CacheHelper.Instance.Get<string>("QQ_Notice_New");
             //if (string.IsNullOrWhiteSpace(strResult))
