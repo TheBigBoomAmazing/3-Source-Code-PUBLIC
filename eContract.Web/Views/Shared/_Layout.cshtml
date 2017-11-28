@@ -255,9 +255,6 @@
                         <li>
                             <span class="m-r-sm text-muted welcome-message">Welcome to FERRERO</span>
                         </li>
-                        <li>
-                            <a href="javascript://" onclick="timeback();">Test</a>
-                        </li>
                         @if (eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null)
                         {
                             <li>
@@ -269,8 +266,9 @@
                         else
                         {
                             <li>
-                                <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin"></a>
-                                <i class="fa fa-sign-out"></i> 登录
+                                <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin">
+                                    <i class="fa fa-sign-out"></i> 登录
+                                </a>
                             </li>
                         }
                     </ul>
@@ -324,33 +322,6 @@
         $(this).addClass("active");
     });
 </script>
-@if (!IsHome && IsFirst)
-{
-    <script type="text/javascript">
-
-        window.location.href = "@Url.Content("~/" + currentCitem.Page.PageUrl)";
-
-    </script>
-}
-else
-{
-    <script type="text/javascript">
-        function timeback() {
-            $.ajax({
-                url: "/CAS/Common/TimeBack",
-                method: "post",
-                type: "json",
-                data: null,
-                success: function (result) {
-                    jNotify.showSuccess("成功回溯一天！");
-                },
-                error: function (result) {
-                    jNotify.showError("操作失败");
-                }
-            });
-        }
-    </script>
-}
 @RenderSection("footer", false)
 
 </html>
