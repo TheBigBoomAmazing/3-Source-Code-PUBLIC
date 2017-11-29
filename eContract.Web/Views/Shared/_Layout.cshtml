@@ -249,6 +249,7 @@
             <div class="row">
                 <nav class="navbar navbar-static-top  @(currentMenu==null?"white-bg":"")" role="navigation" style="margin-bottom: 0">
                     <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="javascript:;"><i class="fa fa-bars"></i></a>
                         <img class="navbar-header-img" src="~/UI/Css/default/images/common/navbar-header.jpg" />
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
@@ -267,7 +268,7 @@
                         {
                             <li>
                                 <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin">
-                                    <i class="fa fa-sign-out"></i> 登录
+                                    @*<i class="fa fa-sign-out"></i>*@ 登录
                                 </a>
                             </li>
                         }
