@@ -153,8 +153,8 @@ namespace eContract.Web.Controllers
             //    string newreturnUrl = Request.Url.Scheme + "://" + Request.Url.Authority + "/" + FormsAuthentication.DefaultUrl;
             //    return Redirect(ComixSDK.EDI.Utils.ConfigHelper.GetConfigString("SSOLogin") + "/Account/LogOff?returnUrl=" + newreturnUrl);
             //}
-            return RedirectToAction("Login");
-            //return Redirect("~/home");
+            //return RedirectToAction("Login");
+            return Redirect("~/home");
         }
 
         public ActionResult ChangePasswordSuccess()
