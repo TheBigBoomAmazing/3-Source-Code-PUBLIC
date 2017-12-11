@@ -4,97 +4,10 @@
 <html xml:lang="en">
 @using eContract.BusinessService.BusinessData.Service
 @{
-    string authKey = "";
-    string strError = "";
-    string mailNewCount = "0";
     var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;
-    string controller = ViewContext.RouteData.Route.GetRouteData(this.Context).Values["controller"].ToString();
-    string action = ViewContext.RouteData.Route.GetRouteData(this.Context).Values["action"].ToString();
-    string area = "home";
-    if (ViewContext.RouteData.Route.GetRouteData(this.Context).DataTokens["area"] != null)
-    {
-        area = ViewContext.RouteData.Route.GetRouteData(this.Context).DataTokens["area"].ToString().ToLower();
-    }
-    string controllerNew = (!string.IsNullOrEmpty(area) ? area + "/" : "") + controller.ToLower();
-    string controllerurl = controllerNew + "/" + action.ToLower();
-
-    eContract.Common.WebUtils.MenuDataItem currentItem = null;
-    eContract.Common.WebUtils.MenuDataItem currentCitem = null;//二级当前分类
-    eContract.Common.WebUtils.MenuDataItem currentMenu = null;
-    if (eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null && eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.MenuDataItems.Count > 0)
-    {
-        currentMenu = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.SubMenuDataItems.Where(x => x.Page.PageUrl.ToLower().Equals(controllerurl)).FirstOrDefault();
-        if (currentMenu == null)
-        {
-            currentMenu = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.SubMenuDataItems.Where(x => x.Page.PageUrl.ToLower().Contains(controllerurl + "/")).FirstOrDefault();
-        }
-        if (currentMenu == null)
-        {
-            currentMenu = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.SubMenuDataItems.Where(x => x.Page.PageUrl.ToLower().Contains(controllerurl)).FirstOrDefault();
-        }
-        if (currentMenu == null)
-        {
-            currentMenu = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.SubMenuDataItems.Where(x => x.Page.PageUrl.ToLower().Equals(controllerNew)).FirstOrDefault();
-        }
-        if (currentMenu == null)
-        {
-            currentMenu = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.SubMenuDataItems.Where(x => x.Page.PageUrl.ToLower().Contains(controllerNew + "/")).FirstOrDefault();
-        }
-        if (currentMenu == null)
-        {
-            currentMenu = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.SubMenuDataItems.Where(x => x.Page.PageUrl.ToLower().Contains(controllerNew)).FirstOrDefault();
-        }
-        if (currentMenu == null)
-        {
-            currentMenu = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.MenuDataItems.Where(x => x.Page.PageUrl.ToLower().Equals(area)).FirstOrDefault();
-        }
-        if (currentMenu == null)
-        {
-            currentMenu = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.MenuDataItems.Where(x => x.Page.PageUrl.ToLower().Contains(area + "/")).FirstOrDefault();
-        }
-        if (currentMenu == null)
-        {
-            currentMenu = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.MenuDataItems.Where(x => x.Page.PageUrl.ToLower().Contains(area)).FirstOrDefault();
-        }
-        if (currentMenu != null)
-        {
-            eContract.Common.WebUtils.MenuDataItem current3 = null;
-            current3 = currentMenu.SubMenu.Where(x => x.Page.PageUrl.ToLower().Equals(controllerurl)).FirstOrDefault();
-            if (current3 == null)
-            {
-                current3 = currentMenu.SubMenu.Where(x => x.Page.PageUrl.ToLower().Equals(controllerNew)).FirstOrDefault();
-            }
-            if (current3 == null && currentMenu.SubMenu != null)
-            {
-                current3 = currentMenu.SubMenu.Where(x => x.Page.PageUrl.ToLower().Equals(controllerNew)).FirstOrDefault();
-            }
-            if (current3 != null)
-            {
-                currentMenu = current3;
-            }
-        }
-    }
-
-    eContract.Common.WebUtils.MenuDataItem fristPage = null;
-    eContract.Common.WebUtils.MenuDataItem twopage = null;
-    if (currentMenu != null)
-    {
-        fristPage = twopage = currentMenu;
-        if (currentMenu.ParentMenu != null)
-        {
-            fristPage = currentMenu.ParentMenu;
-        }
-    }
-    eContract.Common.WebUtils.MenuDataItem currentcCitem = currentMenu;
-    var IsFirst = false;
-    var IsHome = false;
-    if (ViewBag.IsHome != null && Convert.ToBoolean(ViewBag.IsHome))
-    {
-        IsHome = Convert.ToBoolean(ViewBag.IsHome);
-    }
-
 
 }
+
 <head>
     <title>Contract Management System</title>
     <link href="@Url.Content("~/favicon.ico")" mce_href="favicon.ico" rel="bookmark" type="image/x-icon" />
@@ -106,166 +19,129 @@
     @RenderPage("_PublicCSSPartial.cshtml")
     @RenderSection("header", false)
 </head>
-
-<body class="pace-done @(currentUser!=null?"":"mini-navbar") ">
-    <div id="wrapper">
-        <nav class="layout-body-left navbar-default navbar-static-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav metismenu" id="side-menu">
-                    <li class="nav-header">
-                        <div class="dropdown profile-element">
-                            <span>
-                                <img alt="image" class="img-logo" src="/UI/INSPINIA/img/profile_small.png" />
-                            </span>
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="clear">
-                                    <span class="block m-t-xs">
-                                    </span>
-                                    @if (currentUser != null)
-            {
-                                        <span class="text-muted text-xs block">
-                                            @(currentUser != null ? currentUser.CasUserEntity.EnglishName : "") <b class="caret"></b>
-                                        </span>
-                                    }
-                                </span>
-                            </a>
-                            @if (currentUser != null)
-                            {
-                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                    <li><a href="@Url.Content("~/account/LogOff")">Exit</a></li>
-                                </ul>
-                            }
-
-                        </div>
-                    </li>
-                    <li class="active nav-home nav-menucolor-main">
-                        <a href="@Url.Content("~/")"><i class="fa c-nav-ico fa-home nav-menucolor-main"></i> <span class="nav-label">Home</span></a>
-                    </li>
-
-                    @{
-                        bool flag = false;
-                        List<eContract.Common.WebUtils.MenuDataItem> lstItem = null;
-                        if (eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null && eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.MenuDataItems.Count > 0)
-                        {
-                            lstItem = eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain.MenuDataItems.Where(x => x.Page.IsMenu).ToList();
-                            foreach (var item in lstItem)
-                            {
-                                flag = false;
-                                if (!string.IsNullOrEmpty(item.Page.PageUrl) && item.Page.PageUrl.ToLower().Equals(area))
-                                {
-                                    currentItem = item;
-
-                                    flag = true;
-                                }
-                                <li class="nav-mainmenu nav-menucolor-main @(currentcCitem!=null&&currentcCitem.ParentMenu!=null  && item== currentcCitem.ParentMenu ? "active" : "")">
-                                    <a href="@(!string.IsNullOrEmpty(item.Page.PageUrl) ? Url.Content("~/" + item.Page.PageUrl) : "javascript://")"><i class="fa c-nav-ico nav-menucolor-main"></i> <span class="nav-label"><i class="fa c-nav-ico nav-menucolor-main @(item.Page.PageName=="系统管理"?"fa-cogs":(item.Page.PageName=="合同设置"?"fa-sliders":(item.Page.PageName=="合同模板"?"fa-file-text":(item.Page.PageName=="合同流程"?"fa-sitemap":(item.Page.PageName=="合同管理"? "fa-pencil-square-o" : "fa-cog")))))"></i>@item.Page.PageNameEn</span><span class="fa arrow"></span></a>
-                                    @if (item != null && item.SubMenu.Count > 0)
-                                    {
-                                        <ul class="nav nav-second-level collapse">
-                                            @foreach (var citem in item.SubMenu)
-                                            {
-                                                if (citem.Page.PageId.ToLower() == "4d996de5-a99e-4165-8553-6808344470b3".ToLower())
-                                                {
-                                                    int number = BusinessDataService.ContractApplayService.GetDraftNumber();
-                                                    string showValue = citem.Page.PageNameEn;
-                                                    if (number != 0)
-                                                    {
-                                                        <li class="nav-menucolor-sub @(currentcCitem != null && citem == currentcCitem ? "active" : "")">
-                                                            <a data-ajax-update="#ajaxContent" data-ajax="true" style="font-weight:900" href="@(!string.IsNullOrEmpty(citem.Page.PageUrl) ? Url.Content("~/" + citem.Page.PageUrl) : "javascript://")">@showValue (@number)</a>
-                                                        </li>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <li class="nav-menucolor-sub @(currentcCitem != null && citem == currentcCitem ? "active" : "")">
-                                                            <a data-ajax-update="#ajaxContent" data-ajax="true" href="@(!string.IsNullOrEmpty(citem.Page.PageUrl) ? Url.Content("~/" + citem.Page.PageUrl) : "javascript://")">@showValue</a>
-                                                        </li>
-                                                    }
-                                                }
-                                                else if (citem.Page.PageId.ToLower() == "52beb42f-9bde-4fd2-8c01-b65f14e7ae5f".ToLower())
-                                                {
-                                                    int number = BusinessDataService.ContractApplayService.GetMyTaskNumber();
-                                                    string showValue = citem.Page.PageNameEn;
-                                                    if (number != 0)
-                                                    {
-
-                                                        <li class="nav-menucolor-sub @(currentcCitem != null && citem == currentcCitem ? "active" : "")">
-                                                            <a data-ajax-update="#ajaxContent" style="font-weight:900" data-ajax="true" href="@(!string.IsNullOrEmpty(citem.Page.PageUrl) ? Url.Content("~/" + citem.Page.PageUrl) : "javascript://")">@showValue (@number)</a>
-                                                        </li>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <li class="nav-menucolor-sub @(currentcCitem != null && citem == currentcCitem ? "active" : "")">
-                                                            <a data-ajax-update="#ajaxContent" data-ajax="true" href="@(!string.IsNullOrEmpty(citem.Page.PageUrl) ? Url.Content("~/" + citem.Page.PageUrl) : "javascript://")">@citem.Page.PageNameEn </a>
-                                                        </li>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <li class="nav-menucolor-sub @(currentcCitem != null && citem == currentcCitem ? "active" : "")">
-                                                        <a data-ajax-update="#ajaxContent" data-ajax="true" href="@(!string.IsNullOrEmpty(citem.Page.PageUrl) ? Url.Content("~/" + citem.Page.PageUrl) : "javascript://")">@citem.Page.PageNameEn </a>
-                                                    </li>
-                                                }
-
-                                            }
-
-                                        </ul>
-                                    }
-                                </li>
-                            }
-                        }
-                    }
-
-                </ul>
-            </div>
-        </nav>
-        <div id="page-wrapper" class="gray-bg">
-
-            <div class="row">
-                <nav class="navbar navbar-static-top  @(currentMenu==null?"white-bg":"")" role="navigation" style="margin-bottom: 0">
-                    <div class="navbar-header">
-                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="javascript:;"><i class="fa fa-bars"></i></a>
-                    </div>
-                    <div class="navbar-header">
-                        <p style="font-size:large">这里放我们的logo</p>
-                    </div>
-                    <ul class="nav navbar-top-links navbar-right">
-                        <li>
-                            <span class="m-r-sm text-muted welcome-message">Welcome to FERRERO</span>
-                        </li>
-                        @if (eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null)
-                        {
-                            <li>
-                                <a href="@Url.Content("~/account/LogOff")" style="font-weight: normal;">
-                                    <i class="fa fa-sign-out"></i> 退出
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin">
-                                    登录
-                                </a>
-                            </li>
-                        }
+<body>
+    <div class="navbar" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-inner">
+            <a class="brand" href="#">放我们的一些logo之类的</a>
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="active"><a href="#">首页</a></li>
+                <li><a href="#">联系我们</a></li>
+                <li><a href="#">磐石系统</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle"
+                       data-toggle="dropdown"
+                       href="#">
+                        我的账户
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">消息中心</a></li>
+                        <li><a href="#">账户中心</a></li>
                     </ul>
-                    <div class="border-width-line"></div>
-
-                </nav>
-            </div>
-            <div id="ajaxContent">
-                @RenderBody()
-            </div>
-
-
-            <div class="layout-footer footer">
-                <div class="layout-footer-Copyright" align="center">Copyright &copy 2017 费列罗贸易(上海)有限公司 版权所有</div>
-            </div>
-            @RenderPage("_LoginPartial.cshtml")
+                </li>
+             
+                @if (eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null)
+                {
+                    <li>
+                        <a href="@Url.Content("~/account/LogOff")" style="font-weight: normal;">
+                            <i class="fa fa-sign-out"></i> 退出
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin">
+                            登录
+                        </a>
+                    </li>
+                }
+                <li>
+                    <a style="font-weight:normal;">
+                        |
+                    </a>
+                </li>
+                <li>
+                    <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin">
+                        注册
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
+    <div class="red-bg">
+        <div id="myCarousel" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="~/UI/INSPINIA/img/bootstrap-mdo-sfmoma-02.jpg" alt="">
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Example headline.</h1>
+                            <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <a class="btn btn-large btn-primary" href="#">现在购买</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="~/UI/INSPINIA/img/bootstrap-mdo-sfmoma-01.jpg" alt="">
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Another example headline.</h1>
+                            <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <a class="btn btn-large btn-primary" href="#">现在购买</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="~/UI/INSPINIA/img/bootstrap-mdo-sfmoma-03.jpg" alt=""/>
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>One more for good measure.</h1>
+                            <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <a class="btn btn-large btn-primary" href="#">现在购买</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+        </div>
+        @*<nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">欢迎来到磐石</span>
+                </li>
+                @if (eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null)
+                {
+                    <li>
+                        <a href="@Url.Content("~/account/LogOff")" style="font-weight: normal;">
+                            <i class="fa fa-sign-out"></i> 退出
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin">
+                            登录
+                        </a>
+                    </li>
+                }
+            </ul>
+            <div class="border-width-line"></div>
+
+        </nav>*@
+        <div id="ajaxContent">
+            @RenderBody()
+        </div>
+
+
+        <div class="layout-footer footer">
+            <div class="layout-footer-Copyright" align="center">Copyright &copy 2017 费列罗贸易(上海)有限公司 版权所有</div>
+        </div>
+        @RenderPage("_LoginPartial.cshtml")
+    </div>
+
     <div>
 
     </div>
@@ -279,6 +155,10 @@
     </div>
 
 </body>
+
+@RenderSection("footer", false)
+
+</html>
 <script type="text/javascript">
     var BaseUrl = "@Url.Content("~/")";
     var SkinUrl = "@eContract.Common.ConfigHelper.UIPATH"
@@ -301,6 +181,3 @@
         $(this).addClass("active");
     });
 </script>
-@RenderSection("footer", false)
-
-</html>
