@@ -1,0 +1,230 @@
+﻿
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xml:lang="en">
+@using eContract.BusinessService.BusinessData.Service
+@{
+    var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;
+
+}
+
+<head>
+    <meta charset="utf-8">
+    <title>磐石系统</title>
+    @*<link href="@Url.Content("~/favicon.ico")" mce_href="favicon.ico" rel="bookmark" type="image/x-icon" />*@
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    @RenderPage("_PublicJsPartial.cshtml")
+    @RenderPage("_PublicCSSPartial.cshtml")
+    @RenderSection("header", false)
+</head>
+<body>
+    <div class="navbar" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-inner">
+            <a class="brand" href="#">放我们的一些logo之类的</a>
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="active"><a href="#">首页</a></li>
+                <li><a href="#">联系我们</a></li>
+                <li><a href="#">磐石系统</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle"
+                       data-toggle="dropdown"
+                       href="#">
+                        我的账户
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">消息中心</a></li>
+                        <li><a href="#">账户中心</a></li>
+                    </ul>
+                </li>
+             
+                @if (eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null)
+                {
+                    <li>
+                        <a href="@Url.Content("~/account/LogOff")" style="font-weight: normal;">
+                            <i class="fa fa-sign-out"></i> 退出
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin">
+                            登录
+                        </a>
+                    </li>
+                }
+                <li>
+                    <a style="font-weight:normal;">
+                        |
+                    </a>
+                </li>
+                <li>
+                    <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin">
+                        注册
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <div id="myCarousel" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="~/UI/INSPINIA/img/bootstrap-mdo-sfmoma-02.jpg" alt="" style="width:100%;height:400px">
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Example headline.</h1>
+                            <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <a class="btn btn-large btn-primary" href="#">现在购买</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="~/UI/INSPINIA/img/bootstrap-mdo-sfmoma-01.jpg" alt="" style="width:100%;height:400px">
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Another example headline.</h1>
+                            <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <a class="btn btn-large btn-primary" href="#">现在购买</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="~/UI/INSPINIA/img/bootstrap-mdo-sfmoma-03.jpg" alt="" style="width:100%;height:400px">
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>One more for good measure.</h1>
+                            <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                            <a class="btn btn-large btn-primary" href="#">现在购买</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+            <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+        </div>
+
+        <div class="container marketing">
+            <div class="row">
+                <div class="span4">
+                    <img class="img-circle" src="~/UI/INSPINIA/img/a1.jpg" />
+                    <h2>Heading</h2>
+                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+                    <p><a class="btn" href="#">View details &raquo;</a></p>
+                </div>
+                <div class="span4">
+                    <img class="img-circle" src="~/UI/INSPINIA/img/a6.jpg" />
+                    <h2>Heading</h2>
+                    <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                    <p><a class="btn" href="#">View details &raquo;</a></p>
+                </div>
+                <div class="span4">
+                    <img class="img-circle" src="~/UI/INSPINIA/img/a3.jpg" />
+                    <h2>Heading</h2>
+                    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                    <p><a class="btn" href="#">View details &raquo;</a></p>
+                </div>
+            </div>
+
+
+        </div>
+
+        <hr class="featurette-divider">
+
+
+        <!-- /END THE FEATURETTES -->
+        <!-- FOOTER -->
+        <footer>
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <div class="layout-footer-Copyright" align="center">Copyright &copy 2017磐石公司 版权所有</div>
+        </footer>
+
+
+        <!-- /.row -->
+            @*<nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">欢迎来到磐石</span>
+                    </li>
+                    @if (eContract.BusinessService.SystemManagement.Service.SystemService.UserService.CurrentUserDomain != null)
+                    {
+                        <li>
+                            <a href="@Url.Content("~/account/LogOff")" style="font-weight: normal;">
+                                <i class="fa fa-sign-out"></i> 退出
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a style="font-weight:normal;" data-toggle="modal" data-target="#modelLogin">
+                                登录
+                            </a>
+                        </li>
+                    }
+                </ul>
+                <div class="border-width-line"></div>
+
+            </nav>*@
+            <div id="ajaxContent">
+                @RenderBody()
+            </div>
+
+
+            @*<div class="layout-footer footer">
+                <div class="layout-footer-Copyright" align="center">Copyright &copy 2017 费列罗贸易(上海)有限公司 版权所有</div>
+            </div>*@
+            @RenderPage("_LoginPartial.cshtml")
+        </div>
+
+    <div>
+
+    </div>
+
+    <div class="modal fade" id="modalContent" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document" style="width:80%">
+            <div class="modal-content" id="parentModalContent">
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+@RenderSection("footer", false)
+
+</html>
+<script type="text/javascript">
+
+    !function ($) {
+        $(function () {
+            // carousel demo
+            $('#myCarousel').carousel()
+        })
+    }(window.jQuery)
+
+    var BaseUrl = "@Url.Content("~/")";
+    var SkinUrl = "@eContract.Common.ConfigHelper.UIPATH"
+    var count = 0;
+    function hideModal() {
+        $("#modalContent").modal("hide");
+    }
+    $("#modalContent").on("hidden.bs.modal", function () {
+        if (count != 1) {
+            $("#modalContent").modal("hide");
+            $(this).removeData("bs.modal");
+            $(".modal-backdrop").remove();
+            $(this).find("#parentModalContent").children().remove();
+            count = 0;
+        }
+    });
+    $(".nav-second-level").find("li").click(function () {
+        $(".nav-second-level").find("li").removeClass("active");
+        $(this).siblings().removeClass("active");
+        $(this).addClass("active");
+    });
+</script>
