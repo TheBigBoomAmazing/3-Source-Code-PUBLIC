@@ -28,6 +28,8 @@ public const string C_LAST_MODIFIED_BY = "LAST_MODIFIED_BY";
 
 public const string C_LAST_MODIFIED_TIME = "LAST_MODIFIED_TIME";
 
+public const string C_REGISTER = "";
+
 
 public CasPoApprovalSettingsTable()
 {

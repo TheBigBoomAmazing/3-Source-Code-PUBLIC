@@ -164,6 +164,13 @@ namespace eContract.Web.Controllers
 
         public ActionResult Register()
         {
+            //string judge = Request.Params["accountmessage"];
+            //if (judge == "accountmessage")
+            //{
+            //Areas.CAS.Controllers.POApprovalSetController poa = new Areas.CAS.Controllers.POApprovalSetController();
+            //poa.Edit(RegisterModel);
+            // }
+            //else { return View(); }
             return View();
         }
         public ActionResult Login()

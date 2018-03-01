@@ -79,6 +79,26 @@ namespace eContract.Web.Models
         [Display(Name = "确认密码")]
         [Compare("Password", ErrorMessage = "密码和确认密码不匹配。")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "用户名")]
+        public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "真实姓名")]
+        public string UserRealName { get; set; }
+
+        [Display(Name = "年龄")]
+        public string Age { get; set; }
+
+        [Required]
+        [Display(Name = "身份证号")]
+        public string IdNumber { get; set; }
+
+        [Required]
+        [StringLength(11)]
+        [Display(Name = "手机号")]
+        public string PhoneNumber { get; set; }
     }
 
     public class ResetPasswordViewModel

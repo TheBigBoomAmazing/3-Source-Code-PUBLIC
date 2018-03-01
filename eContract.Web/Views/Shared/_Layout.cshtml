@@ -261,7 +261,9 @@
                     <form class="navbar-form pull-right">
                         <input class="span2" type="text" placeholder="Email">
                         <input class="span2" type="password" placeholder="Password">
-                        <button type="submit" class="btn" ><a href="@Url.Content("~/shared/Login")">Sign in</a></button>
+                        <!--<button type="submit" class="btn" ><a href="Url.Content("~/shared/Login")">Sign in</a></button>-->
+                        <button type="submit" class="btn"><a href="@Url.Content("~/account/Login")">Sign in</a></button>
+                        <button type="submit" class="btn">@Html.ActionLink("注册", "Register","Account")</button>
                     </form>
                 </div><!--/.nav-collapse -->
             </div>

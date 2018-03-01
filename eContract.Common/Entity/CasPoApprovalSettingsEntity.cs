@@ -91,6 +91,11 @@ namespace eContract.Common.Entity
             set;
         }
 
+        public string Register
+        {
+            get { return (string)GetData(CasPoApprovalSettingsTable.C_PO_APPROVAL_ID); }
+            set { SetData(CasPoApprovalSettingsTable.C_PO_APPROVAL_ID, value); }
+        }
         #endregion
     }
 }
