@@ -1,6 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html>
-<html xml:lang="en">
+﻿
 @model eContract.Web.Models.RegisterViewModel
 
 @{
@@ -12,7 +10,9 @@
     var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;
 
 }
-
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xml:lang="en">
 <head>
     <meta charset="utf-8">
     <title>磐石系统</title>
@@ -325,7 +325,7 @@
     }
 </body>
 
-    @RenderSection("footer", false)
+@RenderSection("footer", false)
 
 </html>
     
