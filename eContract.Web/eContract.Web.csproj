@@ -301,6 +301,8 @@
     <Compile Include="Areas\CAS\Controllers\DepUserCommonController.cs" />
     <Compile Include="Areas\CAS\Controllers\ManagerViewController.cs" />
     <Compile Include="Areas\CAS\Controllers\ReportController.cs" />
+    <Compile Include="Areas\LUBR\Controllers\ProductsShowController.cs" />
+    <Compile Include="Areas\LUBR\LUBRAreaRegistration.cs" />
     <Compile Include="Common\AuthAttribute.cs" />
     <Compile Include="Common\AuthBaseController.cs" />
     <Compile Include="Common\BaseController.cs" />
@@ -2190,6 +2192,10 @@
     <Content Include="Areas\CAS\Views\Report\TemplateReviewProcessReport.cshtml" />
     <Content Include="Areas\CAS\Views\Report\ContractReviewProcessReport.cshtml" />
     <Content Include="Areas\Admin\Views\UserManagement\UserPermissionEdit.cshtml" />
+    <Content Include="Areas\LUBR\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\LUBR\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\LUBR\Views\ProductsShow\Index.cshtml" />
+    <Content Include="Areas\LUBR\Views\Web.config" />
     <None Include="Properties\PublishProfiles\eContractPublish.pubxml" />
     <Content Include="UI\Css\plugins\yearCalendar\fonts\icomoon.eot" />
     <Content Include="UI\Css\plugins\yearCalendar\fonts\icomoon.svg" />
@@ -2342,6 +2348,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\LUBR\Scripts\" />
     <Folder Include="UI\Scripts\plugins\My97DatePicker\开发包\" />
   </ItemGroup>
   <ItemGroup>
