@@ -554,6 +554,12 @@
     <Content Include="UI\Css\plugins\yearCalendar\bootstrap-datepicker.min.css" />
     <Content Include="UI\Css\plugins\yearCalendar\bootstrap-year-calendar.min.css" />
     <Content Include="UI\Css\plugins\yearCalendar\default.css" />
+    <Content Include="UI\INSPINIA\img\1.png" />
+    <Content Include="UI\INSPINIA\img\10.png" />
+    <Content Include="UI\INSPINIA\img\2.png" />
+    <Content Include="UI\INSPINIA\img\3.png" />
+    <Content Include="UI\INSPINIA\img\4.png" />
+    <Content Include="UI\INSPINIA\img\9.png" />
     <Content Include="UI\INSPINIA\img\bootstrap-mdo-sfmoma-01.jpg" />
     <Content Include="UI\INSPINIA\img\bootstrap-mdo-sfmoma-02.jpg" />
     <Content Include="UI\INSPINIA\img\bootstrap-mdo-sfmoma-03.jpg" />
