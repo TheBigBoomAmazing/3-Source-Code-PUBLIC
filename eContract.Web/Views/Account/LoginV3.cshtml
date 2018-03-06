@@ -1,7 +1,6 @@
 ﻿@model eContract.Common.Entity.CasUserEntity
 @{
     Layout = null;
-
     string wechatState = eContract.Common.ConfigHelper.GetSetString("System.LocalDomain") + "/account/login";
     wechatState = ComixSDK.EDI.Utils.EncryptionService.EncryptDES(wechatState, eContract.Common.ConfigHelper.GetSetString("EncryptionKey"));
 }
@@ -15,14 +14,14 @@
 </head>
 
 <body class="login-bg">
-    <img class="login-bg-img" src="../UI/Css/default/images/common/login-bg.jpg" />
+    @*<img class="login-bg-img" src="../UI/Css/default/images/common/login-bg.jpg" />*@
     <div class="login-wrapper page-login animated fadeInDown">
         <div class="tab-content">
-            <div class="login-logo">
+            @*<div class="login-logo">
                 <div class="login-logo1"><img src="/UI/Css/default/images/common/logo1.jpg" width="200"></div>
                 <div class="login-logoChina"><img src="/UI/Css/default/images/common/logoChina.png" width="30"></div>
                 <div class="login-logo2"><img src="/UI/Css/default/images/common/logo2.png" width="170"></div>
-            </div>
+            </div>*@
             <div id="login-computer" class="tab-pane active">
                 <div class="login-content">
                     <form class="form-horizontal" method="post">

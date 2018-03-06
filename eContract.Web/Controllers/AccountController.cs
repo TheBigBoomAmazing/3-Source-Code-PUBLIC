@@ -173,9 +173,9 @@ namespace eContract.Web.Controllers
             //else { return View(); }
             return View();
         }
-        public ActionResult Login()
-        {
-            return View();
-        }
+        //public ActionResult Login()
+        //{
+        //    return View();
+        //}
     }
 }
