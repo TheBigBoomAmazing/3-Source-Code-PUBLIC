@@ -3,7 +3,9 @@
 @{
     ViewBag.Title = "注册";
 }
-
+@*@{
+        Layout = null;
+    }*@
 @using eContract.BusinessService.BusinessData.Service
 @{
     var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;

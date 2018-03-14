@@ -59,6 +59,11 @@ namespace eContract.Web.Controllers
             return View();
         }
 
+        public ActionResult Contact()
+        {
+            return View();
+        }
+
         public JsonResult GetMsg(int page = 1)
         {
             string url = "http://www.cninfo.com.cn/cninfo-new/announcement/query";

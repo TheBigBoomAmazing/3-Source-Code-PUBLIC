@@ -301,6 +301,7 @@
     <Compile Include="Areas\CAS\Controllers\DepUserCommonController.cs" />
     <Compile Include="Areas\CAS\Controllers\ManagerViewController.cs" />
     <Compile Include="Areas\CAS\Controllers\ReportController.cs" />
+    <Compile Include="Areas\LUBR\Controllers\MyAccountController.cs" />
     <Compile Include="Areas\LUBR\Controllers\ProductDetailsController.cs" />
     <Compile Include="Areas\LUBR\Controllers\ReportDefinitionController.cs" />
     <Compile Include="Areas\LUBR\Controllers\FinancialGoodsController.cs" />
@@ -2211,6 +2212,7 @@
     <Content Include="Areas\LUBR\Views\Web.config" />
     <Content Include="Areas\LUBR\Views\Shared\Login.cshtml" />
     <Content Include="Areas\LUBR\Views\ProductDetails\Index.cshtml" />
+    <Content Include="Areas\LUBR\Views\MyAccount\Index.cshtml" />
     <None Include="Properties\PublishProfiles\eContractPublish.pubxml" />
     <Content Include="UI\Css\plugins\yearCalendar\fonts\icomoon.eot" />
     <Content Include="UI\Css\plugins\yearCalendar\fonts\icomoon.svg" />

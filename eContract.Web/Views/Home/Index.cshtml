@@ -1,51 +1,12 @@
-﻿@{
+﻿@*@{
     Layout = "~/Views/Shared/_ListLayout.cshtml";
 }
-
 @section header{
+}*@
+@{ 
+    var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;
 }
-@*<div class="wrapper wrapper-content">
-</div>*@
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="brand" href="#">Project name</a>
-                <div class="nav-collapse collapse">
-                    <ul class="nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li class="nav-header">Nav header</li>
-                                <li><a href="#">Separated link</a></li>
-                                <li><a href="#">One more separated link</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <form class="navbar-form pull-right">
-                        <input class="span2" type="text" placeholder="Email">
-                        <input class="span2" type="password" placeholder="Password">
-                        <!--<button type="submit" class="btn" ><a href="Url.Content("~/shared/Login")">Sign in</a></button>-->
-                        <button type="submit" class="btn"><a href="@Url.Content("~/account/Login")">Sign in</a></button>
-                        <button type="submit" class="btn">@Html.ActionLink("注册", "Register", "Account")</button>
-                    </form>
-                </div><!--/.nav-collapse -->
-            </div>
-        </div>
-    </div>
-
     <div id="myCarousel" class="carousel slide" style="margin-top:10px;height:260px">
         <div class="carousel-inner">
             <div class="item active">
@@ -117,17 +78,38 @@
         <hr class="featurette-divider">
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span2" style="background-color:cyan">
-                    信息
-                </div>
-                <div class="span10" style="background-color:deepskyblue">
-                    还没有想好这边放什么
+                @*<div class="span">
+                    基础数据
+                </div>*@
+                <div class="span12">
+                    <div class="span3">
+                        <span style="color: #999999;line-height: 200%;">累计投资：</span>
+                        <span style="font-size: 20px;color:red">2143254</span>
+                        <span style="color: #999999;line-height: 200%;">亿元</span>
+                    </div>
+                    <div class="span3">
+                        <span style="color: #999999;line-height: 200%;">累计赚取：</span>
+                        <span style="font-size: 20px;color:red">3470</span>
+                        <span style="color: #999999;line-height: 200%;">万元</span>
+
+                    </div>
+                    <div class="span3">
+                        <span style="color: #999999;line-height: 200%;">昨日交易：</span>
+                        <span style="font-size: 20px;color:red">2143</span>
+                        <span style="color: #999999;line-height: 200%;">万元</span>
+                    </div>
+                    <div class="span3">
+                        <span style="color: #999999;line-height: 200%;">稳定运行：</span>
+                        <span style="font-size: 20px;color:red">450</span>
+                        <span style="color: #999999;line-height: 200%;">天</span>
+
+                    </div>
                 </div>
             </div>
             <hr class="featurette-divider">
             <div class="row-fluid">
-                <div class="span2" style="background-color:deepskyblue" rowspan="2">
-                    123
+                <div class="span2" rowspan="3" style="height:180px;background-color:aqua">
+                    产品
                 </div>
                 <div class="span10">
                     <div class="row-fluid">
@@ -150,16 +132,16 @@
                     </div>
                     <div class="row-fluid" style="margin-top:20px">
                         <div class="span3">
-                            <span style="font-size: 20px;color:red">8.50</span>%<br>
+                            <span style="font-size: 20px;color:red">7.50</span>%<br>
                             <span style="color: #999999;line-height: 200%;">历史平均年化利率</span>
                         </div>
                         <div class="span3">
-                            <span style="font-size: 20px;">180</span>天<br>
+                            <span style="font-size: 20px;">365</span>天<br>
                             <span style="color: #999999;line-height: 200%;">借贷期限</span>
 
                         </div>
                         <div class="span3">
-                            <span style="font-size: 20px;">1000元</span><br>
+                            <span style="font-size: 20px;">5000元</span><br>
                             <span style="color: #999999;line-height: 200%;">投资起点</span>
                         </div>
                         <div class="span3">
@@ -168,16 +150,16 @@
                     </div>
                     <div class="row-fluid" style="margin-top:20px">
                         <div class="span3">
-                            <span style="font-size: 20px;color:red">8.50</span>%<br>
+                            <span style="font-size: 20px;color:red">9.50</span>%<br>
                             <span style="color: #999999;line-height: 200%;">历史平均年化利率</span>
                         </div>
                         <div class="span3">
-                            <span style="font-size: 20px;">180</span>天<br>
+                            <span style="font-size: 20px;">60</span>天<br>
                             <span style="color: #999999;line-height: 200%;">借贷期限</span>
 
                         </div>
                         <div class="span3">
-                            <span style="font-size: 20px;">1000元</span><br>
+                            <span style="font-size: 20px;">10000元</span><br>
                             <span style="color: #999999;line-height: 200%;">投资起点</span>
                         </div>
                         <div class="span3">
