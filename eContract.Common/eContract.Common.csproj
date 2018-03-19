@@ -107,6 +107,7 @@
     <Compile Include="Entity\CasRegionEntity.cs" />
     <Compile Include="Entity\CasUserEntity.cs" />
     <Compile Include="Entity\CasUserPermissionEntity.cs" />
+    <Compile Include="Entity\LubrFinancialGoodsEntity.cs" />
     <Compile Include="Entity\SecLogErrorEntity.cs" />
     <Compile Include="Entity\SecPageControlEntity.cs" />
     <Compile Include="Entity\SecPageEntity.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Schema\CasRegionTable.cs" />
     <Compile Include="Schema\CasUserPermissionTable.cs" />
     <Compile Include="Schema\CasUserTable.cs" />
+    <Compile Include="Schema\LubrFinancialGoodsTable.cs" />
     <Compile Include="Schema\SecLogErrorTable.cs" />
     <Compile Include="Schema\SecPageControlTable.cs" />
     <Compile Include="Schema\SecPageTable.cs" />
