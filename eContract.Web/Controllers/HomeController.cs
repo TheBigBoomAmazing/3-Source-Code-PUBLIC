@@ -40,6 +40,10 @@ namespace eContract.Web.Controllers
             //    }
 
             //}
+            #region 页面首页带出详细数据
+            List<LubrFinancialGoodsEntity> goodsList = BusinessDataService.LubrProductsShowBLLService.GetAllProducts();
+            ViewBag.goods = goodsList;
+            #endregion
             ViewBag.IsHome = true;
             //ViewBag.QQ_Notice_New = strResult;
 

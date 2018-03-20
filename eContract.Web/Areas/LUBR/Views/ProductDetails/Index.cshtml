@@ -1,20 +1,22 @@
-﻿<div class="row-fluid">
+﻿
+@model eContract.Common.Entity.LubrFinancialGoodsEntity
+<div class="row-fluid">
     <div class="span12">
-        <h2>双季智选</h2>
+        <h2>@Model.goodsname</h2>
         <div class="row-fluid">
             <div class="span8" style="background-color:#f9fafc">
                 <div class="row-fluid" style="margin-top:40px">
                     <div class="span3">
-                        <span style="font-size: 50px;color:red">8.50</span>%<br><br>
+                        <span style="font-size: 50px;color:red">@Model.annualrate</span>%<br><br>
                         <span style="color: #999999;line-height: 200%;">历史平均年化利率</span>
                     </div>
                     <div class="span3">
-                        <span style="font-size: 50px;">180</span>天<br><br>
+                        <span style="font-size: 50px;">@Model.period</span>月<br><br>
                         <span style="color: #999999;line-height: 200%;">借贷期限</span>
 
                     </div>
-                    <div class="span3">
-                        <span style="font-size: 50px;">1000元</span><br><br>
+                    <div class="span5">
+                        <span style="font-size: 50px;">@Model.principal</span>元<br><br>
                         <span style="color: #999999;line-height: 200%;">投资起点</span>
                     </div>
                 </div>

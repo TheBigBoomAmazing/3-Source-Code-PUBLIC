@@ -95,6 +95,7 @@
     <Compile Include="BusinessData\BusinessRule\CommonHelperBLL.cs" />
     <Compile Include="BusinessData\BusinessRule\ContractApprovalBLL.cs" />
     <Compile Include="BusinessData\BusinessRule\ContractFieldBLL.cs" />
+    <Compile Include="BusinessData\BusinessRule\LubrProductsShowBLL.cs" />
     <Compile Include="BusinessData\BusinessRule\ProxyApprovalBLL.cs" />
     <Compile Include="BusinessData\BusinessRule\POBLL.cs" />
     <Compile Include="BusinessData\BusinessRule\ContractCommentBLL.cs" />

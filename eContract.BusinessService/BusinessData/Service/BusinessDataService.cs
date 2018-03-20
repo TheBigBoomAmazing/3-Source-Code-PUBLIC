@@ -52,5 +52,10 @@ namespace eContract.BusinessService.BusinessData.Service
 
         public static ContractFieldBLL _contractFieldService;
         public static ContractFieldBLL ContractFieldService => _contractFieldService ?? (_contractFieldService = new ContractFieldBLL());
+        #region 磐石系统相关代码
+        public static LubrProductsShowBLL _lubrProductsShowService;
+        public static LubrProductsShowBLL LubrProductsShowBLLService => _lubrProductsShowService ?? (_lubrProductsShowService = new LubrProductsShowBLL());
+
+        #endregion
     }
 }
