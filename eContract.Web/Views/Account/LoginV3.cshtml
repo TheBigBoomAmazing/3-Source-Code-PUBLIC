@@ -11,23 +11,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>磐石系统</title>
     <link rel="shortcut icon" href="~/UI/bootstrap-2.3.2/docs/assets/ico/favicon.png">
-    @RenderPage("/Views/Shared/_PublicCSSPartial.cshtml")
+    @*@RenderPage("/Views/Shared/_PublicCSSPartial.cshtml")*@
+    <link href="~/UI/bootstrap-2.3.2/docs/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/UI/bootstrap-2.3.2/docs/assets/css/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="~/UI/bootstrap-2.3.2/docs/assets/css/docs.css" rel="stylesheet" />
 </head>
 
-<body class="login-bg">
+<body style="background-color:#f9fafc">
+    <div class="navbar navbar-fixed-top navbar-without-shadow" style="background-color:orangered">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button> 
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a class="brand" href="@Url.Content("~/home/index")">磐石 | </a></li>
+                        <li><a class="" >登录</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" style="margin-top:120px">
+        <div class="row-fluid">
+            <div class="span5 text-right" >
+                <img src="~/UI/INSPINIA/img/p1.jpg" />
+            </div>
+            <div class="span5" style="background-color:white">
+                <form class="form-horizontal" method="post" style="margin-top:40px">
+                    <input type="hidden" id="AUTHUserId" name="AUTHUserId" value="@ViewBag.AUTHUserId">
+                    <!-- 错误提醒 -->
+                    @if (!string.IsNullOrEmpty(@ViewBag.strError))
+                    {
+                        <dl class="hint-msg clearfix error">
+                            <dt class="fa"></dt>
+                            <dd>@ViewBag.strError</dd>
+                        </dl>
+                    }
+                    <div class="form-group" >
+                        @*<img src="/UI/Css/default/images/common/login-user.png" class="login-user" />*@
+                        <label class="control-label" for="">用户名称</label>
+                        <div class="controls">
+                            <input type="text"  name="UserAccount" placeholder="请输入阁下的用户名" required="" style="width:220px">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group" >
+                        @*<img src="/UI/Css/default/images/common/login-password.png" class="login-password" />*@
+                        <label class="control-label" for="">登录密码</label>
+                        <div class="controls">
+                            
+                            <input type="password"  name="password" placeholder="请输入您的密码" required="" style="width:220px">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        @*<img src="/UI/Css/default/images/common/login-password.png" class="login-password" />*@
+                        <label class="control-label" for=""></label>
+                        <div class="controls">
+
+                            <button type="submit" class="btn btn-block btn-danger" style="width:220px">登录</button>
+                        </div>
+                    </div>
+
+                    
+                    @*<div class="form-other clearfix">
+                <a href="#" class="fr">忘记密码</a>
+            </div>*@
+                </form>
+
+            </div>
+        </div>
+    </div>
         @*<img class="login-bg-img" src="../UI/Css/default/images/common/login-bg.jpg" />*@
-        <div class="login-wrapper page-login animated fadeInDown">
+        @*<div class="login-wrapper page-login animated fadeInDown">
             <div class="tab-content">
-                @*<div class="login-logo">
-                        <div class="login-logo1"><img src="/UI/Css/default/images/common/logo1.jpg" width="200"></div>
-                        <div class="login-logoChina"><img src="/UI/Css/default/images/common/logoChina.png" width="30"></div>
-                        <div class="login-logo2"><img src="/UI/Css/default/images/common/logo2.png" width="170"></div>
-                    </div>*@
                 <div id="login-computer" class="tab-pane active">
                     <div class="login-content">
                         <form class="form-horizontal" method="post">
                             <input type="hidden" id="AUTHUserId" name="AUTHUserId" value="@ViewBag.AUTHUserId">
-                            <!-- 错误提醒 -->
                             @if (!string.IsNullOrEmpty(@ViewBag.strError))
                             {
                                 <dl class="hint-msg clearfix error">
@@ -48,16 +113,12 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary block full-width">登录</button>
-                            @*<div class="form-other clearfix">
-                                    <a href="#" class="fr">忘记密码</a>
-                                </div>*@
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
 
-        <!-- Mainly scripts -->
 </body>
 @RenderPage("/Views/Shared/_PublicJsPartial.cshtml")
 </html>
