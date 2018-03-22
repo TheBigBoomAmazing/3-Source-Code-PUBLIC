@@ -58,6 +58,10 @@ namespace eContract.Web.Controllers
             return View(this.CurrentUser);
         }
 
+        /// <summary>
+        /// 主要显示信息披露页面
+        /// </summary>
+        /// <returns></returns>
         public ActionResult About()
         {
             return View();
