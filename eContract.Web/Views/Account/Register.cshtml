@@ -25,291 +25,188 @@
     <link href="~/UI/bootstrap-2.3.2/docs/assets/css/bootstrap-responsive.css" rel="stylesheet" />
     <link href="~/UI/bootstrap-2.3.2/docs/assets/css/docs.css" rel="stylesheet" />
 
-    <style>
-        /* GLOBAL STYLES
-                        -------------------------------------------------- */
-        /* Padding below the footer and lighter body text */
-        body {
-            padding-bottom: 40px;
-            color: #5a5a5a;
-        }
-        /* CUSTOMIZE THE NAVBAR
-                    -------------------------------------------------- */
-
-        /* Special class on .container surrounding .navbar, used for positioning it into place. */
-        /*.navbar-wrapper {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 10;
-                margin-top: 20px;
-                margin-bottom: -90px;
-            }
-
-                .navbar-wrapper .navbar {
-                }*/
-
-        /* Remove border and change up box shadow for more contrast */
-        .navbar .navbar-inner {
-            border: 0;
-            -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.25);
-            -moz-box-shadow: 0 2px 10px rgba(0,0,0,.25);
-            box-shadow: 0 2px 10px rgba(0,0,0,.25);
-        }
-        /* Downsize the brand/project name a bit */
-        .navbar .brand {
-            padding: 14px 20px 16px; /* Increase vertical padding to match navbar links */
-            font-size: 16px;
-            font-weight: bold;
-            text-shadow: 0 -1px 0 rgba(0,0,0,.5);
-        }
-
-        /* Navbar links: increase padding for taller navbar */
-        .navbar .nav > li > a {
-            padding: 15px 20px;
-        }
-
-        /* Offset the responsive button for proper vertical alignment */
-        .navbar .btn-navbar {
-            margin-top: 10px;
-        }
-
-
-
-        /* CUSTOMIZE THE CAROUSEL
-                -------------------------------------------------- */
-
-        /* Carousel base class */
-        .carousel {
-            margin-bottom: 60px;
-        }
-
-            .carousel .container {
-                position: relative;
-                z-index: 9;
-            }
-
-        .carousel-control {
-            height: 80px;
-            margin-top: 0;
-            font-size: 120px;
-            text-shadow: 0 1px 1px rgba(0,0,0,.4);
-            background-color: transparent;
-            border: 0;
-            z-index: 10;
-        }
-
-        .carousel .item {
-            height: 500px;
-        }
-
-        .carousel img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            min-width: 100%;
-            height: 300px;
-        }
-
-        .carousel-caption {
-            background-color: transparent;
-            position: static;
-            max-width: 550px;
-            padding: 0 20px;
-            margin-top: 60px;
-        }
-
-            .carousel-caption h1,
-            .carousel-caption .lead {
-                margin: 0;
-                line-height: 1.25;
-                color: #fff;
-                text-shadow: 0 1px 1px rgba(0,0,0,.4);
-            }
-
-            .carousel-caption .btn {
-                margin-top: 10px;
-            }
-        /* MARKETING CONTENT
-            -------------------------------------------------- */
-
-        /* Center align the text within the three columns below the carousel */
-        .marketing .span4 {
-            text-align: center;
-        }
-
-        .marketing h2 {
-            font-weight: normal;
-        }
-
-        .marketing .span4 p {
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-
-
-        /* Featurettes
-            ------------------------- */
-
-        .featurette-divider {
-            margin: 80px 0; /* Space out the Bootstrap <hr> more */
-        }
-
-        .featurette {
-            padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
-            overflow: hidden; /* Vertically center images part 2: clear their floats. */
-        }
-
-        .featurette-image {
-            margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
-        }
-
-            /* Give some space on the sides of the floated elements so text doesn't run right into it. */
-            .featurette-image.pull-left {
-                margin-right: 40px;
-            }
-
-            .featurette-image.pull-right {
-                margin-left: 40px;
-            }
-
-        /* Thin out the marketing headings */
-        .featurette-heading {
-            font-size: 50px;
-            font-weight: 300;
-            line-height: 1;
-            letter-spacing: -1px;
-        }
-        /* RESPONSIVE CSS
-        -------------------------------------------------- */
-
-        /*.container.navbar-wrapper {
-                margin-bottom: 0;
-                width: auto;
-            }*/
-
-        .navbar-inner {
-            border-radius: 0;
-            /*margin: -20px 0;*/
-        }
-
-        .carousel .item {
-            height: 500px;
-        }
-
-        .carousel img {
-            width: auto;
-            height: 300px;
-        }
-
-        .featurette {
-            height: auto;
-            padding: 0;
-        }
-
-        .featurette-image.pull-left,
-        .featurette-image.pull-right {
-            display: block;
-            float: none;
-            max-width: 40%;
-            margin: 0 auto 20px;
-        }
-    </style>
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/UI/bootstrap-2.3.2/docs/assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/UI/bootstrap-2.3.2/docs/assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/UI/bootstrap-2.3.2/docs/assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="~/UI/bootstrap-2.3.2/docs/assets/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="~/UI/bootstrap-2.3.2/docs/assets/ico/favicon.png">
 </head>
-<body>
-    <h2>创建新帐户</h2>
-    <p>
-        使用以下表单创建新帐户。
-    </p>
-    <p>
-        密码应至少包含 @ViewBag.PasswordLength 个字符。
-    </p>
 
-    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-
-    @using (Html.BeginForm("Edit", "POApprovalSet", new { name = "Register" }, FormMethod.Post))
-    {
-        @Html.ValidationSummary(true, "帐户创建不成功。请更正错误并重试。")
-        <div>
-            <fieldset>
-                <legend>帐户信息</legend>
-
-                <div class="editor-label">
-                    @Html.LabelFor(m => m.UserName)
+<body style="background-color:#f9fafc">
+    <div class="navbar navbar-fixed-top navbar-without-shadow" style="background-color:orangered">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a class="brand" href="@Url.Content("~/home/index")">磐石 | </a></li>
+                        <li><a class="">注册</a></li>
+                    </ul>
                 </div>
-                <div class="editor-field">
-                    @Html.TextBoxFor(m => m.UserName)
-                    @Html.ValidationMessageFor(m => m.UserName)
-                </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(m => m.Email)
-                </div>
-                <div class="editor-field">
-                    @Html.TextBoxFor(m => m.Email)
-                    @Html.ValidationMessageFor(m => m.Email)
-                </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(m => m.UserRealName)
-                </div>
-                <div class="editor-field">
-                    @Html.TextBoxFor(m => m.UserRealName)
-                    @Html.ValidationMessageFor(m => m.UserRealName)
-                </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(m => m.Age)
-                </div>
-                <div class="editor-field">
-                    @Html.TextBoxFor(m => m.Age)
-                </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(m => m.IdNumber)
-                </div>
-                <div class="editor-field">
-                    @Html.TextBoxFor(m => m.IdNumber)
-                    @Html.ValidationMessageFor(m => m.IdNumber)
-                </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(m => m.PhoneNumber)
-                </div>
-                <div class="editor-field">
-                    @Html.TextBoxFor(m => m.PhoneNumber)
-                    @Html.ValidationMessageFor(m => m.PhoneNumber)
-                </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(m => m.Password)
-                </div>
-                <div class="editor-field">
-                    @Html.PasswordFor(m => m.Password)
-                    @Html.ValidationMessageFor(m => m.Password)
-                </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(m => m.ConfirmPassword)
-                </div>
-                <div class="editor-field">
-                    @Html.PasswordFor(m => m.ConfirmPassword)
-                    @Html.ValidationMessageFor(m => m.ConfirmPassword)
-                </div>
-
-                <p>
-                    <input type="submit" value="注册" />
-                </p>
-            </fieldset>
+            </div>
         </div>
-    }
-</body>
+    </div>
+    <div class="container-fluid" style="margin-top:120px">
+        <div class="row-fluid">
 
+            <div class="span7" style="background-color:white">
+                <form class="form-horizontal" method="post" style="margin-top:40px">
+                    <input type="hidden" id="AUTHUserId" name="AUTHUserId" value="@ViewBag.AUTHUserId">
+                    <!-- 错误提醒 -->
+                    @if (!string.IsNullOrEmpty(@ViewBag.strError))
+                    {
+                        <dl class="hint-msg clearfix error">
+                            <dt class="fa"></dt>
+                            <dd>@ViewBag.strError</dd>
+                        </dl>
+                    }
+                    <div class="form-group">
+                        @*<img src="/UI/Css/default/images/common/login-user.png" class="login-user" />*@
+                        <label class="control-label" for="">手机号</label>
+                        <div class="controls">
+                            <input class="input-large" type="text" name="PhoneNumber" placeholder="手机号" required="" style="width:300px">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+
+                        <label class="control-label" for="">用户名</label>
+                        <div class="controls">
+
+                            <input class="input-large" type="text" name="UserName" placeholder="用户名称" required="" style="width:300px">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+
+                        <label class="control-label" for="">电子邮箱</label>
+                        <div class="controls">
+
+                            <input class="input-large" type="text" name="Email" placeholder="电子邮箱" required="" style="width:300px">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+
+                        <label class="control-label" for="">登陆密码</label>
+                        <div class="controls">
+
+                            <input class="input-large" type="password" name="Password" placeholder="登陆密码" required="" style="width:300px">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+
+                        <label class="control-label" for="">确认密码</label>
+                        <div class="controls">
+
+                            <input class="input-large" type="password" name="ConfirmPassword" placeholder="确认密码" required="" style="width:300px">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox"> 我已阅读并同意
+                            </label>
+                            <label><a style="color:gray" href="#myModal" data-toggle="modal">《磐石诚选平台注册服务协议》</a></label>
+                            <label><a style="color:gray"  href="#myModal1" data-toggle="modal">《风险提示函》</a><a style="color:gray"  href="#myModal2" data-toggle="modal">《投资申明》</a></label>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label class="control-label" for=""></label>
+                        <div class="controls">
+                            <button type="submit" class="btn btn-block btn-danger input-large" style="width:300px">注册</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="span5 text-left">
+                <div class="controls">
+                    <label>已有账户？<a  href="@Url.Content("~/Account/Login")">立即登录</a></label>                    
+                </div>
+                <img src="~/UI/INSPINIA/img/p6.jpg" />
+            </div>
+        </div>
+    </div>
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">磐石诚选平台注册服务协议</h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                梧桐诚选平台用户注册协议
+                梧桐诚选平台（网址：www.91wutong.com）由[上海盛桐信息技术有限公司]负责运营。梧桐诚选依据本协议的规定为梧桐诚选注册会员（以下简称“注册会员”）提供服务，本协议在注册会员和梧桐诚选间具有合同上的法律效力。
+                第一章 梧桐诚选服务
+                第一条    为了保障注册会员的权益，注册会员在自愿注册使用梧桐诚选服务前，必须仔细阅读并充分理解知悉本服务协议所有条款。一经注册或使用梧桐诚选服务即视为对本服务协议的充分理解和接受，如有违反而导致任何法律后果的发生，注册会员将以自己的名义独立承担相应的法律责任。
+                第二条    梧桐诚选服务是由[上海盛桐信息技术有限公司]通过梧桐诚选平台（网址：www.91wutong.com）向注册会员提供服务，具体服务内容主要包括：交易信息发布、提供交易管理服务、提供客户服务等，具体详情以梧桐诚选当时提供的服务内容以及注册会员与[上海盛桐信息技术有限公司]签署的相关协议约定为准。
+                第三条    梧桐诚选服务内容主要包括发布借贷项目信息，根据注册会员需求提供交易管理服务、提供客户服务、签订合同、资金充值、取现、代收、代付、回购等，具体详情以梧桐诚选平台当时提供的服务内容以及注册会员与[上海盛桐信息技术有限公司]签署的相关协议约定为准。梧桐诚选服务的部分内容需要注册会员根据梧桐诚选要求完成安全认证，未进行完整的安全认证之前，注册会员将无法使用部分梧桐诚选服务（包括但不限于充值、投资、转让、提现）。因未能完成认证而无法享受梧桐诚选服务造成的损失，梧桐诚选不承担任何责任。
+                第四条    梧桐诚选将为注册会员提供信息发布服务。梧桐诚选向注册会员提供的各种信息及资料仅为参考，注册会员应依其独立判断做出决策。注册会员据此进行交易的，应根据网站提示签订相关合同，由此产生的风险由注册会员自行承担，注册会员无权据此向梧桐诚选提出任何法律主张。在交易过程中，注册会员之间发生的纠纷，由纠纷各方自行解决，梧桐诚选不承担任何责任。
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+    </div>
+    <div id="myModal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">风险提示函</h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                风险提示函
+
+                特别提示：梧桐诚选平台展示的借贷项目有投资风险，出借人应当充分认识投资风险，谨慎投资。
+
+
+                以下风险提示内容，请出借人认真详细阅读，在充分了解并清楚知晓梧桐诚选平台所展示的借贷项目蕴含风险的基础上，通过自身判断，自主参与交易，并自愿承担相关风险：
+
+                1.信用风险：在资金出借期间，若借款人短期或者长期丧失还款能力（包括但不限于借款人收入情况、财产状况发生变化、人身出现意外、发生疾病、死亡等情况）或者借款人的还款意愿发生变化时，出借人可能损失部分或全部出借资金和收益；
+
+                2.政策风险：梧桐诚选平台所展示的借贷项目是针对当前的相关法律法规和政策设计的。如国家政策、法律法规及其他因素等发生变化，可能影响业务受理、投资、偿还等正常进行；
+
+                3.流动性风险：资金成功出借后，出借人可能面临无法提前赎回，或未到期转让不成功的风险；
+
+                4.其它风险：由于自然灾害、战争等不可抗力因素的出现，将严重影响金融市场的正常运行，从而导致出借资金收益降低或损失，甚至影响业务受理、投资、偿还等的正常进行，进而影响资金收益安全。
+
+
+                以上《风险提示函》本人已阅读并完全理解，愿意承担投资过程中的各种风险。
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+    </div>
+    <div id="myModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">投资申明</h3>
+        </div>
+        <div class="modal-body">
+            <p>
+                投资声明
+
+                本人自愿申报成为梧桐诚选平台借贷项目出借人，并申明如下：
+
+                本人申明在投资梧桐诚选平台发布的借贷项目之前，本人符合下列任意条件之一，且能够识别、判断和承担资金出借的投资风险：
+
+                1.拥有至少10万元可用于投资的个人资产，必要时需提供财产证明：包括但不限于银行开具的存款证明、近三个月内存折或存单复印件、有价证券证明、一年内的有价证券资产证明（上述材料提供时需相关机构加盖印章）。
+
+                2.最近三年内每年个人收入超过20万元人民币；最近三年内每年夫妻合计收入超过30万元人民币。本人愿意根据相关规定提供所需的财务证明。
+
+                本人申明在进行投资行为前，认真阅读并理解所有产品文件，并自愿依法承担相应的投资风险。
+
+
+                本人申明成为借贷项目出借人后，对交易涉及的事项保密，并自愿依法缴纳投资活动所产生的各项税费。
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+    </div>
+</body>
+@RenderPage("/Views/Shared/_PublicJsPartial.cshtml")
 </html>

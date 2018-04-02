@@ -21,17 +21,19 @@ namespace eContract.BusinessService.BusinessData.BusinessRule
     {
         /// <summary>
         /// 获取所有产品的列表
-        /// </summary>
+        ///</summary>
         /// <returns></returns>
         public List<LubrFinancialGoodsEntity> GetAllProducts()
         {
             string sql = "SELECT * FROM FinancialGoods";
-            return DataAccess.Select<LubrFinancialGoodsEntity>(sql);
+            List<LubrFinancialGoodsEntity> list = new List<LubrFinancialGoodsEntity>();
+            list = DataAccess.Select<LubrFinancialGoodsEntity>(sql);
+            return list;
         }
         /// <summary>
         /// 获得单个产品的详细信息
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">id</param>
         /// <returns></returns>
         public LubrFinancialGoodsEntity GetProductsDetailInfo(string id)
         {

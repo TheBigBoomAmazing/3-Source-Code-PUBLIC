@@ -17,6 +17,7 @@ using ComixSDK.EDI.Utils;
 using eContract.Common;
 using System.IO;
 using eContract.Web.Common;
+using eContract.Web.Areas.LUBR.Models;
 
 namespace eContract.Web.Controllers
 {
@@ -162,7 +163,7 @@ namespace eContract.Web.Controllers
             return View();
         }
 
-        public ActionResult Register()
+        public ActionResult Register(RegisterViewModel model)
         {
             //string judge = Request.Params["accountmessage"];
             //if (judge == "accountmessage")
