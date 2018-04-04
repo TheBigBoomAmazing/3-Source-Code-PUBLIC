@@ -2213,6 +2213,7 @@
     <Content Include="Areas\LUBR\Views\Shared\Login.cshtml" />
     <Content Include="Areas\LUBR\Views\ProductDetails\Index.cshtml" />
     <Content Include="Areas\LUBR\Views\MyAccount\Index.cshtml" />
+    <Content Include="Areas\LUBR\Views\User\SecurityCenter.cshtml" />
     <None Include="Properties\PublishProfiles\eContractPublish.pubxml" />
     <Content Include="UI\Css\plugins\yearCalendar\fonts\icomoon.eot" />
     <Content Include="UI\Css\plugins\yearCalendar\fonts\icomoon.svg" />
