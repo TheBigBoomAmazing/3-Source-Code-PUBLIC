@@ -18,6 +18,7 @@ using eContract.Common;
 using System.IO;
 using eContract.Web.Common;
 using eContract.Web.Areas.LUBR.Models;
+using eContract.BusinessService.BusinessData.Service;
 
 namespace eContract.Web.Controllers
 {
@@ -165,6 +166,37 @@ namespace eContract.Web.Controllers
 
         public ActionResult Register(RegisterViewModel model)
         {
+            if (IsPost)
+            {
+                var phone = model.PhoneNumber;
+                var password = model.Password;
+                var Confirm = model.ConfirmPassword;
+                if (password != Confirm)
+                {
+                    return View(model);
+                }
+                else
+                {
+                    LubrUserEntity lubrUser = new LubrUserEntity();
+                    lubrUser.username = model.UserName;
+                    lubrUser.password = model.Password;
+                    lubrUser.age = "0";
+                    lubrUser.realname = model.UserName;
+                    lubrUser.idcard = "";
+                    lubrUser.userclass = "0";
+                    lubrUser.emailaddress = model.Email;
+                    lubrUser.phonenumber = model.PhoneNumber;
+                    BusinessDataService.LubrRegisterService.RegisterNewUser(lubrUser);
+                    return Redirect("~/home");
+                }
+            }
+            else
+            {
+                return View();
+            }
+
+
+
             //string judge = Request.Params["accountmessage"];
             //if (judge == "accountmessage")
             //{
@@ -172,7 +204,13 @@ namespace eContract.Web.Controllers
             //poa.Edit(RegisterModel);
             // }
             //else { return View(); }
-            return View();
+            
+        }
+
+        public JsonResult SentVerificationCode(string phoneNumber, string username, string emailAddress)
+        {
+            var verificationCode = BusinessDataService.LubrRegisterService.NewUserSentVerificationCode(phoneNumber, username, emailAddress);
+            return Json(AjaxResult.Success(), JsonRequestBehavior.AllowGet);
         }
         //public ActionResult Login()
         //{

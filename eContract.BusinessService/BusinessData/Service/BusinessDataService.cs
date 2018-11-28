@@ -56,6 +56,8 @@ namespace eContract.BusinessService.BusinessData.Service
         public static LubrProductsShowBLL _lubrProductsShowService;
         public static LubrProductsShowBLL LubrProductsShowBLLService => _lubrProductsShowService ?? (_lubrProductsShowService = new LubrProductsShowBLL());
 
+        public static LubrRegisterBLL _lubrRegisterService;
+        public static LubrRegisterBLL LubrRegisterService => _lubrRegisterService ?? (_lubrRegisterService = new LubrRegisterBLL());
         #endregion
     }
 }

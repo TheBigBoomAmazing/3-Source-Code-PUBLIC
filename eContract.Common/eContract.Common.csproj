@@ -110,6 +110,7 @@
     <Compile Include="Entity\LubrAccountEntity.cs" />
     <Compile Include="Entity\LubrFinancialGoodsEntity.cs" />
     <Compile Include="Entity\LubrTradeRecordEntity.cs" />
+    <Compile Include="Entity\LubrUserEntity.cs" />
     <Compile Include="Entity\SecLogErrorEntity.cs" />
     <Compile Include="Entity\SecPageControlEntity.cs" />
     <Compile Include="Entity\SecPageEntity.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="IApplicationSession.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="ListSort.cs" />
+    <Compile Include="LubrSentMail.cs" />
     <Compile Include="MVC\AjaxResult.cs" />
     <Compile Include="MVC\ConfigHelper.cs" />
     <Compile Include="MVC\FilterGroup.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Schema\LubrAccountTable.cs" />
     <Compile Include="Schema\LubrFinancialGoodsTable.cs" />
     <Compile Include="Schema\LubrTradeRecordTable.cs" />
+    <Compile Include="Schema\LubrUser.cs" />
     <Compile Include="Schema\SecLogErrorTable.cs" />
     <Compile Include="Schema\SecPageControlTable.cs" />
     <Compile Include="Schema\SecPageTable.cs" />

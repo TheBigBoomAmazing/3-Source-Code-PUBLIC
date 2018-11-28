@@ -1,4 +1,4 @@
-﻿@model eContract.Web.Models.RegisterViewModel
+﻿@model eContract.Web.Areas.LUBR.Models.RegisterViewModel
 
 @{
     ViewBag.Title = "注册";
@@ -63,7 +63,14 @@
                         @*<img src="/UI/Css/default/images/common/login-user.png" class="login-user" />*@
                         <label class="control-label" for="">手机号</label>
                         <div class="controls">
-                            <input class="input-large" type="text" name="PhoneNumber" placeholder="手机号" required="" style="width:300px">
+                            @if (Model == null)
+                            {
+                                <input class="input-large" type="text" name="PhoneNumber" placeholder="手机号" required="" style="width:300px">
+                            }
+                            else
+                            {
+                                <input class="input-large" type="text" name="PhoneNumber" placeholder="手机号" required=""  value="@Model.PhoneNumber"style="width:300px">
+                            } 
                         </div>
                     </div>
                     <br />
@@ -71,8 +78,14 @@
 
                         <label class="control-label" for="">用户名</label>
                         <div class="controls">
-
-                            <input class="input-large" type="text" name="UserName" placeholder="用户名称" required="" style="width:300px">
+                            @if (Model == null)
+                            {
+                                <input class="input-large" type="text" name="UserName" placeholder="用户名称" required="" style="width:300px">
+                            }
+                            else
+                            {
+                                <input class="input-large" type="text" name="UserName" placeholder="用户名称" required="" value="@Model.UserName" style="width:300px">
+                            }                         
                         </div>
                     </div>
                     <br />
@@ -80,10 +93,16 @@
 
                         <label class="control-label" for="">电子邮箱</label>
                         <div class="controls">
-
-                            <input class="input-large" type="text" name="Email" placeholder="电子邮箱" required="" style="width:300px">
-                            @*<input class="input-large" type="button" name="sendCode" value="发送验证码" style="width:100px">*@
-                            <button class="btn btn-small btn-primary" type="button">发送验证码</button>
+                            @if (Model == null)
+                            {
+                                <input class="input-large" type="text" name="Email" placeholder="电子邮箱" required="" style="width:300px">
+                            }
+                            else
+                            {
+                                <input class="input-large" type="text" name="Email" placeholder="电子邮箱" required="" value="@Model.Email" style="width:300px">
+                            } 
+                           
+                            <button class="btn btn-small btn-primary" id="sentCode" type="button">发送验证码</button>
                         </div>
                     </div>
                     <br />
@@ -93,7 +112,7 @@
                         <div class="controls">
 
                             <input class="input-large" type="text" name="Email" placeholder="发送到您的电子邮箱验证码" required="" style="width:300px">
-                           
+
                         </div>
                     </div>
                     <br />
@@ -121,7 +140,7 @@
                                 <input type="checkbox"> 我已阅读并同意
                             </label>
                             <label><a style="color:gray" href="#myModal" data-toggle="modal">《磐石诚选平台注册服务协议》</a></label>
-                            <label><a style="color:gray"  href="#myModal1" data-toggle="modal">《风险提示函》</a><a style="color:gray"  href="#myModal2" data-toggle="modal">《投资申明》</a></label>
+                            <label><a style="color:gray" href="#myModal1" data-toggle="modal">《风险提示函》</a><a style="color:gray" href="#myModal2" data-toggle="modal">《投资申明》</a></label>
                         </div>
                     </div>
                     <br />
@@ -136,7 +155,7 @@
             </div>
             <div class="span5 text-left">
                 <div class="controls">
-                    <label>已有账户？<a  href="@Url.Content("~/Account/Login")">立即登录</a></label>                    
+                    <label>已有账户？<a href="@Url.Content("~/Account/Login")">立即登录</a></label>
                 </div>
                 <img src="~/UI/INSPINIA/img/p6.jpg" />
             </div>
@@ -222,3 +241,29 @@
 </body>
 @RenderPage("/Views/Shared/_PublicJsPartial.cshtml")
 </html>
+@section footer{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sentCode").click(function () {
+                var phone = $("input[name=PhoneNumber]").val();
+                var username = $("input[name=UserName]").val();
+                var emailAddress = $("input[name=Email]").val();
+                $.ajax({
+                    url: "/Account/SentVerificationCode",
+                    method: "get",
+                    dataType: "json",
+                    data: {
+                        phoneNumber: phone,
+                        username: username,
+                        emailAddress: emailAddress
+                    },
+                    @*success: function (result) {
+                        jqGrid.gridSearch($("#sel_form"), "@Url.Action("PREdit")" + "?id=" + "@ViewBag.ContractId.ToString()");
+                    },*@ error: function (result) {
+
+                    }
+                })
+            });
+        });
+    </script>
+}
