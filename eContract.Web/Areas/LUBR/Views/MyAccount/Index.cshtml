@@ -1,4 +1,9 @@
-﻿<div class="row-fluid">
+﻿
+@{
+    var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;
+}
+
+<div class="row-fluid">
     <div class="span12" style="margin-top:40px">
         <div class="row-fluid">
             <div class="span8" style="background-color:#f9fafc">

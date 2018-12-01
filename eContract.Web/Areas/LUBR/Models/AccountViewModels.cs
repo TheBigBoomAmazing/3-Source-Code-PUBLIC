@@ -99,6 +99,10 @@ namespace eContract.Web.Areas.LUBR.Models
         [StringLength(11)]
         [Display(Name = "手机号")]
         public string PhoneNumber { get; set; }
+
+        [Required]
+        [Display(Name = "验证码")]
+        public string verificationCode { get; set; }
     }
 
     public class ResetPasswordViewModel

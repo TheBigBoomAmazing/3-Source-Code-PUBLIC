@@ -229,12 +229,12 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">@currentUser.CasUserEntity.ChineseName<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="@Url.Content("~/LUBR/MyAccount")">账户首页</a></li>
+                                    <li><a href="@Url.Content("~/LUBR/MyAccount?userid="+currentUser.CasUserEntity.UserId)">账户首页</a></li>
                                     <li><a href="#">充值提现</a></li>
                                     <li><a href="#">奖励管理</a></li>
                                     <li class="divider"></li>
                                     <li class="nav-header">中心</li>
-                                    <li><a href="@Url.Content("~/LUBR/User/SecurityCenter")">安全中心</a></li>
+                                    <li><a href="@Url.Content("~/LUBR/User/SecurityCenter?userid="+currentUser.CasUserEntity.UserId)">安全中心</a></li>
                                     <li><a href="#">消息中心</a></li>
                                 </ul>
                             </li>

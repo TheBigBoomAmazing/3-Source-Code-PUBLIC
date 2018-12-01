@@ -1,12 +1,13 @@
 ﻿@{
     ViewBag.Title = "安全中心";
+    var currentUser = (eContract.BusinessService.SystemManagement.Domain.UserDomain)eContract.Common.WebUtils.WebCaching.CurrentUserDomain;
 }
 
 <div class="row-fluid" style="margin-top:60px">
     <div class="span12">
         <div class="row-fluid">
             <div class="span4">
-                尊敬的：<span style="font-size: 30px;">OLiver</span>  阁下<br />
+                尊敬的：<span style="font-size: 30px;">@currentUser.CasUserEntity.ChineseName</span>  阁下<br />
             </div>
             <div class="span4">
                 <span style="color: #999999;line-height: 200%;">您当前账户的安全级别:</span>

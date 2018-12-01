@@ -20,8 +20,9 @@ namespace eContract.Web.Areas.LUBR.Controllers
         /// 用户的安全中心
         /// </summary>
         /// <returns></returns>
-        public ActionResult SecurityCenter()
+        public ActionResult SecurityCenter(string userid)
         {
+            var aa = userid;
             return View();
         }
     }

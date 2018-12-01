@@ -19,6 +19,7 @@ using System.IO;
 using eContract.Web.Common;
 using eContract.Web.Areas.LUBR.Models;
 using eContract.BusinessService.BusinessData.Service;
+using System.Data;
 
 namespace eContract.Web.Controllers
 {
@@ -166,32 +167,65 @@ namespace eContract.Web.Controllers
 
         public ActionResult Register(RegisterViewModel model)
         {
+            /////还有一个大的问题就是如果用户忘了用户名密码怎么处理
             if (IsPost)
             {
                 var phone = model.PhoneNumber;
+                var name = model.UserName;
                 var password = model.Password;
                 var Confirm = model.ConfirmPassword;
-                if (password != Confirm)
+                var emailAddress = model.Email;
+                var verificationCode = model.verificationCode;
+
+
+                var result = BusinessDataService.LubrRegisterService.AdjustExistEmailCode(emailAddress);
+                if (result=="0")
                 {
-                    return View(model);
+                    var verCodeMatch = false;
+                    DataTable dt = BusinessDataService.LubrRegisterService.GetUSerVerificationCode(phone, name, emailAddress);
+                    if (dt.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            if (verificationCode == dt.Rows[i]["CODE"].ToString())
+                            {
+                                verCodeMatch = true;
+                            }
+                        }
+                    }
+                    if (password != Confirm)
+                    {
+                        ViewBag.strError = "阁下输入的登录密码和确认密码不相符";
+                        return View(model);
+                    }
+                    else if (!verCodeMatch)
+                    {
+                        ViewBag.strError = "阁下输入的验证码不正确，请重新输入";
+                        return View(model);
+                    }
+                    else
+                    {
+                        LubrUserEntity lubrUser = new LubrUserEntity();
+                        lubrUser.username = model.UserName;
+                        lubrUser.password = model.Password;
+                        lubrUser.age = "0";
+                        lubrUser.realname = model.UserName;
+                        lubrUser.idcard = "";
+                        lubrUser.userclass = "0";
+                        lubrUser.emailaddress = model.Email;
+                        lubrUser.phonenumber = model.PhoneNumber;
+                        BusinessDataService.LubrRegisterService.RegisterNewUser(lubrUser);
+                        return Redirect("~/Account/Login");
+                    }
                 }
                 else
                 {
-                    LubrUserEntity lubrUser = new LubrUserEntity();
-                    lubrUser.username = model.UserName;
-                    lubrUser.password = model.Password;
-                    lubrUser.age = "0";
-                    lubrUser.realname = model.UserName;
-                    lubrUser.idcard = "";
-                    lubrUser.userclass = "0";
-                    lubrUser.emailaddress = model.Email;
-                    lubrUser.phonenumber = model.PhoneNumber;
-                    BusinessDataService.LubrRegisterService.RegisterNewUser(lubrUser);
-                    return Redirect("~/home");
+                    ViewBag.strError = "阁下输入的该邮箱已经注册过本系统";
+                    return View(model);
                 }
             }
             else
-            {
+            {  
                 return View();
             }
 

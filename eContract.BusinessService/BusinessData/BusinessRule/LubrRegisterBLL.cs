@@ -5,6 +5,7 @@ using eContract.Common.Entity;
 using Suzsoft.Smart.Data;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -46,6 +47,37 @@ namespace eContract.BusinessService.BusinessData.BusinessRule
             LubrSentMail lubrmial = new LubrSentMail();
             lubrmial.SendEmail(reciever, title, content, null);
             return "";
+        }
+        /// <summary>
+        /// 判断是否改邮箱已经注册过
+        /// </summary>
+        /// <param name="email">邮箱地址</param>
+        /// <returns>如果返回0，说明没有注册过，如果返回1说明注册过</returns>
+        public string AdjustExistEmailCode(string email)
+        {
+            var resultValue = "0";
+            email = email.Trim();
+            string sql= @" SELECT * FROM [eContract].[dbo].[User] WHERE emailaddress='"+ email + "'";
+            DataTable dt = DataAccess.SelectDataSet(sql.ToString()).Tables[0];
+            if (dt.Rows.Count>0)
+            {
+                resultValue = "1";
+            }
+            return resultValue;
+        }
+        /// <summary>
+        /// 注册时候根据用户的手机，姓名，邮件地址获得注册验证码
+        /// </summary>
+        /// <param name="phone">手机</param>
+        /// <param name="name">用户名</param>
+        /// <param name="email">邮箱地址</param>
+        /// <returns></returns>
+        public DataTable GetUSerVerificationCode(string phone,string name,string email)
+        { 
+            DataTable dt = new DataTable();
+            string sql = @"  SELECT VerificationCode as CODE FROM [eContract].[dbo].[User] WHERE username='" + name + "' AND phonenumber='"+ phone + "' AND emailaddress='"+ email + "'";
+            dt = DataAccess.SelectDataSet(sql.ToString()).Tables[0];
+            return dt;
         }
         /// <summary>
         /// 注册新的用户

@@ -9,8 +9,9 @@ namespace eContract.Web.Areas.LUBR.Controllers
     public class MyAccountController : BaseController
     {
         // GET: LUBR/MyAccount我的账户中心首页
-        public ActionResult Index()
+        public ActionResult Index(string userid)
         {
+            var ab = userid;
             return View();
         }
     }
