@@ -54,9 +54,9 @@ namespace eContract.Common.Schema
 
             _current.Add(M_goodsid, new ColumnInfo(M_goodsid, "goodsid", true, typeof(string)));
 
-            _current.Add(M_startdate, new ColumnInfo(M_startdate, "startdate", true, typeof(string)));
+            _current.Add(M_startdate, new ColumnInfo(M_startdate, "startdate", true, typeof(DateTime)));
 
-            _current.Add(M_enddate, new ColumnInfo(M_enddate, "enddate", true, typeof(string)));
+            _current.Add(M_enddate, new ColumnInfo(M_enddate, "enddate", true, typeof(DateTime)));
 
             _current.Add(M_comment, new ColumnInfo(M_comment, "comment", true, typeof(string)));
 
@@ -66,7 +66,7 @@ namespace eContract.Common.Schema
 
             _current.Add(M_annualrate, new ColumnInfo(M_annualrate, "annualrate", true, typeof(string)));
 
-            _current.Add(M_principal, new ColumnInfo(M_principal, "principal", true, typeof(string)));
+            _current.Add(M_principal, new ColumnInfo(M_principal, "principal", true, typeof(decimal)));
 
             _current.Add(M_isvalid, new ColumnInfo(M_isvalid, "isvalid", true, typeof(string))); 
 
