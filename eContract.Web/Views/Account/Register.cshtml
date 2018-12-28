@@ -24,6 +24,8 @@
     <link href="~/UI/bootstrap-2.3.2/docs/assets/css/bootstrap.css" rel="stylesheet" />
     <link href="~/UI/bootstrap-2.3.2/docs/assets/css/bootstrap-responsive.css" rel="stylesheet" />
     <link href="~/UI/bootstrap-2.3.2/docs/assets/css/docs.css" rel="stylesheet" />
+    <link href="~/UI/bootstrap-2.3.2/docs/assets/js/bootstrap-popover.js" rel="stylesheet" />
+    <link href="~/UI/bootstrap-2.3.2/docs/assets/js/bootstrap-button.js" rel="stylesheet" />
 
 </head>
 
@@ -102,7 +104,11 @@
                                 <input class="input-large" type="text" name="Email" placeholder="电子邮箱" required="" value="@Model.Email" style="width:300px">
                             } 
                            
-                            <button class="btn btn-small btn-primary" id="sentCode" type="button">发送验证码</button>
+                            <button class="btn btn-small btn-primary" data-loading-text="正在发送中···" id="sentCode" type="button">发送验证码</button>
+                            <div class="alert fade in" id="alertAAA" hidden="">
+                                <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+                                <strong>提示</strong> 请您检查输入的用户名、手机号以及邮箱地址是否有误，并再次尝试！
+                            </div>
                         </div>
                     </div>
                     <br />
@@ -248,21 +254,27 @@
                 var phone = $("input[name=PhoneNumber]").val();
                 var username = $("input[name=UserName]").val();
                 var emailAddress = $("input[name=Email]").val();
-                $.ajax({
-                    url: "/Account/SentVerificationCode",
-                    method: "get",
-                    dataType: "json",
-                    data: {
-                        phoneNumber: phone,
-                        username: username,
-                        emailAddress: emailAddress
-                    },
-                    @*success: function (result) {
+                if (phone != null && phone != "" && username != null && username != "" && emailAddress != null && emailAddress != "") {
+                    $("div[id=alertAAA]").hide();
+                    $.ajax({
+                        url: "/Account/SentVerificationCode",
+                        method: "post",
+                        dataType: "json",
+                        data: {
+                            phoneNumber: phone,
+                            username: username,
+                            emailAddress: emailAddress
+                        },
+                        @*success: function (result) {
                         jqGrid.gridSearch($("#sel_form"), "@Url.Action("PREdit")" + "?id=" + "@ViewBag.ContractId.ToString()");
                     },*@ error: function (result) {
 
-                    }
-                })
+                        }
+                    })
+                }
+                else {
+                    $("div[id=alertAAA]").show();
+                }
             });
         });
     </script>
