@@ -254,7 +254,7 @@
                 var phone = $("input[name=PhoneNumber]").val();
                 var username = $("input[name=UserName]").val();
                 var emailAddress = $("input[name=Email]").val();
-                if (phone != null && phone != "" && username != null && username != "" && emailAddress != null && emailAddress != "") {
+                if (checkPhone(phone) && username != null && username != "" && checkEmail(emailAddress)) {
                     $("div[id=alertAAA]").hide();
                     $.ajax({
                         url: "/Account/SentVerificationCode",
@@ -277,5 +277,23 @@
                 }
             });
         });
+        function checkPhone(phoneNumber) {
+            var phone = phoneNumber;
+            if (!(/^1[34578]\d{9}$/.test(phone))) {
+                return false;
+            } else
+            {
+                return true;
+            }
+        }
+        function checkEmail(emailAddress) {
+            var email = /^[A-Za-z0-9_-\u4e00-\u9fa5]+@@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            if (!(email.test(emailAddress))) {
+                return false;
+            } else
+            {
+                return true;
+            }
+        }
     </script>
 }
