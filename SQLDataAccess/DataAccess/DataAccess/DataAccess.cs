@@ -498,6 +498,14 @@ namespace Suzsoft.Smart.Data
                                         t.SetData(nameChange[columns[i]], true);
                                     }
                                 }
+                                else if (columnType[columns[i]] == Type.GetType("System.DateTime"))
+                                {
+                                    t.SetData(nameChange[columns[i]], values[i].ToString());
+                                }
+                                else if (columnType[columns[i]] == Type.GetType("System.Decimal"))
+                                {
+                                        t.SetData(nameChange[columns[i]], values[i].ToString());
+                                }
                                 else
                                 {
                                     t.SetData(nameChange[columns[i]], values[i]);

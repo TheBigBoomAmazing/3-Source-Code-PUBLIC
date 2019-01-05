@@ -69,7 +69,7 @@ namespace eContract.Common.Entity
         }
         public string principal
         {
-            get { return (string)GetData(LubrFinancialGoodsTable.M_principal); }
+            get { return GetData(LubrFinancialGoodsTable.M_principal).ToString(); }
             set { SetData(LubrFinancialGoodsTable.M_principal, value); }
         }
         public string isvalid
