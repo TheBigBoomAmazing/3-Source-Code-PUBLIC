@@ -104,7 +104,7 @@
                                 <input class="input-large" type="text" name="Email" placeholder="电子邮箱" required="" value="@Model.Email" style="width:300px">
                             } 
                            
-                            <button class="btn btn-small btn-primary" data-loading-text="正在发送中···" id="sentCode" type="button">发送验证码</button>
+                            <button class="btn btn-small btn-primary captchaBtn" data-loading-text="正在发送中···" id="sentCode" type="button">获取验证码</button>
                             <div class="alert fade in" id="alertAAA" hidden="">
                                 <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
                                 <strong>提示</strong> 请您检查输入的用户名、手机号以及邮箱地址是否有误，并再次尝试！
@@ -295,5 +295,32 @@
                 return true;
             }
         }
+        $(function () {
+            $(".captchaBtn").html('获取验证码').on("click", function () {
+                var that = $(this);
+                var seconds = 60;
+                that.attr("disabled", true);
+                that.html(seconds + '秒');
+                let promise = new Promise((resolve, reject) => {
+                    let setTimer = setInterval(
+                      () => {
+                          seconds -= 1;
+                          // console.info('倒计时:' + seconds);
+                          that.html(seconds + '秒');
+                          if (seconds <= 0) {
+                              that.html('获取验证码');
+                              resolve(setTimer)
+                          }
+                      }
+                      , 1000)
+                })
+                promise.then((setTimer) => {
+                    // console.info('清除');
+                    clearInterval(setTimer);
+                    that.attr("disabled", false);
+                })
+
+            })
+        });
     </script>
 }
