@@ -106,5 +106,79 @@ namespace eContract.BusinessService.BusinessData.BusinessRule
                 broker.Commit();
             }
         }
+        /// <summary>
+        /// 用户开始注册，生成手机短信的验证码
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public string NewUserSentSMSCode(string phone, string userName)
+        {
+            Random rd = new Random();
+            var aa = rd.Next(1000, 10000);
+            string SMSCode = aa.ToString();
+            using (DataAccessBroker broker = DataAccessFactory.Instance())
+            {
+                broker.BeginTransaction();
+                try
+                {
+                    string sql = @"  INSERT INTO [eContract].[dbo].[UserPhoneSMSCode](phonenumber,sendtime,expiretime,smscode,spare2,SMSId)  VALUES  ( '" + phone + "', GETDATE() , 20 ,'" + SMSCode + "','',NEWID())";
+
+                    var success = broker.ExecuteSQL(sql);
+                    broker.Commit();
+                }
+                catch (Exception e)
+                {
+                }
+            }
+            /*var reciever = emailAddress;
+            var cc = "";
+            var title = "用户注册";
+            var content = "感谢您注册磐石系统账号，您的验证码是:" + verificationCode;
+            LubrSentMail lubrmial = new LubrSentMail();
+            lubrmial.SendEmail(reciever, title, content, null);*/
+            return SMSCode;
+        }
+        /// <summary>
+        /// 注册时候根据用户的手机获得注册验证码
+        /// </summary>
+        /// <param name="phone">手机</param>
+        /// <returns></returns>
+        public DataTable GetUSerSMSCode(string phone, string name)
+        {
+            DataTable dt = new DataTable();
+            string sql = @"  SELECT smscode as SMSCODE FROM [eContract].[dbo].[UserPhoneSMSCode] WHERE phonenumber='" + phone + "' order by sendtime desc";
+            dt = DataAccess.SelectDataSet(sql.ToString()).Tables[0];
+            return dt;
+        }
+        /// <summary>
+        /// 发送验证码时候判断之前验证码是否过期
+        /// </summary>
+        /// <param name="phone">手机</param>
+        /// <returns></returns>
+        public DataTable GetUSerSMSCodeExpireTime(string phone)
+        {
+            DataTable dt = new DataTable();
+            string sql = @"  SELECT TOP 1 sendtime as SENDTIME,expiretime as EXPIRETIME FROM [eContract].[dbo].[UserPhoneSMSCode] WHERE phonenumber='" + phone + "' order by sendtime desc";
+            dt = DataAccess.SelectDataSet(sql.ToString()).Tables[0];
+            return dt;
+        }
+        /// <summary>
+        /// 判断是否该手机号已经注册过
+        /// </summary>
+        /// <param name="phone">邮箱地址</param>
+        /// <returns>如果返回0，说明没有注册过，如果返回1说明注册过</returns>
+        public string AdjustExistPhoneCode(string phone)
+        {
+            var resultValue = "0";
+            phone = phone.Trim();
+            string sql = @" SELECT * FROM [eContract].[dbo].[User] WHERE phonenumber='" + phone + "'";
+            DataTable dt = DataAccess.SelectDataSet(sql.ToString()).Tables[0];
+            if (dt.Rows.Count > 0)
+            {
+                resultValue = "1";
+            }
+            return resultValue;
+        }
     }
 }

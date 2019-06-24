@@ -73,6 +73,7 @@
                             {
                                 <input class="input-large" type="text" name="PhoneNumber" placeholder="手机号" required=""  value="@Model.PhoneNumber"style="width:300px">
                             } 
+                            
                         </div>
                     </div>
                     <br />
@@ -103,8 +104,8 @@
                             {
                                 <input class="input-large" type="text" name="Email" placeholder="电子邮箱" required="" value="@Model.Email" style="width:300px">
                             } 
-                           
-                            <button class="btn btn-small btn-primary captchaBtn" data-loading-text="正在发送中···" id="sentCode" type="button">获取验证码</button>
+                            <button class="btn btn-small btn-primary captchaBtn" id="sentSMSCode" type="button">获取短信验证码</button>
+                            <!--<button class="btn btn-small btn-primary captchaBtn" data-loading-text="正在发送中···" id="sentCode" type="button">获取验证码</button>-->
                             <div class="alert fade in" id="alertAAA" hidden="">
                                 <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
                                 <strong>提示</strong> 请您检查输入的用户名、手机号以及邮箱地址是否有误，并再次尝试！
@@ -117,7 +118,7 @@
                         <label class="control-label" for="">验证码</label>
                         <div class="controls">
 
-                            <input class="input-large" type="text" name="verificationCode" placeholder="发送到您的电子邮箱验证码" required="" style="width:300px">
+                            <input class="input-large" type="text" name="verificationCode" placeholder="发送到您的手机验证码" required="" style="width:300px">
 
                         </div>
                     </div>
@@ -276,6 +277,38 @@
                     $("div[id=alertAAA]").show();
                 }
             });
+            $("#sentSMSCode").click(function () {
+                var phone = $("input[name=PhoneNumber]").val();
+                var username = $("input[name=UserName]").val();
+                if (checkPhone(phone) && username != null && username != "") {
+                    $("div[id=alertAAA]").hide();
+                    $.ajax({
+                        url: "/Account/SentSMSCode",
+                        method: "post",
+                        dataType: "json",
+                        data: {
+                            phoneNumber: phone,
+                            username: username
+                        },
+                        success: function (result) {
+                            var obj = JSON.parse(result);
+                            @*alert("此次发送短信返回代码为："+obj.statusCode);*@
+                            if (obj.statusCode != "000000") {
+                                alert("发送失败,请重新尝试！");
+                            }
+                            else if (obj.statusCode == "1") {
+                                alert("抱歉，验证码有效期为20分钟，请勿频繁发送！");
+                            }
+                            else{ alert("发送成功");}
+                        }, error: function (result) {
+                            alert("发送失败"+result);
+                        }
+                    })
+                }
+                else {
+                    $("div[id=alertAAA]").show();
+                }
+            });
         });
         function checkPhone(phoneNumber) {
             var phone = phoneNumber;
@@ -296,7 +329,7 @@
             }
         }
         $(function () {
-            $(".captchaBtn").html('获取验证码').on("click", function () {
+            $(".captchaBtn").html('获取短信验证码').on("click", function () {
                 var that = $(this);
                 var seconds = 60;
                 that.attr("disabled", true);

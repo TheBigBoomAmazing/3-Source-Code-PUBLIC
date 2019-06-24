@@ -20,6 +20,7 @@ using eContract.Web.Common;
 using eContract.Web.Areas.LUBR.Models;
 using eContract.BusinessService.BusinessData.Service;
 using System.Data;
+using Newtonsoft.Json;
 
 namespace eContract.Web.Controllers
 {
@@ -177,17 +178,18 @@ namespace eContract.Web.Controllers
                 var emailAddress = model.Email;
                 var verificationCode = model.verificationCode;
 
-
-                var result = BusinessDataService.LubrRegisterService.AdjustExistEmailCode(emailAddress);
+                //改为验证手机是否已经注册
+                //var result = BusinessDataService.LubrRegisterService.AdjustExistEmailCode(emailAddress);
+                var result = BusinessDataService.LubrRegisterService.AdjustExistPhoneCode(phone);
                 if (result=="0")
                 {
                     var verCodeMatch = false;
-                    DataTable dt = BusinessDataService.LubrRegisterService.GetUSerVerificationCode(phone, name, emailAddress);
+                    DataTable dt = BusinessDataService.LubrRegisterService.GetUSerSMSCode(phone, name);
                     if (dt.Rows.Count > 0)
                     {
                         for (int i = 0; i < dt.Rows.Count; i++)
                         {
-                            if (verificationCode == dt.Rows[i]["CODE"].ToString())
+                            if (verificationCode == dt.Rows[i]["SMSCODE"].ToString())
                             {
                                 verCodeMatch = true;
                             }
@@ -245,6 +247,84 @@ namespace eContract.Web.Controllers
         {
             var verificationCode = BusinessDataService.LubrRegisterService.NewUserSentVerificationCode(phoneNumber, username, emailAddress);
             return Json(AjaxResult.Success(), JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 发送短信验证码
+        /// </summary>
+        public JsonResult SentSMSCode(string phoneNumber, string username)
+        {
+            string ret = null;
+            string sendtime = "";
+            string expiretime = "";
+            DataTable dt = BusinessDataService.LubrRegisterService.GetUSerSMSCodeExpireTime(phoneNumber);
+            if (dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    sendtime = dt.Rows[i]["SENDTIME"].ToString();
+                    expiretime = dt.Rows[i]["EXPIRETIME"].ToString();
+                    TimeSpan ts = DateTime.Now - DateTime.Parse(sendtime);
+                    if (ts.Minutes < expiretime.ToInt())
+                    {
+                        ret = "{\"statusCode\":\"1\"}";
+                        return Json(ret);
+                    }
+                }
+            }
+
+            CCPRestSDK.CCPRestSDK api = new CCPRestSDK.CCPRestSDK();
+            //ip格式如下，不带https://
+            bool isInit = api.init("app.cloopen.com", "8883");
+            api.setAccount("8a216da86b652116016b77bfba220ef5", "cf633b3910a04b61a22af6734b5f91c3");
+            //测试,此处api以及appid均为cs测试账户 充值后会有新的，填入即可
+            //api.setAccount("8a216da86b652116016b77bfba220ef", "cf633b3910a04b61a22af6734b5f91c");
+            api.setAppId("8a216da86b652116016b77bfba8a0efc");
+            //测试
+            //api.setAppId("8a216da86b652116016b77bfba8a0ef");
+
+            try
+            {
+                if (isInit)
+                {
+
+                    var SMSCode = BusinessDataService.LubrRegisterService.NewUserSentSMSCode(phoneNumber, username);
+                    //cs测试把此注释
+                    //Dictionary<string, object> retData = api.SendTemplateSMS("15935141467", "1", new string[] { SMSCode, "1" });
+                    //三个参数分别为需要发送的手机号码、模板类型（此处为测试模板1，可以修改）、模板中需要替换的参数
+                    Dictionary<string, object> retData = api.SendTemplateSMS(phoneNumber, "1", new string[] { SMSCode, "1" });
+                    //cs测试把此注释，不发短信
+                    ret = JsonConvert.SerializeObject(retData);
+                    //ret = "{\"statusCode\":\"000000\"}";
+                    return Json(ret);
+                }
+                else
+                {
+                    ret = "初始化失败";
+                }
+            }
+            catch (Exception exc)
+            {
+                ret = exc.Message;
+            }
+            return Json(ret);
+        }
+        private string getDictionaryData(Dictionary<string, object> data)
+        {
+            string ret = null;
+            foreach (KeyValuePair<string, object> item in data)
+            {
+                if (item.Value != null && item.Value.GetType() == typeof(Dictionary<string, object>))
+                {
+                    ret += item.Key.ToString() + "={";
+                    ret += getDictionaryData((Dictionary<string, object>)item.Value);
+                    ret += "};";
+                }
+                else
+                {
+                    ret += item.Key.ToString() + "=" + (item.Value == null ? "null" : item.Value.ToString()) + ";";
+                }
+            }
+            return ret;
         }
         //public ActionResult Login()
         //{

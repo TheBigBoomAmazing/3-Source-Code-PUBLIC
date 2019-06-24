@@ -56,6 +56,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CCPRestSDK">
+      <HintPath>..\..\..\..\Desktop\CCP_REST_DEMO_CSharp_v2.6r1\CCP_REST_DEMO_CSharp_v2.6r1\CCPRestDemo\Lib\CCPRestSDK.dll</HintPath>
+    </Reference>
     <Reference Include="ComixSDK.EDI.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ReferenceDll\ComixSDK.EDI.Utils.dll</HintPath>
@@ -77,6 +80,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ReferenceDll\NPOI.dll</HintPath>
@@ -217,9 +221,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -372,6 +373,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="log4net.xml" />
+    <Content Include="Newtonsoft.Json.dll" />
     <Content Include="Report\Page\ContractReviewProcessRecord.aspx" />
     <Content Include="Report\Page\TemplateReviewProcessRecord.aspx" />
     <Content Include="Scripts\bootstrap.js" />
