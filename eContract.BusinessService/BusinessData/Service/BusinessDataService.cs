@@ -58,6 +58,11 @@ namespace eContract.BusinessService.BusinessData.Service
 
         public static LubrRegisterBLL _lubrRegisterService;
         public static LubrRegisterBLL LubrRegisterService => _lubrRegisterService ?? (_lubrRegisterService = new LubrRegisterBLL());
+
+        //获取验证码
+        public static LubrPhoneSMSCodeBLL _lubrPhoneSMSCodeService;
+        public static LubrPhoneSMSCodeBLL LubrPhoneSMSCodeService => _lubrPhoneSMSCodeService ?? (_lubrPhoneSMSCodeService = new LubrPhoneSMSCodeBLL());
+
         #endregion
     }
 }

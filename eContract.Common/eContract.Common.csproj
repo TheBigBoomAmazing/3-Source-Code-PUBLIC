@@ -111,6 +111,7 @@
     <Compile Include="Entity\LubrFinancialGoodsEntity.cs" />
     <Compile Include="Entity\LubrTradeRecordEntity.cs" />
     <Compile Include="Entity\LubrUserEntity.cs" />
+    <Compile Include="Entity\LubrUserPhoneSMSCodeEntity.cs" />
     <Compile Include="Entity\SecLogErrorEntity.cs" />
     <Compile Include="Entity\SecPageControlEntity.cs" />
     <Compile Include="Entity\SecPageEntity.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="Schema\LubrFinancialGoodsTable.cs" />
     <Compile Include="Schema\LubrTradeRecordTable.cs" />
     <Compile Include="Schema\LubrUser.cs" />
+    <Compile Include="Schema\LubrUserPhoneSMSCodeTable.cs" />
     <Compile Include="Schema\SecLogErrorTable.cs" />
     <Compile Include="Schema\SecPageControlTable.cs" />
     <Compile Include="Schema\SecPageTable.cs" />
