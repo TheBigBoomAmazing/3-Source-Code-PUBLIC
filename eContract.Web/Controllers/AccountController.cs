@@ -326,6 +326,23 @@ namespace eContract.Web.Controllers
             }
             return ret;
         }
+        /// <summary>
+        /// 忘记密码
+        /// </summary>
+        /// <returns></returns>
+        //public ActionResult ForgetPassword()
+        //{
+        //    return View();
+        //}
+
+        public ActionResult ForgetPassword(RegisterViewModel resetModel)
+        {
+            if (IsPost)
+            {
+                string aa= "";
+            }
+            return View();
+        }
         //public ActionResult Login()
         //{
         //    return View();
