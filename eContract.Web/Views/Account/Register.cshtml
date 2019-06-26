@@ -62,6 +62,21 @@
                         </dl>
                     }
                     <div class="form-group">
+
+                        <label class="control-label" for="">用户名</label>
+                        <div class="controls">
+                            @if (Model == null)
+                            {
+                                <input class="input-large" type="text" name="UserName" placeholder="用户名称" required="" style="width:300px">
+                            }
+                            else
+                            {
+                                <input class="input-large" type="text" name="UserName" placeholder="用户名称" required="" value="@Model.UserName" style="width:300px">
+                            }
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="form-group">
                         @*<img src="/UI/Css/default/images/common/login-user.png" class="login-user" />*@
                         <label class="control-label" for="">手机号</label>
                         <div class="controls">
@@ -78,17 +93,16 @@
                     </div>
                     <br />
                     <div class="form-group">
-
-                        <label class="control-label" for="">用户名</label>
+                        <label class="control-label" for="">验证码</label>
                         <div class="controls">
-                            @if (Model == null)
-                            {
-                                <input class="input-large" type="text" name="UserName" placeholder="用户名称" required="" style="width:300px">
-                            }
-                            else
-                            {
-                                <input class="input-large" type="text" name="UserName" placeholder="用户名称" required="" value="@Model.UserName" style="width:300px">
-                            }                         
+
+                            <input class="input-medium" type="text" name="verificationCode" placeholder="发送到您的手机验证码" required="" style="width:190px">
+                            <button class="btn btn-small btn-primary captchaBtn" id="sentSMSCode" type="button">获取短信验证码</button>
+                            <!--<button class="btn btn-small btn-primary captchaBtn" data-loading-text="正在发送中···" id="sentCode" type="button">获取验证码</button>-->
+                            <div class="alert fade in" id="alertAAA" hidden="">
+                                <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+                                <strong>提示</strong> 请您检查输入的用户名、手机号以及邮箱地址是否有误，并再次尝试！
+                            </div>
                         </div>
                     </div>
                     <br />
@@ -104,21 +118,6 @@
                             {
                                 <input class="input-large" type="text" name="Email" placeholder="电子邮箱" required="" value="@Model.Email" style="width:300px">
                             } 
-                            <button class="btn btn-small btn-primary captchaBtn" id="sentSMSCode" type="button">获取短信验证码</button>
-                            <!--<button class="btn btn-small btn-primary captchaBtn" data-loading-text="正在发送中···" id="sentCode" type="button">获取验证码</button>-->
-                            <div class="alert fade in" id="alertAAA" hidden="">
-                                <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
-                                <strong>提示</strong> 请您检查输入的用户名、手机号以及邮箱地址是否有误，并再次尝试！
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group">
-
-                        <label class="control-label" for="">验证码</label>
-                        <div class="controls">
-
-                            <input class="input-large" type="text" name="verificationCode" placeholder="发送到您的手机验证码" required="" style="width:300px">
 
                         </div>
                     </div>
