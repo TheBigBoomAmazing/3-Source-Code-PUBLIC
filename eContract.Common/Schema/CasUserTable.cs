@@ -90,8 +90,9 @@ public const string C_LAST_MODIFIED_BY = "LAST_MODIFIED_BY";
 
 public const string C_LAST_MODIFIED_TIME = "LAST_MODIFIED_TIME";
 
+public const string C_PHONE_NUMBER = "PHONE_NUMBER";
 
-public CasUserTable()
+ public CasUserTable()
 {
 _tableName = "CAS_USER";
 }
@@ -193,6 +194,7 @@ _current.Add(C_LAST_MODIFIED_BY, new ColumnInfo(C_LAST_MODIFIED_BY, "last_modifi
 
 _current.Add(C_LAST_MODIFIED_TIME, new ColumnInfo(C_LAST_MODIFIED_TIME, "last_modified_time", false, typeof(DateTime)));
 
+_current.Add(C_PHONE_NUMBER, new ColumnInfo(C_PHONE_NUMBER, "phone_number", false, typeof(string)));
 }
 
 
@@ -396,5 +398,10 @@ public ColumnInfo LAST_MODIFIED_TIME
 get { return this[C_LAST_MODIFIED_TIME]; }
 }
 
+public ColumnInfo PHONE_NUMBER
+{
+    get { return this[C_PHONE_NUMBER]; }
 }
+
+    }
 }

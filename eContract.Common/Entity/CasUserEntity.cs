@@ -314,6 +314,11 @@ namespace eContract.Common.Entity
         {
             get;set;
         }
+        public string PhoneNumber
+        {
+            get { return (string)GetData(CasUserTable.C_PHONE_NUMBER); }
+            set { SetData(CasUserTable.C_PHONE_NUMBER, value); }
+        }
         #endregion
     }
 }

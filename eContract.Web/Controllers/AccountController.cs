@@ -184,7 +184,7 @@ namespace eContract.Web.Controllers
                 if (result=="0")
                 {
                     var verCodeMatch = false;
-                    DataTable dt = BusinessDataService.LubrRegisterService.GetUSerSMSCode(phone, name);
+                    DataTable dt = BusinessDataService.LubrRegisterService.GetUSerSMSCode(phone, name,"1");
                     if (dt.Rows.Count > 0)
                     {
                         for (int i = 0; i < dt.Rows.Count; i++)
@@ -251,7 +251,7 @@ namespace eContract.Web.Controllers
         /// <summary>
         /// 发送短信验证码
         /// </summary>
-        public JsonResult SentSMSCode(string phoneNumber, string username)
+        public JsonResult SentSMSCode(string phoneNumber, string username,string flagstatus)
         {
             string ret = null;
             string sendtime = "";
@@ -287,7 +287,7 @@ namespace eContract.Web.Controllers
                 if (isInit)
                 {
 
-                    var SMSCode = BusinessDataService.LubrRegisterService.NewUserSentSMSCode(phoneNumber, username);
+                    var SMSCode = BusinessDataService.LubrRegisterService.NewUserSentSMSCode(phoneNumber, username,flagstatus);
                     //cs测试把此注释
                     //Dictionary<string, object> retData = api.SendTemplateSMS("15935141467", "1", new string[] { SMSCode, "1" });
                     //三个参数分别为需要发送的手机号码、模板类型（此处为测试模板1，可以修改）、模板中需要替换的参数
@@ -335,13 +335,68 @@ namespace eContract.Web.Controllers
         //    return View();
         //}
 
-        public ActionResult ForgetPassword(RegisterViewModel resetModel)
+        public ActionResult ForgetPassword(ForgetPasswordViewModel resetModel)
         {
             if (IsPost)
             {
-                string aa= "";
+                var phone = resetModel.PhoneNumber;
+                var name = resetModel.UserName;
+                var password = resetModel.Password;
+                var Confirm = resetModel.ConfirmPassword;
+                //var emailAddress = resetModel.Email;
+                var verificationCode = resetModel.verificationCode;
+
+                //改为验证手机是否已经注册
+                //var result = BusinessDataService.LubrRegisterService.AdjustExistEmailCode(emailAddress);
+                var result = BusinessDataService.LubrRegisterService.AdjustExistPhoneCode(phone);
+                if (result != "0")
+                {
+                    var verCodeMatch = false;
+                    DataTable dt = BusinessDataService.LubrRegisterService.GetUSerSMSCode(phone, name,"2");
+                    if (dt.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            if (verificationCode == dt.Rows[i]["SMSCODE"].ToString())
+                            {
+                                verCodeMatch = true;
+                            }
+                        }
+                    }
+                    if (password != Confirm)
+                    {
+                        ViewBag.strError = "阁下输入的登录密码和确认密码不相符";
+                        return View(resetModel);
+                    }
+                    else if (!verCodeMatch)
+                    {
+                        ViewBag.strError = "阁下输入的验证码不正确，请重新输入";
+                        return View(resetModel);
+                    }
+                    else
+                    {
+                        LubrUserEntity lubrUser = new LubrUserEntity();
+                        lubrUser.username = resetModel.UserName;
+                        lubrUser.password = resetModel.Password;
+                        lubrUser.age = "0";
+                        lubrUser.realname = resetModel.UserName;
+                        lubrUser.idcard = "";
+                        lubrUser.userclass = "0";
+                        lubrUser.phonenumber = resetModel.PhoneNumber;
+                        BusinessDataService.LubrRegisterService.Update(lubrUser);
+                        return Redirect("~/Account/Login");
+                    }
+                }
+                else
+                {
+                    ViewBag.strError = "阁下输入的该手机号码没有注册过本系统，请先注册后再使用。";
+                    return View(resetModel);
+                }
             }
-            return View();
+            else
+            {
+                return View();
+            }
         }
         //public ActionResult Login()
         //{

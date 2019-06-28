@@ -102,6 +102,7 @@ namespace eContract.Common.Entity
             get { return (string)GetData(LubrUserTable.M_VerificationCode); }
             set { SetData(LubrUserTable.M_VerificationCode, value); }
         }
+
         #endregion
     }
 }
