@@ -108,6 +108,45 @@ namespace eContract.BusinessService.BusinessData.BusinessRule
             }
         }
         /// <summary>
+        /// 跟新用户的登录密码
+        /// </summary>
+        /// <param name="userEntity"></param>
+        public void UpdateUser(LubrUserEntity userEntity)
+        {
+            //首先我得获取用户的id
+            var phone = userEntity.phonenumber.ToString().Trim();
+            var account = userEntity.username.ToString().Trim();
+            var userID = GetUserIdByPhoneAndAccount(phone,account);
+            using (DataAccessBroker broker = DataAccessFactory.Instance())
+            {
+                broker.BeginTransaction();
+                CasUserEntity user = SystemService.UserService.GetById<CasUserEntity>(userID);
+                user.Password = Encryption.Encrypt(userEntity.password);
+                user.LastModifiedBy = "忘记密码";
+                user.LastModifiedTime = DateTime.Now;
+                DataAccess.Update(user, broker);
+                broker.Commit();
+            }            
+        }
+        /// <summary>
+        /// 根据phone和accout获得用户的id信息
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <param name="account"></param>
+        /// <returns></returns>
+        public string GetUserIdByPhoneAndAccount(string phone, string account)
+        {
+            string id = "";
+            DataTable dt = new DataTable();
+            string sql = "SELECT USER_ID FROM  CAS_USER WHERE PHONE_NUMBER='" + phone + "' AND USER_ACCOUNT='"+ account + "'";
+            dt = DataAccess.SelectDataSet(sql.ToString()).Tables[0];
+            if (dt.Rows.Count >0)
+            {
+                id = dt.Rows[0]["USER_ID"].ToString();
+            }
+            return id;
+        }
+        /// <summary>
         /// 用户开始注册，生成手机短信的验证码
         /// </summary>
         /// <param name="phone"></param>

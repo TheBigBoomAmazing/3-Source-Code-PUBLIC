@@ -383,7 +383,7 @@ namespace eContract.Web.Controllers
                         lubrUser.idcard = "";
                         lubrUser.userclass = "0";
                         lubrUser.phonenumber = resetModel.PhoneNumber;
-                        BusinessDataService.LubrRegisterService.Update(lubrUser);
+                        BusinessDataService.LubrRegisterService.UpdateUser(lubrUser);
                         return Redirect("~/Account/Login");
                     }
                 }
